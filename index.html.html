@@ -1,0 +1,1833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Life OS</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Special+Elite&family=IBM+Plex+Mono:wght@300;400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --deep:#080d18;
+  --blue:#0d1e35;
+  --blue2:#152540;
+  --teal:#1a3a5c;
+  --gold:#d4a017;
+  --gold2:#f0c84a;
+  --gold-dim:rgba(212,160,23,0.18);
+  --gold-border:rgba(212,160,23,0.55);
+  --paper:#f0e8d8;
+  --paper2:#e0d4be;
+  --dust:#8ba0b4;
+  --dust2:rgba(139,160,180,0.45);
+  --pink:#c45a8a;
+  --pink2:#e87aaa;
+  --green:#3a8a5a;
+  --green2:#5aaa7a;
+  --red:#b03a2a;
+  --red2:#d05a3a;
+  --border:rgba(212,160,23,0.4);
+  --border2:rgba(212,160,23,0.2);
+  --text:rgba(240,232,216,0.92);
+  --muted:rgba(139,160,180,0.7);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+
+body {
+  background:var(--deep);
+  color:var(--text);
+  font-family:'Lora',serif;
+  font-size:14px;
+  line-height:1.65;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* FILM GRAIN */
+body::before {
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;
+  z-index:999;
+}
+
+/* SCANLINES */
+body::after {
+  content:'';
+  position:fixed;
+  inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.025) 2px,rgba(0,0,0,0.025) 4px);
+  pointer-events:none;
+  z-index:998;
+}
+
+/* ── TOPBAR ── */
+.topbar {
+  position:sticky;top:0;z-index:100;
+  background:rgba(8,13,24,0.97);
+  border-bottom:1px solid var(--gold-border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;height:52px;
+  gap:12px;
+}
+.logo {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:22px;letter-spacing:0.22em;color:var(--gold2);
+  display:flex;align-items:center;gap:8px;flex-shrink:0;
+}
+.logo-pulse {
+  width:7px;height:7px;border-radius:50%;background:var(--gold);
+  animation:logobeat 2.8s ease-in-out infinite;
+}
+@keyframes logobeat{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.3;transform:scale(0.7);}}
+.nav-tabs{display:flex;overflow-x:auto;gap:0;}
+.nav-tabs::-webkit-scrollbar{display:none;}
+.nav-tab {
+  font-family:'IBM Plex Mono',monospace;
+  font-size:8.5px;letter-spacing:0.16em;text-transform:uppercase;
+  padding:0 13px;height:52px;
+  display:flex;align-items:center;cursor:pointer;
+  color:var(--dust);
+  border-bottom:2px solid transparent;
+  transition:all 0.18s;white-space:nowrap;user-select:none;
+  position:relative;
+}
+.nav-tab::after{content:attr(data-label);position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-size:6px;letter-spacing:0.1em;color:transparent;transition:color 0.18s;}
+.nav-tab:hover{color:var(--paper);}
+.nav-tab.active{color:var(--gold2);border-bottom-color:var(--gold);}
+.date-chip {
+  font-family:'IBM Plex Mono',monospace;font-size:9px;
+  color:var(--dust);letter-spacing:0.08em;flex-shrink:0;
+  background:rgba(212,160,23,0.07);
+  border:1px solid var(--border2);
+  padding:4px 10px;border-radius:2px;
+}
+
+/* ── LAYOUT ── */
+.main{padding:0 20px 80px;max-width:1280px;margin:0 auto;}
+.page{display:none;}
+.page.active{display:block;}
+
+/* ── SECTION HEAD ── */
+.section-head{padding:26px 0 16px;margin-bottom:20px;position:relative;}
+.section-head::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--gold-border),transparent 60%);}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold);margin-bottom:5px;}
+.section-head h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,5vw,52px);letter-spacing:0.05em;line-height:1;color:var(--paper);}
+.section-sub{font-family:'Lora',serif;font-style:italic;font-size:13px;color:var(--dust);margin-top:4px;}
+
+/* ── PORTAL CARDS (your website's yellow-bordered cards) ── */
+.portals{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:14px;}
+.portal {
+  border:2px solid var(--gold-border);
+  background:var(--blue);
+  padding:0;cursor:pointer;
+  transition:border-color 0.18s,background 0.18s,transform 0.15s;
+  position:relative;overflow:hidden;
+  aspect-ratio:1/1.1;
+  display:flex;flex-direction:column;justify-content:flex-end;
+}
+.portal:hover{border-color:var(--gold2);background:var(--blue2);transform:translateY(-2px);}
+.portal-bg{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:52px;opacity:0.12;
+  pointer-events:none;
+  filter:sepia(0.5);
+}
+.portal-label{
+  position:relative;z-index:2;
+  background:rgba(8,13,24,0.82);
+  padding:8px 10px;
+  border-top:1px solid var(--gold-border);
+}
+.portal-dept{font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:2px;}
+.portal-title{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:0.1em;color:var(--paper2);}
+.portal-status{font-size:10px;color:var(--dust);margin-top:1px;font-style:italic;}
+.portal-badge{
+  position:absolute;top:8px;right:8px;
+  font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:0.08em;
+  background:var(--gold);color:var(--deep);
+  padding:2px 6px;border-radius:1px;z-index:3;font-weight:500;
+}
+
+/* ── DAILY SIGNAL ── */
+.signal-bar{
+  background:var(--blue);border:1px solid var(--gold-border);
+  border-left:4px solid var(--gold);
+  padding:14px 18px;margin-bottom:14px;
+  display:flex;align-items:flex-start;gap:14px;
+}
+.signal-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
+.signal-label{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;}
+.signal-text{font-family:'Lora',serif;font-style:italic;font-size:15px;color:var(--paper);line-height:1.6;}
+
+/* ── MINI CALENDAR ── */
+.mini-cal{background:var(--blue);border:2px solid var(--gold-border);padding:14px;cursor:pointer;transition:border-color 0.18s;}
+.mini-cal:hover{border-color:var(--gold2);}
+.mini-cal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.mini-cal-title{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:0.12em;color:var(--gold2);}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
+.cal-dow{font-family:'IBM Plex Mono',monospace;font-size:7px;text-align:center;color:var(--dust);padding:2px 0;letter-spacing:0.06em;}
+.cal-day{font-family:'IBM Plex Mono',monospace;font-size:10.5px;text-align:center;padding:5px 2px;border-radius:2px;color:rgba(240,232,216,0.35);line-height:1;position:relative;}
+.cal-day.in-month{color:var(--text);}
+.cal-day.today{background:var(--gold);color:var(--deep);font-weight:700;}
+.cal-day.has-ev::after{content:'';position:absolute;bottom:1px;left:50%;transform:translateX(-50%);width:3px;height:3px;border-radius:50%;background:var(--gold2);}
+.cal-day.today.has-ev::after{background:var(--deep);}
+.cal-day.is-date::after{background:var(--pink2);}
+.upcoming-list{margin-top:10px;padding-top:8px;border-top:1px solid var(--border2);}
+.ev-row{display:flex;align-items:center;gap:8px;padding:4px 0;font-size:11px;border-bottom:1px solid rgba(212,160,23,0.08);}
+.ev-row:last-child{border-bottom:none;}
+.ev-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+.ev-day-tag{font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--dust);min-width:30px;flex-shrink:0;}
+.ev-name{flex:1;color:var(--text);}
+.ev-time-tag{font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--dust);white-space:nowrap;}
+
+/* ── CHECKLIST ── */
+.cl-block{background:var(--blue);border:1px solid var(--border2);padding:13px 15px;margin-bottom:10px;}
+.cl-head{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;display:flex;justify-content:space-between;}
+.cl-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid rgba(212,160,23,0.07);cursor:pointer;user-select:none;}
+.cl-row:last-child{border-bottom:none;}
+.cl-row:hover{opacity:0.85;}
+.cl-box{width:18px;height:18px;border:1.5px solid var(--gold-border);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;transition:all 0.15s;border-radius:1px;}
+.cl-box.done{background:rgba(90,170,90,0.2);border-color:var(--green2);color:var(--green2);}
+.cl-name{font-size:13px;flex:1;}
+.cl-name.done{text-decoration:line-through;color:var(--muted);}
+.cl-streak{font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--gold);background:rgba(212,160,23,0.1);border:1px solid var(--border2);padding:1px 6px;border-radius:2px;flex-shrink:0;}
+
+/* ── STAT ROWS ── */
+.stat-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(212,160,23,0.08);font-size:13px;}
+.stat-row:last-child{border-bottom:none;}
+.stat-lbl{color:var(--dust);}
+.val-a{color:var(--gold2);font-weight:600;}
+.val-g{color:var(--green2);font-weight:600;}
+.val-r{color:var(--red2);font-weight:600;}
+
+/* ── CARDS ── */
+.card{background:var(--blue);border:1px solid var(--border2);padding:13px 15px;}
+.card-lbl{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--dust);margin-bottom:4px;}
+.card-num{font-family:'Bebas Neue',sans-serif;font-size:28px;line-height:1;letter-spacing:0.03em;}
+.card-sub{font-size:10px;color:var(--dust);margin-top:2px;font-style:italic;}
+.num-a{color:var(--gold2);}
+.num-g{color:var(--green2);}
+.num-r{color:var(--red2);}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px;}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px;}
+
+/* ── MODAL SYSTEM ── */
+.modal-overlay{
+  position:fixed;inset:0;z-index:500;
+  background:rgba(4,8,18,0.88);
+  backdrop-filter:blur(4px);
+  display:none;align-items:flex-start;justify-content:center;
+  padding:40px 16px;overflow-y:auto;
+}
+.modal-overlay.open{display:flex;}
+.modal{
+  background:var(--blue);
+  border:2px solid var(--gold-border);
+  width:100%;max-width:720px;
+  position:relative;
+  animation:modalIn 0.22s ease;
+}
+@keyframes modalIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.modal-header{
+  background:var(--blue2);
+  border-bottom:1px solid var(--gold-border);
+  padding:14px 18px;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.modal-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.1em;color:var(--gold2);}
+.modal-close{
+  width:28px;height:28px;border:1px solid var(--gold-border);background:transparent;
+  color:var(--gold);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;
+  transition:background 0.15s;
+}
+.modal-close:hover{background:rgba(212,160,23,0.12);}
+.modal-body{padding:18px;}
+.modal-link{
+  display:inline-block;margin-top:12px;
+  font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--gold);border:1px solid var(--gold-border);padding:6px 14px;
+  text-decoration:none;cursor:pointer;transition:background 0.15s;
+}
+.modal-link:hover{background:rgba(212,160,23,0.1);}
+
+/* ── DOTTED SEPARATOR ── */
+.dotted{height:1px;background:repeating-linear-gradient(90deg,var(--gold) 0,var(--gold) 4px,transparent 4px,transparent 10px);margin:14px 0;opacity:0.35;}
+
+/* ── PROGRESS ── */
+.prog-wrap{margin:6px 0;}
+.prog-lbl{display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:7.5px;color:var(--dust);margin-bottom:3px;}
+.prog-track{background:rgba(8,13,24,0.8);height:3px;overflow:hidden;}
+.prog-fill{height:3px;transition:width 0.6s ease;}
+.pf-gold{background:var(--gold);}
+.pf-green{background:var(--green2);}
+.pf-blue{background:#5a9acc;}
+.pf-pink{background:var(--pink2);}
+
+/* ── CF TABLE ── */
+.cf-table{width:100%;border-collapse:collapse;font-size:12px;}
+.cf-table th{padding:7px 9px;text-align:left;font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:0.12em;text-transform:uppercase;color:var(--dust);border-bottom:1px solid var(--border);}
+.cf-table td{padding:7px 9px;border-bottom:1px solid rgba(212,160,23,0.06);vertical-align:middle;}
+.cf-table tr:last-child td{border-bottom:none;}
+.cf-table .in{color:var(--green2);font-weight:600;}
+.cf-table .out{color:var(--red2);}
+.cf-table .bal{font-family:'IBM Plex Mono',monospace;font-size:10px;}
+.cf-table .sec td{background:rgba(212,160,23,0.06);font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);padding:4px 9px;}
+.cf-table .hl td{background:rgba(90,170,90,0.05);}
+.badge{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:7px;padding:2px 6px;border-radius:1px;}
+.badge-paid{background:rgba(58,138,90,0.2);border:1px solid var(--green);color:var(--green2);}
+.badge-owed{background:rgba(176,58,42,0.2);border:1px solid var(--red);color:var(--red2);}
+.badge-pending{background:rgba(26,58,92,0.4);border:1px solid #3a5a7a;color:#8ab4cc;}
+
+/* ── ZEN GUN PROJECTS ── */
+.zg-card{background:var(--blue);border:1px solid var(--border2);border-left:3px solid var(--gold);padding:13px 15px;margin-bottom:8px;}
+.zg-type{font-family:'IBM Plex Mono',monospace;font-size:7.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;}
+.zg-card h3{font-size:15px;font-weight:600;margin-bottom:3px;color:var(--paper);}
+.zg-card p{font-size:12px;color:var(--dust);line-height:1.6;}
+
+/* ── WORKOUT ── */
+.wd{background:var(--blue);border:1px solid var(--border2);margin-bottom:4px;overflow:hidden;}
+.wd-header{display:flex;align-items:center;gap:10px;padding:10px 13px;cursor:pointer;user-select:none;transition:background 0.15s;}
+.wd-header:hover{background:var(--blue2);}
+.wd-num{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--dust);min-width:32px;line-height:1;}
+.wd.open .wd-num{color:var(--gold);}
+.wd-meta{flex:1;}
+.wd-name{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:0.06em;text-transform:uppercase;}
+.wd-focus{font-size:11px;color:var(--dust);margin-top:1px;}
+.chev{color:var(--dust);transition:transform 0.2s;font-size:10px;}
+.wd.open .chev{transform:rotate(180deg);color:var(--gold);}
+.wd-body{display:none;padding:0 13px 12px;border-top:1px solid var(--border2);}
+.wd.open .wd-body{display:block;}
+.ex-list{list-style:none;margin-top:8px;}
+.ex-list li{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(212,160,23,0.06);font-size:12px;}
+.ex-list li:last-child{border-bottom:none;}
+.ex-sets{font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:var(--gold);margin-left:auto;flex-shrink:0;}
+
+/* ── MUSIC SESSIONS ── */
+.sess{background:var(--blue);border:1px solid var(--border2);margin-bottom:4px;}
+.sess-header{display:flex;align-items:center;cursor:pointer;}
+.sess-day{width:62px;flex-shrink:0;background:var(--blue2);padding:11px 9px;border-right:1px solid var(--border2);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:0.05em;color:var(--gold);}
+.sess-title{flex:1;padding:9px 12px;}
+.sess-title h4{font-size:13px;font-weight:600;margin-bottom:1px;color:var(--paper);}
+.sess-focus{font-family:'IBM Plex Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);}
+.sess-body{display:none;border-top:1px solid var(--border2);padding:9px 12px;}
+.sess.open .sess-body{display:block;}
+.sess-item{display:flex;gap:8px;padding:5px 0;border-bottom:1px solid rgba(212,160,23,0.06);font-size:12px;}
+.sess-item:last-child{border-bottom:none;}
+.sess-time{font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--gold);min-width:32px;margin-top:1px;}
+.sess-desc h5{font-size:12px;font-weight:600;margin-bottom:1px;color:var(--paper);}
+.sess-desc p{font-size:11px;color:var(--dust);line-height:1.5;}
+.chips{display:flex;flex-wrap:wrap;gap:3px;margin-top:4px;}
+.chip{font-family:'IBM Plex Mono',monospace;font-size:7px;padding:2px 5px;border-radius:1px;background:rgba(26,58,92,0.6);border:1px solid #3a5a7a;color:#8ab4cc;}
+
+/* ── BOOK ITEMS ── */
+.book-row{display:flex;gap:9px;padding:8px 0;border-bottom:1px solid var(--border2);align-items:flex-start;}
+.book-row:last-child{border-bottom:none;}
+.book-spine{width:3px;flex-shrink:0;height:32px;border-radius:1px;margin-top:2px;}
+.book-info h4{font-size:13px;font-weight:600;margin-bottom:1px;color:var(--paper);}
+.book-info .auth{font-family:'IBM Plex Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--dust);margin-bottom:2px;}
+.book-info .bnote{font-size:11px;font-style:italic;color:rgba(139,160,180,0.65);line-height:1.5;}
+
+/* ── PHASE BLOCKS (LAB) ── */
+.phase-block{background:var(--blue);border:1px solid var(--border2);margin-bottom:7px;overflow:hidden;}
+.phase-header{padding:13px 15px;cursor:pointer;user-select:none;display:flex;align-items:center;gap:12px;transition:background 0.15s;}
+.phase-header:hover{background:var(--blue2);}
+.phase-num{font-family:'Bebas Neue',sans-serif;font-size:26px;line-height:1;min-width:26px;}
+.phase-meta{flex:1;}
+.phase-title{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:0.07em;}
+.phase-when{font-family:'IBM Plex Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;margin-top:2px;}
+.phase-tag{font-family:'IBM Plex Mono',monospace;font-size:7.5px;padding:3px 9px;border-radius:1px;flex-shrink:0;}
+.phase-body{display:none;border-top:1px solid var(--border2);padding:14px 15px;}
+.phase-block.open .phase-body{display:block;}
+.phase-block.open .chev{transform:rotate(180deg);color:var(--gold);}
+.skill-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:10px 0;}
+.skill-item{background:var(--blue2);padding:9px 11px;}
+.skill-name{font-weight:600;font-size:12px;margin-bottom:2px;color:var(--paper);}
+.skill-why{font-size:10.5px;color:var(--dust);line-height:1.5;}
+.res-list{list-style:none;margin-top:8px;}
+.res-list li{font-size:11.5px;color:rgba(240,232,216,0.65);padding:4px 0;border-bottom:1px solid rgba(212,160,23,0.06);padding-left:14px;position:relative;line-height:1.5;}
+.res-list li:last-child{border-bottom:none;}
+.res-list li::before{content:'→';position:absolute;left:0;color:var(--dust);font-size:10px;}
+.res-list li strong{color:var(--paper);}
+.callout-note{padding:11px 15px;background:rgba(26,58,92,0.4);border-left:2px solid #5a9acc;font-size:12px;color:var(--dust);line-height:1.65;margin:10px 0;}
+.callout-warn{padding:11px 15px;background:rgba(212,160,23,0.07);border-left:2px solid var(--gold);font-size:12px;color:var(--dust);line-height:1.65;margin:10px 0;}
+.callout-note strong,.callout-warn strong{color:var(--paper);}
+
+/* ── TIMELINE BAR ── */
+.tl-bar{display:flex;margin:14px 0;overflow:hidden;height:36px;border:1px solid var(--gold-border);}
+.tl-seg{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1px;padding:5px;cursor:pointer;flex:1;border-right:1px solid rgba(255,255,255,0.12);transition:opacity 0.15s;}
+.tl-seg:last-child{border-right:none;}
+.tl-seg:hover{opacity:0.8;}
+.tl-label{font-family:'IBM Plex Mono',monospace;font-size:7.5px;font-weight:500;letter-spacing:0.06em;color:rgba(255,255,255,0.85);text-align:center;line-height:1.2;}
+
+/* ── PROTOCOL TABLE ── */
+.proto-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;}
+.proto-table th{padding:6px 9px;text-align:left;font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:var(--dust);border-bottom:1px solid var(--border);}
+.proto-table td{padding:7px 9px;border-bottom:1px solid rgba(212,160,23,0.06);vertical-align:top;line-height:1.5;}
+.proto-table tr:last-child td{border-bottom:none;}
+.tret{color:#aa88dd;font-weight:600;}
+.minox{color:var(--green2);font-weight:600;}
+.rest-day{color:var(--dust);}
+
+/* ── WIKI ── */
+.wiki-search{width:100%;background:var(--blue2);border:1px solid var(--border);color:var(--text);padding:8px 11px;font-family:'IBM Plex Mono',monospace;font-size:11px;outline:none;margin-bottom:9px;}
+.wiki-search:focus{border-color:var(--gold);}
+.wiki-search::placeholder{color:var(--dust);}
+.wiki-entry{padding:9px 0;border-bottom:1px solid rgba(212,160,23,0.07);}
+.wiki-entry:last-child{border-bottom:none;}
+.wiki-tag{font-family:'IBM Plex Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:2px;}
+.wiki-topic{font-size:13px;font-weight:600;margin-bottom:2px;color:var(--paper);}
+.wiki-note{font-size:11.5px;color:var(--dust);line-height:1.5;}
+.tag-filter{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:9px;}
+.tag-btn{font-family:'IBM Plex Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;padding:3px 9px;border:1px solid var(--border2);background:transparent;color:var(--dust);cursor:pointer;}
+.tag-btn:hover{color:var(--text);border-color:var(--dust);}
+.tag-btn.active{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);}
+.add-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+.add-row input,.add-row select{background:var(--blue2);border:1px solid var(--border);color:var(--text);padding:7px 9px;font-family:'IBM Plex Mono',monospace;font-size:10px;outline:none;min-width:0;}
+.add-row input:focus,.add-row select:focus{border-color:var(--gold);}
+.add-row input::placeholder{color:var(--dust);}
+.add-btn{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:7px 14px;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:0.1em;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+.add-btn:hover{background:var(--gold-dim);}
+.del-btn{background:transparent;border:1px solid var(--red);color:var(--red2);padding:4px 8px;font-family:'IBM Plex Mono',monospace;font-size:7.5px;cursor:pointer;}
+.del-btn:hover{background:rgba(176,58,42,0.1);}
+
+/* ── CALENDAR / DATING ── */
+.full-cal-nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.cal-nav-btn{background:transparent;border:1px solid var(--gold-border);color:var(--gold);padding:4px 11px;font-family:'IBM Plex Mono',monospace;font-size:9px;cursor:pointer;transition:background 0.15s;}
+.cal-nav-btn:hover{background:var(--gold-dim);}
+.cal-month-label{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:0.1em;color:var(--gold2);}
+.date-card{background:var(--blue);border:1px solid var(--border2);border-left:3px solid var(--pink2);padding:13px 15px;margin-bottom:8px;}
+.date-name{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:0.08em;color:var(--paper);}
+.date-status-badge{font-family:'IBM Plex Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;padding:2px 8px;border-radius:1px;}
+.ds-active{background:rgba(196,90,138,0.2);border:1px solid var(--pink);color:var(--pink2);}
+.ds-maybe{background:rgba(212,160,23,0.15);border:1px solid var(--gold);color:var(--gold2);}
+.ds-past{background:rgba(37,36,32,0.3);border:1px solid var(--border);color:var(--dust);}
+.date-meta-row{display:flex;gap:14px;font-size:11px;color:var(--dust);margin:5px 0;flex-wrap:wrap;}
+.date-note{font-size:12px;font-style:italic;color:rgba(139,160,180,0.65);line-height:1.5;border-top:1px solid var(--border2);padding-top:6px;margin-top:5px;}
+.date-log{margin-top:7px;}
+.date-log-row{display:flex;gap:8px;padding:3px 0;border-bottom:1px solid rgba(212,160,23,0.06);font-size:11px;}
+.date-log-row:last-child{border-bottom:none;}
+.date-log-d{font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:var(--gold);flex-shrink:0;}
+/* add event form */
+.ev-form{background:var(--blue2);border:1px solid var(--border2);padding:12px 14px;margin-bottom:10px;}
+.ev-form-title{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:9px;}
+.form-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;}
+.form-row input,.form-row select,.form-row textarea{background:var(--deep);border:1px solid var(--border);color:var(--text);padding:7px 9px;font-family:'IBM Plex Mono',monospace;font-size:10px;outline:none;min-width:0;}
+.form-row input:focus,.form-row select:focus{border-color:var(--gold);}
+.form-row input::placeholder,.form-row textarea::placeholder{color:var(--dust);}
+
+/* resource table */
+.res-table{width:100%;border-collapse:collapse;font-size:11.5px;}
+.res-table th{padding:7px 9px;text-align:left;font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:0.12em;text-transform:uppercase;color:var(--dust);border-bottom:1px solid var(--border);}
+.res-table td{padding:7px 9px;border-bottom:1px solid rgba(212,160,23,0.06);}
+.res-table tr:last-child td{border-bottom:none;}
+
+/* ── BALANCE HERO ── */
+.bal-hero{background:var(--blue);border:1px solid var(--gold-border);padding:18px 20px 0;margin-bottom:12px;}
+.bal-top{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:16px;gap:14px;flex-wrap:wrap;}
+.bal-label{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--dust);margin-bottom:3px;}
+.bal-num{font-family:'Bebas Neue',sans-serif;font-size:68px;line-height:0.9;color:var(--gold2);}
+.bal-asof{font-size:11px;color:var(--dust);font-style:italic;margin-top:4px;}
+.bal-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);margin:0 -20px;}
+.bm{background:var(--blue2);padding:10px 13px;}
+.bm-lbl{font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:0.14em;text-transform:uppercase;color:var(--dust);margin-bottom:2px;}
+.bm-val{font-family:'Bebas Neue',sans-serif;font-size:20px;line-height:1;}
+.bm-sub{font-size:10px;color:var(--dust);font-style:italic;margin-top:1px;}
+
+/* ── INSTR BLOCK ── */
+.instr-block{background:var(--blue);border:1px solid var(--border2);padding:14px;margin-bottom:7px;}
+.instr-block h3{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:0.06em;margin-bottom:3px;}
+
+/* ── SCROLLBAR ── */
+
+/* STORY CARDS */
+.story-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-bottom:16px;}
+.sc{border:2px solid var(--gold-b);background:var(--blue);cursor:pointer;position:relative;overflow:hidden;aspect-ratio:2/3;display:flex;flex-direction:column;justify-content:flex-end;transition:border-color .18s,transform .15s;}
+.sc::before{content:'';position:absolute;inset:4px;border:1px dotted rgba(212,160,23,.18);pointer-events:none;z-index:1;}
+.sc:hover{border-color:var(--gold2);transform:translateY(-3px);}
+.sc-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:34px;opacity:.07;pointer-events:none;}
+.sc-ov{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 30%,rgba(6,9,15,.92) 100%);pointer-events:none;}
+.sc-lbl{position:relative;z-index:2;padding:10px 12px;}
+.sc-type{font-family:'IBM Plex Mono',monospace;font-size:6.5px;letter-spacing:.15em;text-transform:uppercase;margin-bottom:4px;}
+.sc-title{font-family:'Special Elite',cursive;font-size:14px;color:var(--paper);line-height:1.3;margin-bottom:3px;}
+.sc-meta{font-size:9px;color:var(--dust);font-style:italic;}
+.sc-add{background:rgba(212,160,23,.03);border:2px dashed rgba(212,160,23,.25);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;aspect-ratio:2/3;transition:border-color .15s;}
+.sc-add:hover{border-color:var(--gold);background:rgba(212,160,23,.05);}
+/* STORY EDITOR */
+#se{position:fixed;inset:0;z-index:800;background:var(--deep);display:none;flex-direction:column;}
+#se.open{display:flex}
+.se-top{background:rgba(6,9,15,.98);border-bottom:1px solid var(--gold-border);padding:0 18px;height:50px;display:flex;align-items:center;gap:12px;flex-shrink:0;}
+#se-ttl{font-family:'Special Elite',cursive;font-size:17px;background:transparent;border:none;color:var(--gold2);outline:none;flex:1;}
+#se-info{font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--dust);white-space:nowrap;}
+.se-close{background:transparent;border:1px solid var(--border2);color:var(--dust);padding:5px 12px;font-family:'IBM Plex Mono',monospace;font-size:8px;cursor:pointer;}
+.se-close:hover{border-color:var(--gold);color:var(--gold)}
+.se-body{flex:1;display:flex;overflow:hidden;}
+.se-side{width:195px;flex-shrink:0;background:var(--blue);border-right:1px solid var(--border2);padding:14px;overflow-y:auto;display:flex;flex-direction:column;gap:11px;}
+.se-lbl{font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:.18em;text-transform:uppercase;color:var(--dust);margin-bottom:4px;}
+.se-sel{background:var(--deep);border:1px solid var(--border2);color:var(--text);padding:5px 7px;font-family:'IBM Plex Mono',monospace;font-size:9px;outline:none;width:100%;}
+.se-sel:focus{border-color:var(--gold)}
+#se-notes{background:rgba(6,9,15,.6);border:1px solid var(--border2);color:var(--text);padding:7px;font-family:'Lora',serif;font-size:11px;outline:none;resize:none;width:100%;min-height:90px;line-height:1.6;}
+.se-btn{background:transparent;border:1px solid var(--gold-border);color:var(--gold);padding:7px;font-family:'IBM Plex Mono',monospace;font-size:8px;cursor:pointer;width:100%;transition:background .15s;}
+.se-btn:hover{background:rgba(212,160,23,.09)}
+.se-btn.del{border-color:var(--red);color:var(--red2);}
+.se-btn.del:hover{background:rgba(176,58,42,.1)}
+#se-ta{flex:1;background:var(--deep);border:none;color:var(--text);padding:36px 44px;font-family:'Lora',serif;font-size:16px;line-height:1.85;outline:none;resize:none;overflow-y:auto;}
+#se-ta::placeholder{color:rgba(139,160,180,.22);font-style:italic}
+#se-wc{position:fixed;bottom:14px;right:18px;z-index:810;font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--dust);background:rgba(6,9,15,.85);border:1px solid var(--border2);padding:4px 10px;}
+/* DAY PANEL */
+.day-panel{background:var(--blue2);border:1px solid var(--gold-border);padding:13px 15px;margin-top:10px;display:none;}
+.day-panel.open{display:block}
+.dp-ttl{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.1em;color:var(--gold2);margin-bottom:10px;}
+.dp-ev{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid rgba(212,160,23,.07);font-size:12px;}
+.dp-ev:last-child{border-bottom:none}
+.dp-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.dp-time{font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--dust);min-width:40px;flex-shrink:0;margin-top:2px;}
+.dp-title{flex:1;color:var(--text);line-height:1.4}
+.dp-note{font-size:10.5px;color:var(--dust);font-style:italic;margin-top:1px;}
+/* AI BOX */
+.ai-box-v7{background:var(--blue);border:1px solid var(--gold-border);border-top:3px solid var(--gold);margin-bottom:14px;overflow:hidden;}
+.ai-hdr-v7{background:var(--blue2);padding:9px 13px;display:flex;align-items:center;gap:10px;cursor:pointer;border-bottom:1px solid var(--border2);user-select:none;}
+.ai-av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;border:1px solid var(--gold-border);background:rgba(212,160,23,.07);}
+.ai-nm{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:.1em;color:var(--gold2);}
+.ai-rl{font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:.12em;text-transform:uppercase;color:var(--dust);}
+.ai-chv{margin-left:auto;font-size:10px;color:var(--dust);transition:transform .2s;}
+.ai-box-v7.open .ai-chv{transform:rotate(180deg);color:var(--gold)}
+.ai-bd{display:none;padding:12px 13px;}
+.ai-box-v7.open .ai-bd{display:block}
+.ai-msgs{max-height:220px;overflow-y:auto;margin-bottom:9px;display:flex;flex-direction:column;gap:7px;}
+.ai-msg{padding:8px 11px;font-size:12px;line-height:1.6;}
+.ai-msg.a{background:rgba(212,160,23,.06);border-left:2px solid var(--gold);}
+.ai-msg.u{background:rgba(26,58,92,.35);border-right:2px solid #5a9acc;text-align:right;}
+.ai-who{font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px;}
+.ai-msg.a .ai-who{color:var(--gold)}.ai-msg.u .ai-who{color:#8ab4cc}
+.ai-inp-v7{flex:1;background:rgba(6,9,15,.6);border:1px solid var(--border);color:var(--text);padding:7px 10px;font-family:'Lora',serif;font-size:12px;outline:none;}
+.ai-inp-v7:focus{border-color:var(--gold)}.ai-inp-v7::placeholder{color:var(--dust);font-style:italic}
+.ai-snd{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:7px 13px;font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.1em;cursor:pointer;transition:background .15s;white-space:nowrap;}
+.ai-snd:hover{background:rgba(212,160,23,.09)}.ai-snd:disabled{opacity:.35;cursor:default}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--deep);}
+::-webkit-scrollbar-thumb{background:var(--border);}
+
+/* ── RESPONSIVE ── */
+@media(max-width:680px){
+  .topbar{padding:0 12px;}
+  .nav-tab{padding:0 8px;font-size:7px;}
+  .main{padding:0 12px 60px;}
+  .portals{grid-template-columns:repeat(3,1fr);}
+  .grid2,.grid3,.grid4,.bal-metrics,.skill-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ TOPBAR ══ -->
+
+<div id="se">
+  <div class="se-top">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.15em;color:var(--dust);text-transform:uppercase;flex-shrink:0">ZEN GUN</span>
+    <input id="se-ttl" placeholder="Story title...">
+    <span id="se-info"></span>
+    <button class="se-close" onclick="closeEditor()">CLOSE &times;</button>
+  </div>
+  <div class="se-body">
+    <div class="se-side">
+      <div><div class="se-lbl">Type</div>
+        <select id="se-type" class="se-sel"><option>Short Story</option><option>Poem</option><option>Novel</option><option>Film</option><option>Song</option><option>Essay</option><option>Notes</option><option>Gestation</option><option>Journal</option></select></div>
+      <div><div class="se-lbl">Status</div>
+        <select id="se-stat" class="se-sel"><option>Gestating</option><option>In Progress</option><option>Drafting</option><option>Complete</option></select></div>
+      <div><div class="se-lbl">Notes / Ideas</div>
+        <textarea id="se-notes" placeholder="Mood, images, fragments..."></textarea></div>
+      <button class="se-btn" onclick="saveStory()">SAVE (Ctrl+S)</button>
+      <button class="se-btn del" onclick="deleteStory()">DELETE</button>
+    </div>
+    <textarea id="se-ta" placeholder="Begin here. Time out of mind. Write the first image..." spellcheck="true"></textarea>
+  </div>
+  <div id="se-wc">0 words</div>
+</div>
+<div id="io-panel" style="display:none;background:var(--blue);border:1px solid var(--gold-border);padding:12px 16px;margin:8px 20px 0;position:relative;z-index:10;">
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:9px;">Data Export / Import</div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;">
+    <button onclick="exportData()" style="font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;background:transparent;border:1px solid var(--gold-border);color:var(--gold);padding:7px 14px;cursor:pointer;">Export All Data &darr;</button>
+    <label style="font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;background:transparent;border:1px solid var(--gold-border);color:var(--gold);padding:7px 14px;cursor:pointer;display:inline-block;">Import Data &uarr;<input type="file" accept=".json" style="display:none" onchange="importData(event)"></label>
+  </div>
+  <div style="font-size:10.5px;color:var(--dust);font-style:italic;margin-top:7px;">Export saves everything as JSON. Import into any new version to restore.</div>
+</div>
+<nav class="topbar">
+  <div class="logo"><div class="logo-pulse"></div>LIFE OS</div>
+  <div class="nav-tabs">
+    <div class="nav-tab active" data-page="overview">Overview</div>
+    <div class="nav-tab" data-page="finance">Finance</div>
+    <div class="nav-tab" data-page="zengun">Zen Gun</div>
+    <div class="nav-tab" data-page="body">Body</div>
+    <div class="nav-tab" data-page="workout">Workout</div>
+    <div class="nav-tab" data-page="music">Music</div>
+    <div class="nav-tab" data-page="reading">Reading</div>
+    <div class="nav-tab" data-page="lab">The Lab</div>
+    <div class="nav-tab" data-page="calendar">Calendar</div>
+    <div class="nav-tab" data-page="wiki">Wiki</div>
+  </div>
+  <div class="date-chip" id="date-disp"></div>
+  <button onclick="document.getElementById('io-panel').style.display=document.getElementById('io-panel').style.display==='none'?'block':'none'" style="font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:.1em;text-transform:uppercase;background:transparent;border:1px solid rgba(212,160,23,.45);color:var(--gold);padding:4px 9px;cursor:pointer;white-space:nowrap;flex-shrink:0;">Data &harr;</button>
+</nav>
+
+<div class="main">
+
+<!-- ══════════ OVERVIEW ══════════ -->
+<div class="page active" id="page-overview">
+  <div class="section-head">
+    <div class="eyebrow">Daily Dispatch — <span id="ov-date"></span></div>
+    <h2>Command</h2>
+    <div class="section-sub" id="ov-sub"></div>
+  </div>
+
+  <div class="signal-bar">
+    <div class="signal-icon">📡</div>
+    <div>
+      <div class="signal-label">Today's Signal</div>
+      <div class="signal-text" id="signal-text"></div>
+    </div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="eyebrow" style="margin-bottom:8px;">Today's Mission</div>
+  <div class="cl-block">
+    <div class="cl-head"><span>Daily Completion</span><span id="master-prog" style="color:var(--dust);">0 / 0</span></div>
+    <div id="master-cl"></div>
+  </div>
+
+  <!-- PORTAL GRID — department cards like your website -->
+  <div class="eyebrow" style="margin-bottom:8px;">Departments</div>
+  <div class="portals" id="portal-grid">
+    <div class="portal" onclick="goTo('finance')">
+      <div class="portal-bg">💰</div>
+      <div class="portal-badge">$163</div>
+      <div class="portal-label">
+        <div class="portal-dept">Treasury</div>
+        <div class="portal-title">FINANCE</div>
+        <div class="portal-status" id="pv-finance">Connor $500 · Apr 14</div>
+      </div>
+    </div>
+    <div class="portal" onclick="goTo('zengun')">
+      <div class="portal-bg">📽</div>
+      <div class="portal-label">
+        <div class="portal-dept">Creative Engine</div>
+        <div class="portal-title">ZEN GUN</div>
+        <div class="portal-status">Madison County · Fennimore</div>
+      </div>
+    </div>
+    <div class="portal" onclick="goTo('body')">
+      <div class="portal-bg">⚗️</div>
+      <div class="portal-label">
+        <div class="portal-dept">The Body</div>
+        <div class="portal-title">BODY</div>
+        <div class="portal-status" id="pv-body">Check tonight's protocol</div>
+      </div>
+    </div>
+    <div class="portal" onclick="goTo('workout')">
+      <div class="portal-bg">⚡</div>
+      <div class="portal-label">
+        <div class="portal-dept">The Gym</div>
+        <div class="portal-title">WORKOUT</div>
+        <div class="portal-status" id="pv-workout">Loading...</div>
+      </div>
+    </div>
+    <div class="portal" onclick="goTo('music')">
+      <div class="portal-bg">🎵</div>
+      <div class="portal-label">
+        <div class="portal-dept">Sound</div>
+        <div class="portal-title">MUSIC</div>
+        <div class="portal-status" id="pv-music">Loading...</div>
+      </div>
+    </div>
+    <div class="portal" onclick="goTo('reading')">
+      <div class="portal-bg">📚</div>
+      <div class="portal-label">
+        <div class="portal-dept">The Library</div>
+        <div class="portal-title">READING</div>
+        <div class="portal-status">2 hrs · Oresteia + Homer</div>
+      </div>
+    </div>
+    <div class="portal" onclick="goTo('lab')">
+      <div class="portal-bg">🔬</div>
+      <div class="portal-label">
+        <div class="portal-dept">Dev Track</div>
+        <div class="portal-title">THE LAB</div>
+        <div class="portal-status">Month 1 · Foundations</div>
+      </div>
+    </div>
+    <div class="portal" onclick="goTo('calendar')" style="border-color:rgba(196,90,138,0.55);">
+      <div class="portal-bg">📅</div>
+      <div class="portal-label" style="border-top-color:rgba(196,90,138,0.55);">
+        <div class="portal-dept" style="color:var(--pink2);">Social + Events</div>
+        <div class="portal-title">CALENDAR</div>
+        <div class="portal-status" id="pv-cal">Upcoming dates + events</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dotted"></div>
+
+  <!-- MINI CALENDAR + DATING OVERVIEW -->
+  <div class="grid2">
+    <div class="mini-cal" onclick="goTo('calendar')">
+      <div class="mini-cal-header">
+        <div class="mini-cal-title" id="mini-month-label"></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--dust);">tap → full calendar</div>
+      </div>
+      <div class="cal-grid" id="mini-cal-grid"></div>
+      <div class="upcoming-list" id="mini-upcoming"></div>
+    </div>
+    <div>
+      <div class="eyebrow" style="margin-bottom:8px;">Active — Social</div>
+      <div id="ov-dating"></div>
+      <div style="margin-top:8px;">
+        <div class="eyebrow" style="margin-bottom:6px;">Finance Quick</div>
+        <div class="grid2" style="margin-bottom:0;">
+          <div class="card"><div class="card-lbl">Balance</div><div class="card-num num-a" style="font-size:26px;">$163</div></div>
+          <div class="card"><div class="card-lbl">Next In</div><div class="card-num num-g" style="font-size:22px;">$500</div><div class="card-sub">Connor · Apr 14</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ FINANCE ══════════ -->
+<div class="page" id="page-finance">
+  <div class="section-head">
+    <div class="eyebrow">Dept. of Treasury</div>
+    <h2>Finance</h2>
+    <div class="section-sub">Updated Apr 10 — stay lean through Wisconsin</div>
+  </div>
+  <div class="ai-box-v7" id="ai-finance">
+    <div class="ai-hdr-v7" onclick="this.parentElement.classList.toggle('open')">
+      <div class="ai-av">&#x1F3A9;</div>
+      <div><div class="ai-nm">CONSTANCE</div><div class="ai-rl">Director of Treasury &middot; Your Financial Advisor</div></div>
+      <div class="ai-chv">&#x25BC;</div>
+    </div>
+    <div class="ai-bd">
+      <div class="ai-msgs" id="am-finance"><div class="ai-msg a"><div class="ai-who">Constance</div>The books are open. Balance $163 &mdash; tight but manageable. Connor&apos;s $500 clears Tuesday. What do you need?</div></div>
+      <div style="display:flex;gap:7px"><input class="ai-inp-v7" id="ai-i-finance" placeholder="Ask Constance about your finances..." onkeydown="if(event.key==='Enter')sendAI('finance')"><button class="ai-snd" id="ai-b-finance" onclick="sendAI('finance')">Send &rarr;</button></div>
+    </div>
+  </div>
+  <div class="bal-hero">
+    <div class="bal-top">
+      <div>
+        <div class="bal-label">Current Balance</div>
+        <div class="bal-num">$163</div>
+        <div class="bal-asof">Apr 10 — after travel + Amazon + co-op</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="bal-label">Daily Target</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:30px;color:var(--gold2);">≤ $15 / day</div>
+        <div class="bal-asof">Wisconsin. Stay lean.</div>
+      </div>
+    </div>
+    <div class="bal-metrics">
+      <div class="bm"><div class="bm-lbl">Next Money In</div><div class="bm-val num-a">$500</div><div class="bm-sub">Connor · Tue Apr 14</div></div>
+      <div class="bm"><div class="bm-lbl">Connor Debt</div><div class="bm-val num-r">$2,573</div><div class="bm-sub">Clear Jun 1</div></div>
+      <div class="bm"><div class="bm-lbl">End of Apr Target</div><div class="bm-val num-g">$2,453</div><div class="bm-sub">After all flows</div></div>
+      <div class="bm"><div class="bm-lbl">NYC Cash Apr 17</div><div class="bm-val" style="color:#8ab4cc;">$1,000</div><div class="bm-sub">Grab from apt</div></div>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="card" style="padding:0;overflow:hidden;">
+      <div style="padding:9px 13px;border-bottom:1px solid var(--border2);"><div class="card-lbl">April Cash Flow</div></div>
+      <div style="overflow-x:auto;">
+        <table class="cf-table">
+          <thead><tr><th>Date</th><th>Event</th><th>In/Out</th><th>Balance</th></tr></thead>
+          <tbody>
+            <tr class="sec"><td colspan="4">Apr 10 — Today</td></tr>
+            <tr><td>Apr 10</td><td>Connor $490</td><td class="in">+$490</td><td class="bal">$490</td></tr>
+            <tr><td>Apr 10</td><td>Travel + groceries + Amazon</td><td class="out">-$327</td><td class="bal">$163</td></tr>
+            <tr class="sec"><td colspan="4">Apr 11–13 — Wisconsin</td></tr>
+            <tr><td>Apr 11–13</td><td>Food + bus Milwaukee→ORD</td><td class="out">-$110</td><td class="bal">$53</td></tr>
+            <tr class="sec"><td colspan="4">Apr 14 — Connor $500</td></tr>
+            <tr class="hl"><td>Apr 14</td><td>Connor $500 posts</td><td class="in">+$500</td><td class="bal">$553</td></tr>
+            <tr><td>Apr 14–16</td><td>Food + misc Wisconsin</td><td class="out">-$75</td><td class="bal">$478</td></tr>
+            <tr class="sec"><td colspan="4">Apr 17 — NYC</td></tr>
+            <tr class="hl"><td>Apr 17</td><td>Fly + grab $1,000 cash from apt</td><td class="in">+$1,000</td><td class="bal">$1,478</td></tr>
+            <tr><td>Apr 17–24</td><td>NYC food + dates + misc</td><td class="out">-$300</td><td class="bal">$1,178</td></tr>
+            <tr class="hl"><td>Apr 24</td><td>Leo $400 rent share</td><td class="in">+$400</td><td class="bal">$1,578</td></tr>
+            <tr><td>Apr 24–30</td><td>NYC food + misc</td><td class="out">-$200</td><td class="bal">$1,378</td></tr>
+            <tr class="sec"><td colspan="4">Apr 30</td></tr>
+            <tr class="hl"><td>Apr 30</td><td>Connor $2,000 debt paydown</td><td class="in">+$2,000</td><td class="bal">$3,378</td></tr>
+            <tr><td>May 1</td><td>La Crosse rent $925</td><td class="out">-$925</td><td class="bal">$2,453</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:9px;">
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div style="padding:9px 13px;border-bottom:1px solid var(--border2);"><div class="card-lbl">Obligations</div></div>
+        <table class="cf-table">
+          <thead><tr><th>Person</th><th>Amount</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Connor / HB360</td><td>$2,573</td><td><span class="badge badge-pending">Jun 1</span></td></tr>
+            <tr><td>Kealy (mom)</td><td>$300</td><td><span class="badge badge-owed">ASAP</span></td></tr>
+            <tr><td>Gus</td><td>$1,100</td><td><span class="badge badge-pending">Slow PayPal</span></td></tr>
+            <tr><td>Nikolaj</td><td>Paid thru Apr</td><td><span class="badge badge-paid">Clear ✓</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-lbl">Savings Rules</div>
+        <div class="stat-row"><span class="stat-lbl">Daily cap — Wisconsin</span><span class="val-a">≤$15/day</span></div>
+        <div class="stat-row"><span class="stat-lbl">Daily cap — NYC</span><span class="val-a">≤$20/day</span></div>
+        <div class="stat-row"><span class="stat-lbl">Dates + going out</span><span class="val-a">≤$200 Apr total</span></div>
+        <div class="stat-row"><span class="stat-lbl">Impulse Amazon</span><span class="val-g">List only, batch</span></div>
+        <div class="stat-row"><span class="stat-lbl">Buffer into May</span><span class="val-g">$500+ minimum</span></div>
+      </div>
+      <div class="card">
+        <div class="card-lbl">Connor Paydown — Clear Jun 1</div>
+        <div class="prog-wrap"><div class="prog-lbl"><span>Apr 14 — $500</span><span>clearing</span></div><div class="prog-track"><div class="prog-fill pf-gold" style="width:20%"></div></div></div>
+        <div class="prog-wrap"><div class="prog-lbl"><span>Apr 30 — $2,000</span><span>planned</span></div><div class="prog-track"><div class="prog-fill pf-gold" style="width:0%"></div></div></div>
+        <div class="prog-wrap"><div class="prog-lbl"><span>May 15 — final</span><span>planned</span></div><div class="prog-track"><div class="prog-fill pf-green" style="width:0%"></div></div></div>
+        <div style="margin-top:7px;font-size:10px;color:var(--dust);font-style:italic;">Full $2,500 pay resumes Jun 15.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ ZEN GUN ══════════ -->
+<div class="page" id="page-zengun">
+  <div class="section-head">
+    <div class="eyebrow">Creative Engine</div>
+    <h2>Zen Gun</h2>
+    <div class="section-sub">Short stories · MiniDV · Song lyrics · Online rep before 30</div>
+  </div>
+  <div class="ai-box-v7" id="ai-zengun"><div class="ai-hdr-v7" onclick="this.parentElement.classList.toggle('open')"><div class="ai-av">&#x1F33F;</div><div><div class="ai-nm">FLORA</div><div class="ai-rl">Director of Creative Affairs &middot; Your Muse</div></div><div class="ai-chv">&#x25BC;</div></div><div class="ai-bd"><div class="ai-msgs" id="am-zengun"><div class="ai-msg a"><div class="ai-who">Flora</div>Nine projects alive. The Carnival is waiting for its first apocalyptic line. Ronaldo is saddling up. Open any card and begin.</div></div><div style="display:flex;gap:7px"><input class="ai-inp-v7" id="ai-i-zengun" placeholder="Ask Flora... opening line for Carnival of the Cannibal" onkeydown="if(event.key==='Enter')sendAI('zengun')"><button class="ai-snd" id="ai-b-zengun" onclick="sendAI('zengun')">Send &rarr;</button></div></div></div>
+  <div class="eyebrow" style="margin-bottom:9px">Writing Studio &mdash; Click Any Card to Open</div>
+  <div class="story-grid" id="story-grid"></div>
+  <div class="grid2" style="margin-bottom:14px;">
+    <div class="card"><div class="card-lbl">Mission</div><div style="font-size:13px;font-style:italic;line-height:1.7;color:rgba(240,232,216,0.8);margin-top:4px;">Establish an online creative reputation before 30. Zen Gun is the hub — all formats feed the same brand.</div></div>
+    <div class="card"><div class="card-lbl">Aesthetic</div><div style="font-size:12px;color:var(--dust);line-height:1.7;margin-top:3px;">Slow · atmospheric · dreamlike. Time out of mind. Artifacts, landscapes, portraits. The specific over the general.</div></div>
+  </div>
+  <div class="eyebrow" style="margin-bottom:8px;">Active Projects</div>
+  <div class="zg-card"><div class="zg-type">Short Story · In Progress</div><h3>Madison County Church Suicide Corner</h3><p>Slow, atmospheric, Wisconsin. Time out of mind. Begin with an image, not a plot.</p></div>
+  <div class="zg-card"><div class="zg-type">Short Story · In Progress</div><h3>That Motel in Fennimore</h3><p>Roadside America, specific and strange. The motel as threshold space.</p></div>
+  <div class="zg-card" style="border-left-color:#5a9acc;"><div class="zg-type">MiniDV Film · Complete</div><h3>The Drinker</h3><p>Shot in Denmark. Slow, dreamlike, centered on artifacts and landscape.</p></div>
+  <div class="zg-card" style="border-left-color:var(--green2);"><div class="zg-type">AI Platform · Building</div><h3>Life OS</h3><p>This dashboard. Build for yourself → productize → revenue. The story of building it is the creative content.</p></div>
+</div>
+
+<!-- ══════════ BODY ══════════ -->
+<div class="page" id="page-body">
+  <div class="section-head">
+    <div class="eyebrow">Dept. of the Body</div>
+    <h2>Body</h2>
+    <div class="section-sub">Hair protocol · Skin · Daily habits · Streak tracking</div>
+  </div>
+  <div class="eyebrow" style="margin-bottom:8px;">Daily Habits — <span id="body-day-lbl"></span></div>
+  <div class="cl-block" id="body-cl">
+    <div class="cl-head"><span>Body Habits</span><span id="body-prog" style="color:var(--dust);">0/0</span></div>
+    <div id="body-cl-items"></div>
+  </div>
+  <div class="eyebrow" style="margin:12px 0 8px;">Weekly Hair Protocol</div>
+  <div class="card" style="padding:0;overflow:hidden;">
+    <div style="padding:9px 13px;border-bottom:1px solid var(--border2);"><div class="card-lbl">Tret + Minox Schedule</div></div>
+    <table class="proto-table">
+      <thead><tr><th>Day</th><th>Protocol</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Monday</td><td><span class="tret">Tret scalp+face</span> → <span class="minox">Minox</span></td><td>Wait 20–30 min between</td></tr>
+        <tr><td>Tuesday</td><td><span class="minox">Minox only</span></td><td>No tret</td></tr>
+        <tr><td>Wednesday</td><td><span class="tret">Tret scalp+face</span> → <span class="minox">Minox</span></td><td>Wait 20–30 min between</td></tr>
+        <tr><td>Thursday</td><td><span class="minox">Minox only</span></td><td>No tret</td></tr>
+        <tr><td>Friday</td><td><span class="tret">Tret scalp+face</span> → <span class="minox">Minox</span></td><td>Wait 20–30 min between</td></tr>
+        <tr><td>Saturday</td><td><span class="minox">Minox only</span></td><td>No tret</td></tr>
+        <tr><td>Sunday</td><td><span class="rest-day">Rest or Minox</span></td><td>Optional — let skin recover</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="eyebrow" style="margin:12px 0 8px;">Key Rules</div>
+  <div class="card">
+    <div class="stat-row"><span class="stat-lbl">Order</span><span class="val-a">ALWAYS tret first, never after</span></div>
+    <div class="stat-row"><span class="stat-lbl">Wait time</span><span class="val-a">20–30 min tret → minox</span></div>
+    <div class="stat-row"><span class="stat-lbl">After minox</span><span class="val-a">No wash for 4 hours</span></div>
+    <div class="stat-row"><span class="stat-lbl">Tret concentration</span><span class="val-g">0.025% — ideal start</span></div>
+    <div class="stat-row"><span class="stat-lbl">Vitamin C serum</span><span class="val-g">Morning ONLY — never mix with tret</span></div>
+    <div class="stat-row"><span class="stat-lbl">Fin</span><span class="val-g">Same time every day, no exceptions</span></div>
+    <div class="stat-row"><span class="stat-lbl">Derma roller — clean with</span><span class="val-g">70% isopropyl before + after</span></div>
+  </div>
+</div>
+
+<!-- ══════════ WORKOUT ══════════ -->
+<div class="page" id="page-workout">
+  <div class="section-head">
+    <div class="eyebrow">The Gym — Week 2</div>
+    <h2>Workout</h2>
+    <div class="section-sub">Wider shoulders · Chest · Visible abs · Dumbbells + pull-up bar</div>
+  </div>
+  <div class="cl-block">
+    <div class="cl-head"><span>Workout Checklist</span><span id="wo-prog">0/0</span></div>
+    <div id="wo-cl-items"></div>
+  </div>
+  <div class="card" id="today-wo-card" style="margin-bottom:10px;border-color:var(--gold-border);background:rgba(212,160,23,0.04);">
+    <div class="card-lbl" style="color:var(--gold);">Today's Session</div>
+    <div id="today-wo-name" style="font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:0.06em;margin-top:3px;color:var(--gold2);"></div>
+    <div id="today-wo-focus" style="font-size:11px;color:var(--dust);margin-top:2px;font-style:italic;"></div>
+  </div>
+  <div class="wd open"><div class="wd-header" onclick="toggleWD(this)"><div class="wd-num">Fri</div><div class="wd-meta"><div class="wd-name" style="color:var(--red2);">Pull-ups + Chest + Light Legs</div><div class="wd-focus">Pull focus · Chest volume</div></div><div class="chev">▼</div></div><div class="wd-body"><ul class="ex-list"><li>Dead hangs 2×30s + Scapular pull-ups 2×8<span class="ex-sets">Warm-up</span></li><li>Wide-Grip Pull-ups<span class="ex-sets">4×max</span></li><li>Chin-ups<span class="ex-sets">3×max</span></li><li>DB Bent-over Row<span class="ex-sets">4×12ea</span></li><li>Rear Delt Fly<span class="ex-sets">3×15</span></li><li>Wide Push-ups + Floor Press + Chest Fly<span class="ex-sets">3×ea</span></li><li>Bodyweight Squats + Glute Bridges<span class="ex-sets">3×20</span></li></ul></div></div>
+  <div class="wd"><div class="wd-header" onclick="toggleWD(this)"><div class="wd-num">Sat</div><div class="wd-meta"><div class="wd-name" style="color:var(--gold2);">Shoulders Heavy + Abs</div><div class="wd-focus">All 3 delt heads · Width session</div></div><div class="chev">▼</div></div><div class="wd-body"><ul class="ex-list"><li>DB Overhead Press<span class="ex-sets">4×8–10</span></li><li>Lateral Raises drop set<span class="ex-sets">4×12+12p</span></li><li>Elevated Pike Push-ups ★<span class="ex-sets">4×10–12</span></li><li>Rear Delt Fly<span class="ex-sets">4×15</span></li><li>Hanging Knee Raises + Plank + Bicycle<span class="ex-sets">3×ea</span></li></ul></div></div>
+  <div class="wd"><div class="wd-header" onclick="toggleWD(this)"><div class="wd-num">Sun</div><div class="wd-meta"><div class="wd-name" style="color:var(--gold2);">Shoulders + Chest + Legs</div><div class="wd-focus">Third shoulder hit this week</div></div><div class="chev">▼</div></div><div class="wd-body"><ul class="ex-list"><li>DB Overhead Press<span class="ex-sets">4×10</span></li><li>Lateral Raises<span class="ex-sets">4×15</span></li><li>Elevated Pike Push-ups ★<span class="ex-sets">3×10–12</span></li><li>Rear Delt Fly + Wide Push-ups + Floor Press<span class="ex-sets">3×ea</span></li><li>Reverse Lunges + Calf Raises<span class="ex-sets">3×12ea</span></li></ul></div></div>
+  <div class="wd"><div class="wd-header" onclick="toggleWD(this)"><div class="wd-num">Mon</div><div class="wd-meta"><div class="wd-name" style="color:var(--red2);">Sprints + Leg Finisher</div><div class="wd-focus">6–7 sprints full effort · testosterone boost</div></div><div class="chev">▼</div></div><div class="wd-body"><ul class="ex-list"><li>5 min warm-up jog<span class="ex-sets">Non-negotiable</span></li><li>6–7 × 20–30s sprints at 90–100%<span class="ex-sets">Walk 90s recovery</span></li><li>Jump Squats + Bulgarian Split Squat + RDL<span class="ex-sets">3×ea</span></li></ul></div></div>
+  <div class="wd" style="opacity:0.4;"><div class="wd-header"><div class="wd-num" style="color:var(--dust);">Tue</div><div class="wd-meta"><div class="wd-name" style="color:var(--dust);">Full Rest</div><div class="wd-focus">Eat protein · Sleep 8 hrs</div></div></div></div>
+  <div class="wd"><div class="wd-header" onclick="toggleWD(this)"><div class="wd-num">Wed</div><div class="wd-meta"><div class="wd-name" style="color:var(--gold2);">Shoulders + Chest + Legs</div><div class="wd-focus">Hardest session of the week</div></div><div class="chev">▼</div></div><div class="wd-body"><ul class="ex-list"><li>DB Overhead Press (heaviest)<span class="ex-sets">4×8–10</span></li><li>Lateral Raises drop set<span class="ex-sets">4×12+12p</span></li><li>Elevated Pike Push-ups ★<span class="ex-sets">4×10–12</span></li><li>Rear Delt Fly + Arnold Press<span class="ex-sets">4+3×ea</span></li></ul></div></div>
+  <div class="wd"><div class="wd-header" onclick="toggleWD(this)"><div class="wd-num">Thu</div><div class="wd-meta"><div class="wd-name" style="color:#4a8a8a;">Pull-ups + Abs</div><div class="wd-focus">Beat last time · V-taper work</div></div><div class="chev">▼</div></div><div class="wd-body"><ul class="ex-list"><li>Wide-Grip Pull-ups (beat last)<span class="ex-sets">4×max</span></li><li>Chin-ups<span class="ex-sets">3×max</span></li><li>DB Row + Rear Delt Fly<span class="ex-sets">4×ea</span></li><li>Hanging Knee Raises + Plank + Bicycle<span class="ex-sets">3×ea</span></li></ul></div></div>
+</div>
+
+<!-- ══════════ MUSIC ══════════ -->
+<div class="page" id="page-music">
+  <div class="section-head">
+    <div class="eyebrow">Dept. of Sound</div>
+    <h2>Music</h2>
+    <div class="section-sub">Guitar active — Wisconsin. Piano resumes NYC Apr 17. Daily listening below.</div>
+  </div>
+  <div class="cl-block">
+    <div class="cl-head"><span>Music Checklist</span><span id="mu-prog">0/0</span></div>
+    <div id="mu-cl-items"></div>
+  </div>
+  <div class="card" style="margin-bottom:10px;">
+    <div class="card-lbl">Today's Listening — <span id="music-day-lbl"></span></div>
+    <div id="today-listening" style="margin-top:8px;"></div>
+  </div>
+  <div class="grid2" style="margin-bottom:12px;">
+    <div class="instr-block"><div class="eyebrow">Active — Wisconsin</div><h3 style="color:var(--gold2);">Guitar</h3><div style="font-size:12px;color:var(--dust);margin-top:4px;line-height:1.6;">30–45 min/day. Blues → Jazz → Bluegrass → Gypsy. Theory from scratch.</div><div style="margin-top:7px;"><div class="prog-wrap"><div class="prog-lbl"><span>Blues Foundation (Wk 1–4)</span><span>Active</span></div><div class="prog-track"><div class="prog-fill pf-gold" style="width:25%"></div></div></div><div class="prog-wrap"><div class="prog-lbl"><span>Jazz Harmony (Wk 5–8)</span><span>Upcoming</span></div><div class="prog-track"><div class="prog-fill pf-blue" style="width:0%"></div></div></div></div></div>
+    <div class="instr-block"><div class="eyebrow" style="color:var(--dust);">Resumes Apr 17 — NYC</div><h3 style="color:var(--dust);">Piano</h3><div style="font-size:12px;color:rgba(139,160,180,0.5);margin-top:4px;line-height:1.6;">90 min/day. Blues + Gospel · Classical · Jazz. Schubert D.960 long-term.</div><div style="margin-top:7px;"><div class="prog-wrap"><div class="prog-lbl"><span>Schubert Moment Musical No.3</span><span>Active</span></div><div class="prog-track"><div class="prog-fill pf-gold" style="width:35%"></div></div></div></div></div>
+  </div>
+  <div class="eyebrow" style="margin-bottom:7px;">Guitar Weekly Sessions</div>
+  <div class="sess open"><div class="sess-header" onclick="toggleSess(this)"><div class="sess-day">MON</div><div class="sess-title"><h4>Blues Scale & Bends</h4><div class="sess-focus">Minor Pentatonic · 12-bar jam · Major Scale theory</div></div></div><div class="sess-body"><div class="sess-item"><div class="sess-time">5 min</div><div class="sess-desc"><h5>Chromatic warmup</h5><p>Spider exercises, metronome 60 bpm.</p></div></div><div class="sess-item"><div class="sess-time">15 min</div><div class="sess-desc"><h5>Minor Pentatonic + Blues Scale in A</h5><p>Focus on bends and vibrato.</p><div class="chips"><span class="chip">YT: Marty Music — Blues Scale 5 Positions</span></div></div></div><div class="sess-item"><div class="sess-time">10 min</div><div class="sess-desc"><h5>Jam over 12-bar blues in A</h5><p>iReal Pro. Improvise. No stopping.</p></div></div></div></div>
+  <div class="sess"><div class="sess-header" onclick="toggleSess(this)"><div class="sess-day">TUE</div><div class="sess-title"><h4>Jazz Shell Chords</h4><div class="sess-focus">Cmaj7 Cm7 C7 · ii-V-I · Autumn Leaves</div></div></div><div class="sess-body"><div class="sess-item"><div class="sess-time">20 min</div><div class="sess-desc"><h5>Shell Chords → ii-V-I</h5><p>Root, 3rd, 7th. Dm7→G7→Cmaj7.</p><div class="chips"><span class="chip">YT: Adam Rafferty — Jazz Shell Chords</span></div></div></div></div></div>
+  <div class="sess"><div class="sess-header" onclick="toggleSess(this)"><div class="sess-day">WED</div><div class="sess-title"><h4>Flatpicking Mechanics</h4><div class="sess-focus">G Major · Crosspicking · Alternate picking</div></div></div><div class="sess-body"><div class="sess-item"><div class="sess-time">25 min</div><div class="sess-desc"><h5>G Major Scale + Crosspicking intro</h5><p>Tony Rice open position. Alternate picking strictly down-up.</p><div class="chips"><span class="chip">YT: Bryan Sutton — Bluegrass Flatpicking</span></div></div></div></div></div>
+  <div class="sess"><div class="sess-header" onclick="toggleSess(this)"><div class="sess-day">THU</div><div class="sess-title"><h4>Theory on the Neck</h4><div class="sess-focus">Intervals · Chord construction · CAGED</div></div></div><div class="sess-body"><div class="sess-item"><div class="sess-time">20 min</div><div class="sess-desc"><h5>Intervals → Chords → CAGED</h5><p>Wk 1: 3rds and 7ths. Wk 2: build chords. Wk 3: CAGED.</p><div class="chips"><span class="chip">YT: Paul Davids — CAGED Complete</span></div></div></div></div></div>
+  <div class="sess"><div class="sess-header" onclick="toggleSess(this)"><div class="sess-day">FRI</div><div class="sess-title"><h4>Gypsy Jazz</h4><div class="sess-focus">La Pompe · Minor Swing · Django listen</div></div></div><div class="sess-body"><div class="sess-item"><div class="sess-time">20 min</div><div class="sess-desc"><h5>La Pompe + Minor Swing Shapes</h5><div class="chips"><span class="chip">YT: Gonzalo Bergara — La Pompe (essential)</span></div></div></div><div class="sess-item"><div class="sess-time">10 min</div><div class="sess-desc"><h5>Active Listen: one Django track</h5><p>3 listens: pleasure → melody → rhythm only.</p></div></div></div></div>
+  <div class="sess"><div class="sess-header" onclick="toggleSess(this)"><div class="sess-day">SAT</div><div class="sess-title"><h4>Blues Deep Dive</h4><div class="sess-focus">One complete lick · Full 12-bar jam</div></div></div><div class="sess-body"><div class="sess-item"><div class="sess-time">35 min</div><div class="sess-desc"><h5>Learn + perform one blues lick</h5><p>BB King vibrato wk 1–2. SRV double-stops wk 3–4.</p><div class="chips"><span class="chip">YT: TrueFire — BB King Licks</span></div></div></div></div></div>
+  <div style="background:var(--blue);border:1px solid var(--border2);padding:10px 12px;margin-top:3px;font-size:11.5px;color:var(--dust);font-style:italic;">Sunday — Ears only. 2 full records. Full attention. No guitar.</div>
+</div>
+
+<!-- ══════════ READING ══════════ -->
+<div class="page" id="page-reading">
+  <div class="section-head">
+    <div class="eyebrow">The Library — 2-Year Curriculum</div>
+    <h2>Reading</h2>
+    <div class="section-sub">Q2 — Homer & the Greek World · 2 hrs/day</div>
+  </div>
+  <div class="cl-block">
+    <div class="cl-head"><span>Reading Checklist</span><span id="rd-prog">0/0</span></div>
+    <div id="rd-cl-items"></div>
+  </div>
+  <div class="grid2" style="margin-top:4px;">
+    <div class="card" style="padding:0;overflow:hidden;">
+      <div style="padding:9px 13px;border-bottom:1px solid var(--border2);"><div class="card-lbl">Currently Reading</div></div>
+      <div style="padding:9px 13px;">
+        <div class="book-row"><div class="book-spine" style="background:var(--gold);"></div><div class="book-info"><div class="auth">KJV · Daily</div><h4>The Bible</h4><div class="bnote">Job → Psalms → Gospels. Keep reading daily.</div></div></div>
+        <div class="book-row"><div class="book-spine" style="background:var(--red2);"></div><div class="book-info"><div class="auth">Aeschylus · Finish First</div><h4>The Oresteia</h4><div class="bnote">All three plays as one work. Q2 core.</div></div></div>
+        <div class="book-row"><div class="book-spine" style="background:#5a9acc;"></div><div class="book-info"><div class="auth">Robert Caro</div><h4>The Path to Power (LBJ Vol. 1)</h4><div class="bnote">History alongside the Greeks.</div></div></div>
+        <div class="book-row"><div class="book-spine" style="background:var(--green2);"></div><div class="book-info"><div class="auth">Shelby Foote</div><h4>The Civil War: A Narrative Vol. I</h4><div class="bnote">Second-hour reading. The American Iliad.</div></div></div>
+        <div class="book-row"><div class="book-spine" style="background:#8a6aaa;"></div><div class="book-info"><div class="auth">Montaigne · Always Open</div><h4>The Complete Essays</h4><div class="bnote">Browse daily, don't rush.</div></div></div>
+        <div class="book-row"><div class="book-spine" style="background:var(--gold);"></div><div class="book-info"><div class="auth">Faulkner</div><h4>The Sound and the Fury</h4><div class="bnote">Finish → straight to Absalom, Absalom!</div></div></div>
+        <div class="book-row"><div class="book-spine" style="background:var(--dust);"></div><div class="book-info"><div class="auth">Daily Forever</div><h4>Chekhov · Wodehouse · Dhammapada</h4><div class="bnote">One Dhammapada chapter every day.</div></div></div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:9px;">
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div style="padding:9px 13px;border-bottom:1px solid var(--border2);"><div class="card-lbl">Q2 — Apr–Jun</div></div>
+        <div style="padding:9px 13px;">
+          <div class="book-row"><div class="book-spine" style="background:var(--red2);"></div><div class="book-info"><div class="auth">Homer · Tier I</div><h4>Iliad → Odyssey</h4><div class="bnote">Read aloud. Mark every simile.</div></div></div>
+          <div class="book-row"><div class="book-spine" style="background:var(--gold);"></div><div class="book-info"><div class="auth">Sophocles · Tier I</div><h4>Oedipus Rex · Antigone</h4><div class="bnote">Antigone immediately after Oedipus.</div></div></div>
+          <div class="book-row"><div class="book-spine" style="background:#5a9acc;"></div><div class="book-info"><div class="auth">Thucydides</div><h4>History of the Peloponnesian War</h4><div class="bnote">Books II + V. The Melian Dialogue.</div></div></div>
+          <div class="book-row"><div class="book-spine" style="background:#4a8a8a;"></div><div class="book-info"><div class="auth">Thoreau</div><h4>Walden</h4><div class="bnote">One chapter per day alongside Greeks.</div></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-lbl">Daily — Both Years</div>
+        <div class="stat-row"><span class="stat-lbl">Dhammapada</span><span class="val-a">One chapter every day</span></div>
+        <div class="stat-row"><span class="stat-lbl">Chekhov + Wodehouse</span><span class="val-a">Always open</span></div>
+        <div class="stat-row"><span class="stat-lbl">MIT Python (Tech)</span><span class="val-a">3× per week → The Lab</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ THE LAB ══════════ -->
+<div class="page" id="page-lab">
+  <div class="section-head">
+    <div class="eyebrow">Dev Track — 3–6 Month Sprint · Professor Mode</div>
+    <h2>The Lab</h2>
+    <div class="section-sub">Exact week-by-week instructions. What to read, download, and build. Nothing abstract.</div>
+  </div>
+  <div class="cl-block">
+    <div class="cl-head"><span>Lab Checklist</span><span id="lab-prog">0/0</span></div>
+    <div id="lab-cl-items"></div>
+  </div>
+  <div class="callout-warn" style="margin-bottom:12px;"><strong>The rule:</strong> Learn → apply to Life OS or Mr. Greg same day. Never learn in the abstract. Daily minimum: 1 hour. Miss a day = 2 hours next day.</div>
+  <div class="tl-bar">
+    <div class="tl-seg" style="background:#1a4a7a;" onclick="openPhase(0)"><span class="tl-label">Month 1<br>Foundations</span></div>
+    <div class="tl-seg" style="background:#1a6b47;" onclick="openPhase(1)"><span class="tl-label">Month 2<br>Go Live</span></div>
+    <div class="tl-seg" style="background:#8a6a18;" onclick="openPhase(2)"><span class="tl-label">Month 3<br>Mr. Greg v1</span></div>
+    <div class="tl-seg" style="background:#5a3a8a;" onclick="openPhase(3)"><span class="tl-label">Month 4–5<br>Integrations</span></div>
+    <div class="tl-seg" style="background:#8a2a1a;" onclick="openPhase(4)"><span class="tl-label">Month 6<br>Ship Both</span></div>
+  </div>
+
+  <div class="phase-block open" id="phase-0">
+    <div class="phase-header" onclick="togglePhase(0)"><div class="phase-num" style="color:#5a9acc;">01</div><div class="phase-meta"><div class="phase-title">Foundations — HTML, CSS, JavaScript, Git</div><div class="phase-when" style="color:#5a9acc;">Month 1 · Weeks 1–4 · 10 hrs/week minimum</div></div><span class="phase-tag" style="background:rgba(58,90,122,0.2);border:1px solid #3a5a7a;color:#8ab4cc;">START HERE</span><div class="chev" style="color:var(--gold);">▼</div></div>
+    <div class="phase-body">
+      <div class="callout-note"><strong>Why this first:</strong> Life OS is pure HTML/CSS/JS. You can edit it right now. Understanding it deeply lets you host your own dashboard within weeks — the fastest win.</div>
+      <div class="eyebrow" style="margin:10px 0 6px;">Week 1 — How the web works + HTML + Git</div>
+      <ul class="res-list">
+        <li><strong>Day 1 — Install VS Code</strong> (code.visualstudio.com, free). Open your Life OS HTML in it. Read every line — don't change anything yet.</li>
+        <li><strong>Day 1 — Create a GitHub account</strong> (github.com). Do the Odin Project "Introduction to Git" lesson. Follow every step.</li>
+        <li><strong>Days 2–7 — The Odin Project Foundations</strong> (theodinproject.com). Start lesson 1. Do NOT skip anything including setup.</li>
+        <li><strong>Watch CS50x 2026 Week 0</strong> (cs50.harvard.edu/x, free). Best lecture on how computers work before you touch code.</li>
+      </ul>
+      <div class="eyebrow" style="margin:10px 0 6px;">Week 2 — CSS (Flexbox + Grid)</div>
+      <ul class="res-list">
+        <li><strong>Continue Odin Foundations</strong> through CSS. Flexbox and Grid are the most important lessons. After each lesson, open Life OS and find where you're using it. Change it. Break it. Fix it.</li>
+        <li><strong>Watch CS50x Week 8</strong> (HTML/CSS/JavaScript lecture). Clearest explanation of how web pages actually work.</li>
+      </ul>
+      <div class="eyebrow" style="margin:10px 0 6px;">Weeks 3–4 — JavaScript</div>
+      <ul class="res-list">
+        <li><strong>Continue Odin JS sections</strong> — do every lesson and exercise in order.</li>
+        <li><strong>Download free:</strong> Eloquent JavaScript 4th Edition — eloquentjavascript.net — PDF or epub. Read chapters 1–6 alongside Odin. Do every exercise.</li>
+        <li><strong>Use as reference:</strong> javascript.info — Part 1, chapters 1–9. Look things up here when Odin or Eloquent JS confuses you.</li>
+        <li><strong>Week 4 milestone:</strong> Create free Netlify account (netlify.com). Drag Life OS HTML file in. Get a real URL. 10 minutes. You now have a live product.</li>
+      </ul>
+      <div class="callout-note" style="margin-top:8px;"><strong>Month 1 milestone:</strong> Life OS hosted at a real URL. You can edit HTML in VS Code, push to GitHub, Netlify auto-updates. That's a real developer workflow.</div>
+    </div>
+  </div>
+
+  <div class="phase-block" id="phase-1">
+    <div class="phase-header" onclick="togglePhase(1)"><div class="phase-num" style="color:var(--green2);">02</div><div class="phase-meta"><div class="phase-title">Life OS Goes Live — Supabase + Plaid + Real Data</div><div class="phase-when" style="color:var(--green2);">Month 2 · Weeks 5–8</div></div><span class="phase-tag" style="background:rgba(58,138,90,0.2);border:1px solid var(--green);color:var(--green2);">MONTH 2</span><div class="chev">▼</div></div>
+    <div class="phase-body">
+      <div class="callout-note"><strong>The shift:</strong> Life OS saves to localStorage — dies when you clear the browser. This month you connect to Supabase (real database) and Plaid (live bank). Finance tab updates automatically.</div>
+      <ul class="res-list">
+        <li><strong>Week 5 — Supabase:</strong> supabase.com — free account. Read "JavaScript quickstart" (20 min). First task: move wiki from localStorage to a Supabase table. ~40 lines of code. Use Claude to help write it.</li>
+        <li><strong>Week 6 — Async JS + Anthropic API:</strong> javascript.info Part 1 Chapter 11 — Promises and async/await. Then docs.anthropic.com "Messages API" quickstart. Call Claude from your own code for the first time.</li>
+        <li><strong>Week 7 — Plaid:</strong> plaid.com — free developer sandbox. Follow quickstart. Wire balance into Finance tab. The number updates live.</li>
+        <li><strong>Week 8 — Domain:</strong> namecheap.com — ~$12/year. Connect to Netlify in one click. Life OS at your real URL.</li>
+        <li><strong>Download free:</strong> You Don't Know JS Yet by Kyle Simpson — github.com/getify/You-Dont-Know-JS — read alongside this month's work.</li>
+      </ul>
+      <div class="callout-note"><strong>Month 2 milestone:</strong> Life OS at your domain. Wiki syncs across phone + laptop. Finance tab shows live balance. You've called Claude API from your own code.</div>
+    </div>
+  </div>
+
+  <div class="phase-block" id="phase-2">
+    <div class="phase-header" onclick="togglePhase(2)"><div class="phase-num" style="color:var(--gold2);">03</div><div class="phase-meta"><div class="phase-title">Mr. Greg v1 — Python + Flask + Claude API</div><div class="phase-when" style="color:var(--gold2);">Month 3 · Weeks 9–12</div></div><span class="phase-tag" style="background:rgba(212,160,23,0.15);border:1px solid var(--gold);color:var(--gold2);">MONTH 3</span><div class="chev">▼</div></div>
+    <div class="phase-body">
+      <div class="callout-note"><strong>Now the product:</strong> Mr. Greg chat widget — Claude-powered, qualifies ACA leads, NJ ballpark estimates, handoff to Connor. Python + Flask backend. Real URL by end of week 12.</div>
+      <ul class="res-list">
+        <li><strong>Week 9 — Python:</strong> Continue MIT textbook. Supplement with MIT OCW 6.0001 free lectures (ocw.mit.edu). Buy Python Crash Course 3rd Ed. by Eric Matthes (~$30 Amazon). Read chapters 1–8 only.</li>
+        <li><strong>Week 10 — Flask:</strong> Flask Mega-Tutorial by Grinberg (blog.miguelgrinberg.com, free) — Parts 1–4. Watch CS50W Week 3 (cs50.harvard.edu/web, free) for context.</li>
+        <li><strong>Week 11 — System prompt:</strong> Read Anthropic prompt engineering guide. Write Mr. Greg persona — tone, 3 qualifying questions, NJ ACA scenario library, handoff logic. Use Claude to iterate it.</li>
+        <li><strong>Week 12 — Deploy:</strong> render.com — free tier, Flask deploys in 10 min. Set API keys in Render dashboard (never in code). Test it. Show Connor.</li>
+      </ul>
+      <div class="callout-warn"><strong>This is the hard month.</strong> Python + Flask + JS + Claude API all at once. Ugly + working beats pretty + broken. Ship first. Polish is month 4.</div>
+    </div>
+  </div>
+
+  <div class="phase-block" id="phase-3">
+    <div class="phase-header" onclick="togglePhase(3)"><div class="phase-num" style="color:#8a6aaa;">04</div><div class="phase-meta"><div class="phase-title">Integrations — HubSpot, Respond.io, Cinch RCS</div><div class="phase-when" style="color:#8a6aaa;">Months 4–5 · Weeks 13–20</div></div><span class="phase-tag" style="background:rgba(106,74,138,0.2);border:1px solid #6a4a8a;color:#aa8acc;">MONTHS 4–5</span><div class="chev">▼</div></div>
+    <div class="phase-body">
+      <ul class="res-list">
+        <li><strong>Zapier first (Month 4):</strong> zapier.com free plan. Build Zap: handoff button → HubSpot contact. Zero code, 30 minutes. Valid until you understand webhooks better.</li>
+        <li><strong>Respond.io:</strong> Free account. Configure Mr. Greg as AI agent inside WhatsApp — same system prompt, no code changes.</li>
+        <li><strong>Cinch RCS (Month 5):</strong> cinch.io — read template guide + fallback SMS section before coding. After qualifying conversation → branded card to client's phone. Falls back to SMS automatically.</li>
+        <li><strong>Security:</strong> Flask-CORS (1 line), Flask-Limiter (rate limiting). Real Python logging guide (realpython.com, free).</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="phase-block" id="phase-4">
+    <div class="phase-header" onclick="togglePhase(4)"><div class="phase-num" style="color:var(--red2);">05</div><div class="phase-meta"><div class="phase-title">Ship Both — Production, Polish, Embed</div><div class="phase-when" style="color:var(--red2);">Month 6 · Weeks 21–24</div></div><span class="phase-tag" style="background:rgba(176,58,42,0.2);border:1px solid var(--red);color:var(--red2);">MONTH 6</span><div class="chev">▼</div></div>
+    <div class="phase-body">
+      <ul class="res-list">
+        <li><strong>Embed Mr. Greg:</strong> One iframe tag on healthbenefits360.com pointing at your Render URL. That's it.</li>
+        <li><strong>Life OS domain:</strong> Render + Netlify handle SSL. Connect Namecheap domain in each dashboard.</li>
+        <li><strong>Analytics:</strong> Plausible.io free tier — one script tag, privacy-first.</li>
+        <li><strong>Error handling:</strong> Wrap every Claude API call in try/catch. Real apps don't crash — they fail gracefully.</li>
+      </ul>
+      <div class="callout-note"><strong>Month 6 milestone:</strong> Mr. Greg live on HB360 website. Life OS at your domain. Both working. You shipped two products in 6 months starting from zero. Total cash outlay: ~$42.</div>
+    </div>
+  </div>
+
+  <div class="eyebrow" style="margin:14px 0 8px;">Resource List — What to Get and When</div>
+  <div class="card" style="padding:0;overflow:hidden;">
+    <table class="res-table">
+      <thead><tr><th>Resource</th><th>Where</th><th>Cost</th><th>When</th></tr></thead>
+      <tbody>
+        <tr><td><strong>VS Code</strong></td><td>code.visualstudio.com</td><td style="color:var(--green2);">Free</td><td>Day 1</td></tr>
+        <tr><td><strong>GitHub</strong></td><td>github.com</td><td style="color:var(--green2);">Free</td><td>Day 1</td></tr>
+        <tr><td><strong>The Odin Project</strong></td><td>theodinproject.com</td><td style="color:var(--green2);">Free</td><td>Day 1 → ongoing</td></tr>
+        <tr><td><strong>CS50x + CS50W</strong> (Harvard)</td><td>cs50.harvard.edu</td><td style="color:var(--green2);">Free</td><td>Week 1 + Month 3</td></tr>
+        <tr><td><strong>Eloquent JavaScript 4th Ed.</strong></td><td>eloquentjavascript.net</td><td style="color:var(--green2);">Free</td><td>Week 3</td></tr>
+        <tr><td><strong>Netlify</strong></td><td>netlify.com</td><td style="color:var(--green2);">Free</td><td>Week 4</td></tr>
+        <tr><td><strong>You Don't Know JS Yet</strong></td><td>github.com/getify</td><td style="color:var(--green2);">Free</td><td>Month 2</td></tr>
+        <tr><td><strong>Supabase</strong></td><td>supabase.com</td><td style="color:var(--green2);">Free tier</td><td>Month 2</td></tr>
+        <tr><td><strong>Plaid sandbox</strong></td><td>plaid.com</td><td style="color:var(--green2);">Free</td><td>Month 2</td></tr>
+        <tr><td><strong>Domain</strong></td><td>namecheap.com</td><td style="color:var(--gold2);">~$12/yr</td><td>Month 2</td></tr>
+        <tr><td><strong>Python Crash Course 3rd Ed.</strong></td><td>Amazon</td><td style="color:var(--gold2);">~$30</td><td>Month 3</td></tr>
+        <tr><td><strong>Flask Mega-Tutorial</strong></td><td>blog.miguelgrinberg.com</td><td style="color:var(--green2);">Free</td><td>Month 3</td></tr>
+        <tr><td><strong>Render.com</strong></td><td>render.com</td><td style="color:var(--green2);">Free tier</td><td>Month 3</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="eyebrow" style="margin:12px 0 8px;">The Rules</div>
+  <div class="card">
+    <div class="stat-row"><span class="stat-lbl">Daily minimum</span><span class="val-a">1 hour — no exceptions</span></div>
+    <div class="stat-row"><span class="stat-lbl">When stuck</span><span class="val-g">Paste exact error into Claude. Ask what it means.</span></div>
+    <div class="stat-row"><span class="stat-lbl">Pair programmer</span><span class="val-g">Claude writes code you don't know yet. You direct it.</span></div>
+    <div class="stat-row"><span class="stat-lbl">Do NOT learn yet</span><span class="val-r">React, Docker, TypeScript, databases beyond Supabase</span></div>
+    <div class="stat-row"><span class="stat-lbl">Month 3 law</span><span class="val-r">Ugly + working beats pretty + broken. Ship first.</span></div>
+    <div class="stat-row"><span class="stat-lbl">Miss a day</span><span class="val-r">Next day is 2 hours. No negotiation.</span></div>
+  </div>
+</div>
+
+<!-- ══════════ CALENDAR ══════════ -->
+<div class="page" id="page-calendar">
+  <div class="section-head">
+    <div class="eyebrow">Social + Events · Google Cal via Claude</div>
+    <h2>Calendar</h2>
+    <div class="section-sub">Ask me to add anything to Google Calendar and I'll push it live. Two-way sync comes in Month 2 of The Lab.</div>
+  </div>
+  <div class="grid2">
+    <div>
+      <div class="eyebrow" style="margin-bottom:8px;">Month View</div>
+      <div class="card" style="padding:14px;">
+        <div class="full-cal-nav">
+          <button class="cal-nav-btn" onclick="calNav(-1)">◀ Prev</button>
+          <div class="cal-month-label" id="full-cal-month"></div>
+          <button class="cal-nav-btn" onclick="calNav(1)">Next ▶</button>
+        </div>
+        <div class="cal-grid" id="full-cal-grid"></div>
+        <div style="display:flex;gap:12px;margin-top:10px;flex-wrap:wrap;">
+          <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--dust);"><div style="width:7px;height:7px;border-radius:50%;background:var(--gold);"></div>Event</div>
+          <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--dust);"><div style="width:7px;height:7px;border-radius:50%;background:var(--pink2);"></div>Date</div>
+          <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--dust);"><div style="width:7px;height:7px;border-radius:50%;background:var(--green2);"></div>Finance</div>
+        </div>
+      </div>
+
+      <div class="eyebrow" style="margin:12px 0 8px;">Upcoming — Next 14 Days</div>
+      <div class="card" style="padding:12px 14px;">
+        <div id="full-upcoming"></div>
+      </div>
+
+      <div class="eyebrow" style="margin:12px 0 8px;">Add Event</div>
+      <div class="ev-form">
+        <div class="ev-form-title">New Event → saves locally · ask me to push to Google Cal</div>
+        <div class="form-row">
+          <input type="text" id="ev-title" placeholder="Event title" style="flex:2;">
+          <input type="date" id="ev-date" style="flex:1;">
+        </div>
+        <div class="form-row">
+          <input type="time" id="ev-time" style="flex:0.8;">
+          <select id="ev-type" style="flex:0.8;">
+            <option value="event">Event</option>
+            <option value="date">Date 💕</option>
+            <option value="finance">Finance 💰</option>
+            <option value="work">Work</option>
+          </select>
+          <input type="text" id="ev-note" placeholder="Note (opt)" style="flex:1.5;">
+          <button class="add-btn" onclick="addEvent()">ADD →</button>
+        </div>
+      </div>
+      <div id="local-ev-list"></div>
+
+      <div class="eyebrow" style="margin:12px 0 8px;">From Google Calendar</div>
+      <div class="card" style="padding:12px 14px;">
+        <div class="ev-row"><div class="ev-dot" style="background:var(--green2);"></div><div class="ev-day-tag">Apr 12</div><div class="ev-name">💰 $1,500 check hits — pay Kealy + Gus</div><div class="ev-time-tag">All day</div></div>
+        <div class="ev-row"><div class="ev-dot" style="background:var(--green2);"></div><div class="ev-day-tag">Apr 13</div><div class="ev-name">💰 Ask Connor for $1,000 — debt paydown</div><div class="ev-time-tag">All day</div></div>
+        <div class="ev-row"><div class="ev-dot" style="background:var(--gold);"></div><div class="ev-day-tag">Daily</div><div class="ev-name">Meditate · Workout · Shower · Cook · Read · Hair routine</div><div class="ev-time-tag">5:50am–10:30pm</div></div>
+        <div class="ev-row"><div class="ev-dot" style="background:#8a6aaa;"></div><div class="ev-day-tag">Weekdays</div><div class="ev-name">Coffee break + write — Zen Gun</div><div class="ev-time-tag">12–1pm</div></div>
+        <div class="ev-row"><div class="ev-dot" style="background:#8a6aaa;"></div><div class="ev-day-tag">Daily</div><div class="ev-name">Zen Gun — write / music / edit</div><div class="ev-time-tag">6:15–7:30pm</div></div>
+        <div style="margin-top:8px;font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--dust);">Say "add [event] [date] [time]" and I'll push it to Google Calendar live.</div>
+      </div>
+    </div>
+
+    <!-- DATING TRACKER -->
+    <div>
+      <div class="eyebrow" style="margin-bottom:8px;">Dating Tracker</div>
+      <div id="dating-list"></div>
+
+      <div class="eyebrow" style="margin:12px 0 8px;">Add Person</div>
+      <div class="ev-form">
+        <div class="form-row">
+          <input type="text" id="dt-name" placeholder="Name / nickname" style="flex:1;">
+          <select id="dt-status" style="flex:0.8;">
+            <option value="active">Seeing 💕</option>
+            <option value="maybe">Prospective</option>
+            <option value="past">Past</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <input type="text" id="dt-note" placeholder="Note — vibe, context, anything" style="flex:2;">
+          <input type="date" id="dt-next" style="flex:0.9;">
+          <button class="add-btn" onclick="addPerson()">ADD →</button>
+        </div>
+      </div>
+
+      <div class="eyebrow" style="margin:10px 0 8px;">Log a Date</div>
+      <div class="ev-form">
+        <div class="form-row">
+          <select id="log-person" style="flex:1;"><option value="">Select person...</option></select>
+          <input type="date" id="log-date" style="flex:0.9;">
+        </div>
+        <div class="form-row">
+          <input type="text" id="log-note" placeholder="How'd it go? Quick note." style="flex:2;">
+          <button class="add-btn" onclick="logDate()">LOG →</button>
+        </div>
+      </div>
+
+      <div class="callout-note" style="margin-top:10px;font-size:11px;">
+        <strong>Google Calendar:</strong> Tell me "add date with [name] [date] [time]" and I'll add it live to your calendar right now.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ WIKI ══════════ -->
+<div class="page" id="page-wiki">
+  <div class="section-head">
+    <div class="eyebrow">Knowledge Archive</div>
+    <h2>Wiki</h2>
+    <div class="section-sub">Search everything — protocols, tips, references, notes</div>
+  </div>
+  <input class="wiki-search" type="text" placeholder="Search wiki..." id="wiki-search-input" oninput="renderWiki()">
+  <div class="tag-filter" id="wiki-tags"></div>
+  <div id="wiki-list"></div>
+  <div class="card" style="margin-top:10px;padding:12px 14px;">
+    <div class="card-lbl" style="margin-bottom:8px;">Add Entry</div>
+    <div class="add-row">
+      <input type="text" id="w-topic" placeholder="Topic" style="flex:1.2;">
+      <input type="text" id="w-note" placeholder="Note / protocol / reference" style="flex:2;">
+      <select id="w-tag" style="flex:0.6;">
+        <option value="hair">Hair</option>
+        <option value="body">Body</option>
+        <option value="workout">Workout</option>
+        <option value="finance">Finance</option>
+        <option value="music">Music</option>
+        <option value="writing">Writing</option>
+        <option value="reading">Reading</option>
+        <option value="lab">Lab</option>
+        <option value="misc">Misc</option>
+      </select>
+      <button class="add-btn" onclick="addWiki()">ADD →</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+// ── NAV
+function goTo(pg){
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.toggle('active',t.dataset.page===pg));
+  document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+pg));
+}
+document.querySelectorAll('.nav-tab').forEach(t=>t.addEventListener('click',function(){goTo(this.dataset.page);}));
+
+// ── DATE
+var now=new Date();
+var DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+var MONS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+var dayName=DAYS[now.getDay()];
+var dateStr=dayName+', '+MONS[now.getMonth()]+' '+now.getDate();
+document.getElementById('date-disp').textContent=now.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}).toUpperCase();
+document.getElementById('ov-date').textContent=dateStr;
+document.getElementById('ov-sub').textContent=dayName+' — '+('Wisconsin. Back to NYC Apr 17. Write something today.');
+var blbl=document.getElementById('body-day-lbl');if(blbl)blbl.textContent=dayName;
+var mlbl=document.getElementById('music-day-lbl');if(mlbl)mlbl.textContent=dayName;
+
+// ── SIGNALS
+var SIGS=[
+  'Write the first sentence of Madison County Church before the day asks anything of you.',
+  'The work at 7:15am is the only work that is truly yours. Guard it.',
+  'A page today. Another tomorrow. The story compounds.',
+  'Slow cinema energy. Time out of mind. Start with what you can see.',
+  'Did you take your finasteride today?',
+  'One hour in The Lab. Do not negotiate with yourself.',
+  'Norwegian dusk, Indian dusk, classical dusk. One hour of full attention.',
+  'Life OS ships when you build it, not when you plan it.',
+  'What is the opening image of the Fennimore story?',
+];
+document.getElementById('signal-text').textContent=SIGS[Math.floor(Math.random()*SIGS.length)];
+
+// ── WORKOUT MAP
+var WO={
+  Sunday:{name:'Shoulders + Chest + Light Legs',focus:'Third shoulder hit this week'},
+  Monday:{name:'Sprints + Leg Finisher',focus:'Testosterone boost · 6–7 sprints full effort'},
+  Tuesday:{name:'Full Rest',focus:'Eat protein · Sleep 8 hrs · Gains lock in'},
+  Wednesday:{name:'Shoulders + Chest + Light Legs',focus:'Hardest session of the week'},
+  Thursday:{name:'Pull-ups + Abs',focus:'Beat last time · V-taper work'},
+  Friday:{name:'Pull-ups + Chest + Light Legs',focus:'Pull focus · Chest volume'},
+  Saturday:{name:'Shoulders Heavy + Abs',focus:'All 3 delt heads · Width session'},
+};
+var todayWO=WO[dayName];
+if(todayWO){
+  var wn=document.getElementById('today-wo-name');if(wn)wn.textContent=todayWO.name;
+  var wf=document.getElementById('today-wo-focus');if(wf)wf.textContent=todayWO.focus;
+  var pv=document.getElementById('pv-workout');if(pv)pv.textContent='Today: '+todayWO.name;
+}
+
+// ── MUSIC LISTENING
+var LISTEN={
+  Monday:[{time:'30 min',title:'Classical — Bach',desc:'Goldberg Variations, Glenn Gould 1981. One variation at a time. Full attention.'},{time:'20 min',title:'Norwegian Folk',desc:'Hardanger fiddle tradition. Annbjørg Lien or Agnes Buen Garnås.'}],
+  Tuesday:[{time:'30 min',title:'Indian Classical — Morning Raga',desc:'Ravi Shankar. Notice the alap — slow unfolding before rhythm enters.'},{time:'20 min',title:'Schubert D.960',desc:'Your long-term piano goal. Know it from the inside before you play it.'}],
+  Wednesday:[{time:'30 min',title:'Norwegian + Swedish Folk',desc:'Ale Möller or Väsen. Folk music as geography — you hear the landscape.'},{time:'20 min',title:'Beethoven — Late Quartets',desc:'Op. 131. The most radical music ever written for a small group.'}],
+  Thursday:[{time:'30 min',title:'Indian Classical — Sarod or Shehnai',desc:'Bismillah Khan or Ali Akbar Khan. Focus on ornament and breath.'},{time:'20 min',title:'Brahms — Intermezzo Op.118 No.2',desc:'The most beautiful sad thing.'}],
+  Friday:[{time:'40 min',title:'Shostakovich — String Quartet No.8',desc:'One of the most personal pieces ever written. Full attention. No interruption.'}],
+  Saturday:[{time:'30 min',title:'European Folk — Wide',desc:'Bulgarian State Radio Choir, or Pentangle.'},{time:'20 min',title:'Indian Classical — Long Form',desc:'A full Hindustani performance. Notice how time works differently.'}],
+  Sunday:[{time:'60 min',title:'Free Listening Sunday',desc:'2 full records. No analysis. No guitar. Just listen as a person, not a student.'}],
+};
+var todayL=LISTEN[dayName]||[];
+var lEl=document.getElementById('today-listening');
+if(lEl&&todayL.length){
+  lEl.innerHTML=todayL.map(function(l){return '<div style="display:flex;gap:9px;padding:6px 0;border-bottom:1px solid rgba(212,160,23,0.07);"><div style="font-family:IBM Plex Mono,monospace;font-size:8px;color:var(--gold);min-width:36px;margin-top:2px;">'+l.time+'</div><div><div style="font-size:13px;font-weight:600;margin-bottom:2px;color:var(--paper);">'+l.title+'</div><div style="font-size:11px;color:var(--dust);line-height:1.5;">'+l.desc+'</div></div></div>';}).join('');
+  var mv=document.getElementById('pv-music');if(mv)mv.textContent='Today: '+todayL[0].title;
+}
+
+// ── TRET DAY
+var TRET_DAYS=['Monday','Wednesday','Friday'];
+var isTretDay=TRET_DAYS.indexOf(dayName)!==-1;
+
+// ── CHECKLIST SYSTEM
+var CHECKS_KEY='lifeos_checks_v4';
+function getTodayKey(){return now.toISOString().slice(0,10);}
+function loadChecks(){try{return JSON.parse(localStorage.getItem(CHECKS_KEY)||'{}')}catch(e){return{};}}
+function saveChecks(d){localStorage.setItem(CHECKS_KEY,JSON.stringify(d));}
+function getStreak(id){
+  var data=loadChecks();var streak=0;var d=new Date(now);
+  for(var i=0;i<365;i++){
+    var k=d.toISOString().slice(0,10);
+    if(data[k]&&data[k][id]){streak++;d.setDate(d.getDate()-1);}else{break;}
+  }
+  return streak;
+}
+
+var CLISTS={
+  master:[
+    {id:'fin',lbl:'Finasteride',sub:'1mg oral · same time daily'},
+    {id:'minox',lbl:'Minoxidil',sub:'1ml scalp · no wash 4 hrs'},
+    {id:'tret',lbl:isTretDay?'Tretinoin ★ TONIGHT':'Tretinoin (off tonight)',sub:isTretDay?'Scalp + face → wait 30 min → minox':'Minox only tonight'},
+    {id:'workout',lbl:'Workout',sub:todayWO?todayWO.name:'Rest day'},
+    {id:'write',lbl:'Morning write block',sub:'7:15–8:00am protected'},
+    {id:'read',lbl:'Reading session',sub:'2 hrs · Homer + Dhammapada'},
+    {id:'guitar',lbl:'Guitar practice',sub:'30–45 min · today session'},
+    {id:'listen',lbl:'Music listening',sub:'Daily schedule · full attention'},
+    {id:'lab',lbl:'Lab study session',sub:'1 hr minimum · build something'},
+    {id:'derma',lbl:'Derma roll',sub:'70% isopropyl before + after'},
+  ],
+  body:[
+    {id:'fin',lbl:'Finasteride',sub:'1mg · same time every day'},
+    {id:'minox',lbl:'Minoxidil',sub:'1ml scalp · no wash 4 hrs'},
+    {id:'tret',lbl:isTretDay?'Tretinoin ★':'Tretinoin (off tonight)',sub:isTretDay?'Scalp + face → 30 min → minox':'Minox only'},
+    {id:'derma',lbl:'Derma roll',sub:'Isopropyl clean before + after'},
+  ],
+  workout:[
+    {id:'workout',lbl:'Session done',sub:todayWO?todayWO.name:'—'},
+    {id:'protein',lbl:'Protein within 45 min',sub:'Post-workout window'},
+    {id:'sleep8',lbl:'Aim for 8 hrs tonight',sub:'Gains lock in during sleep'},
+  ],
+  music:[
+    {id:'guitar',lbl:'Guitar practice',sub:'30–45 min'},
+    {id:'listen',lbl:'Listening session',sub:todayL.length?todayL[0].title:'Open ears'},
+    {id:'piano',lbl:'Piano (NYC only)',sub:'Resumes Apr 17'},
+  ],
+  reading:[
+    {id:'read',lbl:'Primary reading',sub:'Oresteia / Iliad / Homer'},
+    {id:'dhamma',lbl:'Dhammapada',sub:'One chapter — daily forever'},
+    {id:'read2',lbl:'Second-hour reading',sub:'Civil War / Caro / Walden'},
+  ],
+  lab:[
+    {id:'lab',lbl:'Study session',sub:'1 hr minimum'},
+    {id:'build',lbl:'Built or edited something',sub:'Not just reading — applying'},
+    {id:'commit',lbl:'Git commit (if applicable)',sub:'Track your work'},
+  ],
+};
+
+function renderCL(listId,items,containerId,progId){
+  var container=document.getElementById(containerId);
+  if(!container)return;
+  var data=loadChecks();var todayKey=getTodayKey();var done=0;
+  var html=items.map(function(item){
+    var checked=data[todayKey]&&data[todayKey][item.id];
+    var streak=getStreak(item.id);
+    if(checked)done++;
+    return '<div class="cl-row" onclick="toggleCheck(\''+item.id+'\',\''+listId+'\')">'
+      +'<div class="cl-box'+(checked?' done':'')+'">'+( checked?'✓':'' )+'</div>'
+      +'<div style="flex:1;"><div class="cl-name'+(checked?' done':'')+'">'+item.lbl+'</div>'
+      +(item.sub?'<div style="font-size:10px;color:var(--dust);">'+item.sub+'</div>':'')+'</div>'
+      +(streak>1?'<div class="cl-streak">'+streak+'d</div>':'')
+      +'</div>';
+  }).join('');
+  container.innerHTML=html;
+  var prog=document.getElementById(progId);
+  if(prog)prog.textContent=done+' / '+items.length;
+}
+
+function toggleCheck(id){
+  var data=loadChecks();var key=getTodayKey();
+  if(!data[key])data[key]={};
+  data[key][id]=!data[key][id];
+  saveChecks(data);
+  renderAll();
+}
+
+function renderAll(){
+  renderCL('master',CLISTS.master,'master-cl','master-prog');
+  renderCL('body',CLISTS.body,'body-cl-items','body-prog');
+  renderCL('workout',CLISTS.workout,'wo-cl-items','wo-prog');
+  renderCL('music',CLISTS.music,'mu-cl-items','mu-prog');
+  renderCL('reading',CLISTS.reading,'rd-cl-items','rd-prog');
+  renderCL('lab',CLISTS.lab,'lab-cl-items','lab-prog');
+}
+renderAll();
+
+// ── ACCORDION TOGGLES
+function toggleWD(h){h.parentElement.classList.toggle('open');}
+function toggleSess(h){h.parentElement.classList.toggle('open');}
+function togglePhase(i){document.getElementById('phase-'+i).classList.toggle('open');}
+function openPhase(i){
+  var el=document.getElementById('phase-'+i);
+  el.classList.add('open');
+  el.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ── CALENDAR SYSTEM
+var CAL_KEY='lifeos_cal_v1';
+var DATING_KEY='lifeos_dating_v2';
+function loadCal(){try{return JSON.parse(localStorage.getItem(CAL_KEY)||'[]');}catch(e){return[];}}
+function saveCal(d){localStorage.setItem(CAL_KEY,JSON.stringify(d));}
+var DATING_PRELOAD=[
+  {name:'Ellen',status:'active',note:'Give Bird book gift',nextDate:'2026-04-17',nextTime:'',log:[]},
+  {name:'May',status:'past',note:'',nextDate:'',nextTime:'',log:[]},
+  {name:'Golrokh',status:'maybe',note:'Shuffleboard!',nextDate:'2026-05-19',nextTime:'',log:[]},
+  {name:'Aila',status:'maybe',note:'5104262387 text~',nextDate:'2026-04-17',nextTime:'',log:[]},
+];
+function loadDating(){try{var d=JSON.parse(localStorage.getItem(DATING_KEY)||'null');return(d&&d.length)?d:DATING_PRELOAD;}catch(e){return DATING_PRELOAD;}}
+function saveDating(d){localStorage.setItem(DATING_KEY,JSON.stringify(d));}
+
+var GCAL=[
+  {title:'$1,500 check hits — pay Kealy + Gus',date:'2026-04-12',type:'finance',time:''},
+  {title:'Ask Connor for $1,000 — debt paydown',date:'2026-04-13',type:'finance',time:''},
+  {title:'Fly NYC — arrive Brooklyn',date:'2026-04-17',type:'event',time:''},
+];
+
+var calView=new Date(now.getFullYear(),now.getMonth(),1);
+
+function allEvents(){return GCAL.concat(loadCal());}
+
+function buildGrid(containerId,year,month){
+  var container=document.getElementById(containerId);
+  if(!container)return;
+  var today=now.toISOString().slice(0,10);
+  var firstDay=new Date(year,month,1).getDay();
+  var daysInMo=new Date(year,month+1,0).getDate();
+  var evts=allEvents();
+  var datingData=loadDating();
+  var dateDates=new Set();
+  datingData.forEach(function(p){
+    if(p.nextDate)dateDates.add(p.nextDate);
+    (p.log||[]).forEach(function(l){dateDates.add(l.date);});
+  });
+  var DOWS=['S','M','T','W','T','F','S'];
+  var html=DOWS.map(function(d){return '<div class="cal-dow">'+d+'</div>';}).join('');
+  for(var i=0;i<firstDay;i++)html+='<div class="cal-day"></div>';
+  for(var d=1;d<=daysInMo;d++){
+    var ds=year+'-'+String(month+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+    var hasEv=evts.some(function(e){return e.date===ds;});
+    var isDate=dateDates.has(ds);
+    var isToday=ds===today;
+    var cls='cal-day in-month';
+    if(isToday)cls+=' today';
+    if(hasEv)cls+=' has-ev';
+    if(isDate)cls+=' is-date';
+    html+='<div class="'+cls+'" onclick="dayClick(\''+ds+'\')">'+(d)+'</div>';
+  }
+  container.innerHTML=html;
+}
+
+function renderUpcoming(containerId,days){
+  var container=document.getElementById(containerId);
+  if(!container)return;
+  var today=now.toISOString().slice(0,10);
+  var cut=new Date(now);cut.setDate(cut.getDate()+days);
+  var cutStr=cut.toISOString().slice(0,10);
+  var all=allEvents().filter(function(e){return e.date>=today&&e.date<=cutStr;});
+  var datingData=loadDating();
+  datingData.filter(function(p){return p.nextDate&&p.nextDate>=today&&p.nextDate<=cutStr;})
+    .forEach(function(p){all.push({title:'Date with '+p.name,date:p.nextDate,type:'date',time:p.nextTime||''});});
+  all.sort(function(a,b){return a.date.localeCompare(b.date);});
+  if(!all.length){container.innerHTML='<div style="font-size:11px;color:var(--dust);font-style:italic;">Nothing coming up — add events above.</div>';return;}
+  var TC={finance:'var(--green2)',date:'var(--pink2)',event:'var(--gold)',work:'#5a9acc',personal:'#4a8a8a'};
+  container.innerHTML=all.map(function(e){
+    var d=new Date(e.date+'T12:00:00');
+    var lbl=d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+    var col=TC[e.type]||'var(--gold)';
+    return '<div class="ev-row"><div class="ev-dot" style="background:'+col+';"></div>'
+      +'<div class="ev-day-tag">'+lbl+'</div>'
+      +'<div class="ev-name">'+e.title+'</div>'
+      +(e.time?'<div class="ev-time-tag">'+e.time+'</div>':'')+'</div>';
+  }).join('');
+}
+
+function renderMiniCal(){
+  var lbl=document.getElementById('mini-month-label');
+  if(lbl)lbl.textContent=MONS[now.getMonth()].toUpperCase()+' '+now.getFullYear();
+  buildGrid('mini-cal-grid',now.getFullYear(),now.getMonth());
+  renderUpcoming('mini-upcoming',7);
+}
+
+function renderFullCal(){
+  var lbl=document.getElementById('full-cal-month');
+  if(lbl)lbl.textContent=MONS[calView.getMonth()].toUpperCase()+' '+calView.getFullYear();
+  buildGrid('full-cal-grid',calView.getFullYear(),calView.getMonth());
+  renderUpcoming('full-upcoming',14);
+  renderLocalEvList();
+}
+
+function calNav(dir){calView=new Date(calView.getFullYear(),calView.getMonth()+dir,1);renderFullCal();}
+
+function renderLocalEvList(){
+  var container=document.getElementById('local-ev-list');
+  if(!container)return;
+  var evts=loadCal();
+  if(!evts.length){container.innerHTML='';return;}
+  container.innerHTML='<div class="eyebrow" style="margin:10px 0 6px;">Your Added Events</div>'
+    +evts.map(function(e,i){
+      return '<div class="ev-row">'
+        +'<div class="ev-dot" style="background:var(--gold);"></div>'
+        +'<div class="ev-day-tag">'+e.date+'</div>'
+        +'<div class="ev-name">'+e.title+(e.time?' · '+e.time:'')+'</div>'
+        +'<button class="del-btn" onclick="delEvent('+i+')">✕</button>'
+        +'</div>';
+    }).join('');
+}
+
+function addEvent(){
+  var title=document.getElementById('ev-title').value.trim();
+  var date=document.getElementById('ev-date').value;
+  var time=document.getElementById('ev-time').value;
+  var type=document.getElementById('ev-type').value;
+  var note=document.getElementById('ev-note').value.trim();
+  if(!title||!date)return;
+  var evts=loadCal();evts.push({title:title,date:date,time:time,type:type,note:note});
+  saveCal(evts);
+  document.getElementById('ev-title').value='';
+  document.getElementById('ev-date').value='';
+  document.getElementById('ev-time').value='';
+  document.getElementById('ev-note').value='';
+  renderFullCal();renderMiniCal();
+}
+
+function delEvent(i){var evts=loadCal();evts.splice(i,1);saveCal(evts);renderFullCal();renderMiniCal();}
+
+// ── DATING
+function renderDating(){
+  var data=loadDating();
+  var SL={active:'Seeing 💕',maybe:'Prospective',past:'Past'};
+  var SC={active:'ds-active',maybe:'ds-maybe',past:'ds-past'};
+  var fullEl=document.getElementById('dating-list');
+  var ovEl=document.getElementById('ov-dating');
+  var sel=document.getElementById('log-person');
+
+  var html=data.map(function(p,i){
+    return '<div class="date-card">'
+      +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;">'
+      +'<div class="date-name">'+p.name+'</div>'
+      +'<span class="date-status-badge '+(SC[p.status]||'ds-maybe')+'">'+SL[p.status]+'</span>'
+      +'</div>'
+      +'<div class="date-meta-row">'
+      +(p.nextDate?'<span>📅 Next: '+new Date(p.nextDate+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})+'</span>':'')
+      +((p.log&&p.log.length)?'<span>🗓 '+p.log.length+' date'+(p.log.length>1?'s':'')+' logged</span>':'')
+      +'</div>'
+      +(p.note?'<div class="date-note">'+p.note+'</div>':'')
+      +((p.log&&p.log.length)?'<div class="date-log">'+p.log.slice().reverse().slice(0,3).map(function(l){return '<div class="date-log-row"><div class="date-log-d">'+l.date+'</div><div style="color:var(--dust);">'+( l.note||'—')+'</div></div>';}).join('')+'</div>':'')
+      +'<div style="margin-top:7px;"><button class="del-btn" onclick="delPerson('+i+')">Remove</button></div>'
+      +'</div>';
+  }).join('');
+
+  if(fullEl)fullEl.innerHTML=html||'<div style="font-size:12px;color:var(--dust);font-style:italic;padding:8px 0;">No one added yet. Use the form below.</div>';
+
+  var active=data.filter(function(p){return p.status==='active'||p.status==='maybe';});
+  if(ovEl){
+    if(!active.length){ovEl.innerHTML='<div style="font-size:11px;color:var(--dust);font-style:italic;">No active dates — add in Calendar tab</div>';}
+    else{ovEl.innerHTML=active.map(function(p){
+      return '<div style="padding:7px 0;border-bottom:1px solid rgba(212,160,23,0.08);">'
+        +'<div style="display:flex;justify-content:space-between;"><span style="font-size:13px;font-weight:600;color:var(--paper);">'+p.name+'</span><span style="font-size:9px;color:var(--pink2);font-family:IBM Plex Mono,monospace;">'+SL[p.status]+'</span></div>'
+        +(p.nextDate?'<div style="font-size:11px;color:var(--dust);margin-top:1px;">Next: '+new Date(p.nextDate+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'})+'</div>':'')
+        +(p.note?'<div style="font-size:11px;font-style:italic;color:rgba(139,160,180,0.5);margin-top:1px;">'+p.note.substring(0,55)+(p.note.length>55?'...':'')+'</div>':'')
+        +'</div>';
+    }).join('');}
+  }
+
+  if(sel){sel.innerHTML='<option value="">Select person...</option>'+data.map(function(p,i){return '<option value="'+i+'">'+p.name+'</option>';}).join('');}
+}
+
+function addPerson(){
+  var name=document.getElementById('dt-name').value.trim();
+  var status=document.getElementById('dt-status').value;
+  var note=document.getElementById('dt-note').value.trim();
+  var nextDate=document.getElementById('dt-next').value;
+  if(!name)return;
+  var data=loadDating();data.push({name:name,status:status,note:note,nextDate:nextDate,log:[]});
+  saveDating(data);
+  document.getElementById('dt-name').value='';
+  document.getElementById('dt-note').value='';
+  document.getElementById('dt-next').value='';
+  renderDating();renderMiniCal();
+}
+
+function logDate(){
+  var idx=document.getElementById('log-person').value;
+  var date=document.getElementById('log-date').value;
+  var note=document.getElementById('log-note').value.trim();
+  if(idx===''||!date)return;
+  var data=loadDating();
+  if(!data[idx].log)data[idx].log=[];
+  data[idx].log.push({date:date,note:note});
+  saveDating(data);
+  document.getElementById('log-date').value='';
+  document.getElementById('log-note').value='';
+  renderDating();
+}
+
+function delPerson(i){var data=loadDating();data.splice(i,1);saveDating(data);renderDating();renderMiniCal();}
+
+// ── WIKI
+var WIKI_KEY='lifeos_wiki_v4';
+var DEFAULT_WIKI=[
+  {topic:'Finasteride',note:'1mg oral daily. Same time every day. Never skip — consistency is everything.',tag:'hair'},
+  {topic:'Minoxidil',note:'1ml to scalp in thinning areas. Massage gently. Do not wash hair for 4 hours after.',tag:'hair'},
+  {topic:'Tretinoin protocol',note:'Apply scalp + face Mon/Wed/Fri. Wait 20–30 min then minox. Never minox immediately after. 0.025% ideal.',tag:'hair'},
+  {topic:'Tret order rule',note:'ALWAYS tret first. NEVER after. Vitamin C serum is morning only — never mix with tret.',tag:'hair'},
+  {topic:'Derma roller',note:'Clean with 70% isopropyl before and after. Roll 4–5x per direction per zone. Light pressure.',tag:'hair'},
+  {topic:'Pull-up form',note:'Dead hang start. Engage scapula first. Drive elbows down and back. Full ROM. Wide grip for V-taper.',tag:'workout'},
+  {topic:'Elevated pike push-up',note:'Feet on chair, hips high. Targets anterior delt. Key for shoulder width without equipment.',tag:'workout'},
+  {topic:'Lateral raise tip',note:'Lead with pinky finger. Slow negative 3 seconds. Drop set: 12 full + 12 partial. This builds width.',tag:'workout'},
+  {topic:'Morning write block',note:'7:15–8:00am. Protected. Coffee while writing. Before work, before anything.',tag:'writing'},
+  {topic:'Madison County Church',note:'Suicide corner. Slow, atmospheric, Wisconsin. Time out of mind. Start with an image not a plot.',tag:'writing'},
+  {topic:'Zen Gun aesthetic',note:'Slow, dreamlike, atmospheric. Artifacts, landscapes, portraits. The specific over the general.',tag:'writing'},
+  {topic:'ii-V-I progression',note:'Most important jazz chord progression. In C: Dm7 → G7 → Cmaj7. Learn in all 12 keys.',tag:'music'},
+  {topic:'La Pompe',note:'Gypsy jazz rhythm. Down strum with muted upstroke. Gonzalo Bergara YouTube lesson is essential.',tag:'music'},
+  {topic:'Secured credit card',note:'Discover it Secured — best rebuild card. No annual fee, auto-upgrade at 7 months, all 3 bureaus.',tag:'finance'},
+  {topic:'Dhammapada rule',note:'One chapter every single day. Both years. Not optional.',tag:'reading'},
+  {topic:'Melian Dialogue',note:'Thucydides Book V. Ten pages that changed political thought forever. Read it twice.',tag:'reading'},
+  {topic:'The Odin Project',note:'theodinproject.com — free full-stack curriculum. Start Foundations. Best free resource for HTML/CSS/JS.',tag:'lab'},
+  {topic:'Supabase',note:'Free Postgres database + auth. supabase.com. Replace localStorage permanently. Free tier generous.',tag:'lab'},
+  {topic:'Anthropic API',note:'docs.anthropic.com — Messages API quickstart. System prompts + conversation history. Mr. Greg IS a Claude system prompt.',tag:'lab'},
+];
+function loadWiki(){try{var d=JSON.parse(localStorage.getItem(WIKI_KEY)||'[]');return d.length?d:DEFAULT_WIKI;}catch(e){return DEFAULT_WIKI;}}
+function saveWiki(d){localStorage.setItem(WIKI_KEY,JSON.stringify(d));}
+var wikiData=loadWiki();
+if(!localStorage.getItem(WIKI_KEY))saveWiki(wikiData);
+var wikiTag='all';
+
+function renderTags(){
+  var tags=['all'].concat([...new Set(wikiData.map(function(e){return e.tag;}))]);
+  var container=document.getElementById('wiki-tags');
+  if(!container)return;
+  container.innerHTML=tags.map(function(t){return '<button class="tag-btn'+(t===wikiTag?' active':'')+'" onclick="setWikiTag(\''+t+'\')">'+t+'</button>';}).join('');
+}
+function setWikiTag(t){wikiTag=t;renderTags();renderWiki();}
+function renderWiki(){
+  var search=(document.getElementById('wiki-search-input')||{}).value||'';
+  search=search.toLowerCase();
+  var entries=wikiData;
+  if(wikiTag!=='all')entries=entries.filter(function(e){return e.tag===wikiTag;});
+  if(search)entries=entries.filter(function(e){return e.topic.toLowerCase().indexOf(search)!==-1||e.note.toLowerCase().indexOf(search)!==-1;});
+  var container=document.getElementById('wiki-list');
+  if(!container)return;
+  if(!entries.length){container.innerHTML='<div style="font-size:12px;color:var(--dust);padding:10px 0;font-style:italic;">No entries found.</div>';return;}
+  container.innerHTML=entries.slice().reverse().map(function(e){return '<div class="wiki-entry"><div class="wiki-tag">'+e.tag+'</div><div class="wiki-topic">'+e.topic+'</div><div class="wiki-note">'+e.note+'</div></div>';}).join('');
+}
+function addWiki(){
+  var topic=(document.getElementById('w-topic')||{}).value||'';
+  var note=(document.getElementById('w-note')||{}).value||'';
+  var tag=(document.getElementById('w-tag')||{}).value||'misc';
+  topic=topic.trim();note=note.trim();
+  if(!topic||!note)return;
+  wikiData.push({topic:topic,note:note,tag:tag});
+  saveWiki(wikiData);
+  document.getElementById('w-topic').value='';
+  document.getElementById('w-note').value='';
+  renderTags();renderWiki();
+}
+renderTags();renderWiki();
+
+// ── INIT CALENDAR + DATING
+renderMiniCal();
+renderFullCal();
+renderDating();
+
+// ═══ STORY SYSTEM ═══
+var STORY_KEY='lifeos_stories_v7';
+function defaultStories(){return[
+  {id:'s1',title:'Madison County Church Suicide Corner',type:'Short Story',status:'Gestating',notes:'Slow, atmospheric. Time out of mind. Wisconsin landscape.',body:''},
+  {id:'s2',title:'That Motel in Fennimore',type:'Short Story',status:'Gestating',notes:'Roadside America. Specific and strange. The motel as threshold space.',body:''},
+  {id:'s3',title:'The Drinker',type:'Film',status:'Complete',notes:'Shot in Denmark on MiniDV. Slow, dreamlike.',body:'Shot in Denmark. Complete.'},
+  {id:'s4',title:'Gestation Lab',type:'Gestation',status:'In Progress',notes:'Quick capture for any idea, fragment, image, line.',body:''},
+  {id:'s5',title:'The Carnival of the Cannibal',type:'Poem',status:'Gestating',notes:'Stream of consciousness poem about Vegas. Apocalyptic fervor. Revelations energy.',body:''},
+  {id:'s6',title:'The Radiator Plan',type:'Short Story',status:'Gestating',notes:'Old 20th century NYC building. Fellini-esque. Lovers, suicides, drugs, poets, bankers, sex.',body:''},
+  {id:'s7',title:'The Adventures of Ronaldo di Monde',type:'Novel',status:'Gestating',notes:'Traveling con man on motorcycle + crony The Great Jones in sidecar. Sells fake rubies, bibles, elixirs, stolen melodies. Visits sad divorced women, senescent farmers, bored European royalty. Pillages restrooms. Steals heirlooms.',body:''},
+  {id:'s8',title:'House of Wind',type:'Journal',status:'Gestating',notes:'Journal/poetic entries with breathing industrial or climate soundscapes.',body:''},
+  {id:'s9',title:'The Dromedary',type:'Notes',status:'Gestating',notes:'A fable. Nothing yet.',body:''},
+];}
+function loadStories(){try{var d=JSON.parse(localStorage.getItem(STORY_KEY)||'null');return(d&&d.length)?d:defaultStories();}catch(e){return defaultStories();}}
+function saveStories(d){localStorage.setItem(STORY_KEY,JSON.stringify(d));}
+var curStory=null;
+function renderStories(){
+  var stories=loadStories();var grid=document.getElementById('story-grid');if(!grid)return;
+  var IC={'Short Story':'&#9997;','Poem':'&#128220;','Novel':'&#128214;','Film':'&#128253;','Song':'&#127925;','Essay':'&#128196;','Notes':'&#128161;','Gestation':'&#127793;','Journal':'&#128212;'};
+  var COLS=['var(--gold)','var(--pink2)','#5a9acc','var(--purple-bright)','var(--green-bright)','var(--red-bright)','#8a7a4a','var(--dust)','#6a8a4a'];
+  var html=stories.map(function(s,i){
+    var ic=IC[s.type]||'&#9997;';var col=COLS[i%COLS.length];
+    var wc=s.body?s.body.trim().split(/\s+/).filter(Boolean).length:0;
+    return '<div class="sc" onclick="openStory('+i+')" style="border-color:'+col+'44">'
+      +'<div class="sc-bg">'+ic+'</div><div class="sc-ov"></div>'
+      +'<div class="sc-lbl"><div class="sc-type" style="color:'+col+'">'+s.type+' &middot; '+s.status+'</div>'
+      +'<div class="sc-title">'+s.title+'</div>'
+      +'<div class="sc-meta">'+(wc?wc+' words':'No text yet')+'</div></div></div>';
+  }).join('');
+  html+='<div class="sc-add" onclick="newStory()"><div style="font-size:24px;color:var(--dust);margin-bottom:8px">+</div><div style="font-family:IBM Plex Mono,monospace;font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dust)">New Story</div></div>';
+  grid.innerHTML=html;
+}
+function openStory(i){
+  curStory=i;var s=loadStories()[i];
+  document.getElementById('se-ttl').value=s.title;
+  document.getElementById('se-ta').value=s.body||'';
+  document.getElementById('se-notes').value=s.notes||'';
+  document.getElementById('se-type').value=s.type||'Short Story';
+  document.getElementById('se-stat').value=s.status||'Gestating';
+  updateWC();document.getElementById('se').classList.add('open');
+}
+function newStory(){
+  var st=loadStories();st.push({id:'s'+Date.now(),title:'Untitled',type:'Short Story',status:'Gestating',notes:'',body:''});
+  saveStories(st);curStory=st.length-1;openStory(curStory);
+}
+function saveStory(){
+  if(curStory===null)return;var st=loadStories();var s=st[curStory];
+  s.title=document.getElementById('se-ttl').value||'Untitled';
+  s.body=document.getElementById('se-ta').value;
+  s.notes=document.getElementById('se-notes').value;
+  s.type=document.getElementById('se-type').value;
+  s.status=document.getElementById('se-stat').value;
+  saveStories(st);renderStories();
+  document.getElementById('se-info').textContent='Saved '+new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+}
+function closeEditor(){saveStory();document.getElementById('se').classList.remove('open');renderStories();}
+function deleteStory(){if(curStory===null)return;if(!confirm('Delete this story?'))return;var st=loadStories();st.splice(curStory,1);saveStories(st);document.getElementById('se').classList.remove('open');renderStories();}
+function updateWC(){var ta=document.getElementById('se-ta');if(!ta)return;var wc=ta.value.trim().split(/\s+/).filter(Boolean).length;var el=document.getElementById('se-wc');if(el)el.textContent=wc+' words';}
+document.getElementById('se-ta').addEventListener('input',updateWC);
+document.getElementById('se-ta').addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&e.key==='s'){e.preventDefault();saveStory();}});
+renderStories();
+
+// ═══ DAY CLICK ═══
+function evColor2(cat){var m={finance:'#5aaa7a',date:'#e87aaa',event:'#f0c84a',friend:'#9a7acc',work:'#5a7a9a',personal:'#4a8a8a'};return m[cat]||'#f0c84a';}
+var selectedDay=null;
+function dayClick(ds){
+  selectedDay=ds;
+  var panel=document.getElementById('day-panel');
+  var ptitle=document.getElementById('dp-title');
+  var pevts=document.getElementById('dp-events');
+  if(!panel)return;
+  var d=new Date(ds+'T12:00:00');
+  ptitle.textContent=d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+  var evts=getAllEvents().filter(function(e){return e.date===ds;});
+  var dt=loadDating();
+  dt.filter(function(p){return p.nextDate===ds;}).forEach(function(p){evts.push({title:'Date with '+p.name,type:'date',time:p.nextTime||'',note:p.note||''});});
+  if(!evts.length){pevts.innerHTML='<div style="font-size:11.5px;color:var(--muted);font-style:italic;padding:6px 0">Nothing scheduled. Add something below.</div>';}
+  else{pevts.innerHTML=evts.map(function(e){return '<div class="dp-ev"><div class="dp-dot" style="background:'+evColor2(e.type||e.cat)+'"></div><div class="dp-time">'+(e.time||'All day')+'</div><div><div class="dp-title">'+e.title+'</div>'+(e.note?'<div class="dp-note">'+e.note+'</div>':'')+'</div></div>';}).join('');}
+  panel.classList.add('open');
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+  renderFullCal();
+}
+function addQuickEv(){
+  var t=document.getElementById('qev-t').value.trim();
+  var tm=document.getElementById('qev-tm').value;
+  var cat=document.getElementById('qev-c').value;
+  if(!t||!selectedDay)return;
+  var evts=loadCal();evts.push({title:t,date:selectedDay,time:tm,type:cat,note:''});
+  saveCal(evts);
+  document.getElementById('qev-t').value='';document.getElementById('qev-tm').value='';
+  dayClick(selectedDay);renderFullCal();renderMiniCal();
+}
+
+// ═══ AI CHARACTERS ═══
+var AI_SYS={
+  finance:'You are Constance, Director of Treasury. Precise, like a personal financial advisor. Finances: balance $163, Connor debt $2573 clearing Jun 1, Kealy $300 ASAP, Gus $1100 slow PayPal, Brooklyn rent paid through April, Connor $500 coming Apr 14, Chicago trip Apr 16, fly NYC Apr 17 grab $1000 cash, daily cap $15 Wisconsin $20 NYC. 2-4 sentences max.',
+  zengun:'You are Flora, Director of Creative Affairs. Warm atmospheric literary muse. Projects: Madison County Church Suicide Corner (short story, gestating, Wisconsin, slow/atmospheric); That Motel in Fennimore (short story, gestating, roadside America); The Drinker (MiniDV film Denmark, complete); Carnival of the Cannibal (stream of consciousness poem, Vegas, apocalyptic Revelations energy); The Radiator Plan (short story, NYC 20th century building, Fellini-esque lovers/suicides/drugs/poets/bankers); Adventures of Ronaldo di Monde (picaresque, traveling con man on motorcycle + crony The Great Jones in sidecar, sells fake rubies/stories/bibles/elixirs, visits sad divorced women/senescent farmers/bored European royalty, pillages restrooms, steals heirlooms); House of Wind (journal/poetry with industrial/climate soundscapes); The Dromedary (fable, nothing yet). Help with story ideas, openings, images, moods.',
+  workout:'You are Viktor, Director of Athletic Performance. Direct motivating trainer. Programme: Week 2, wider shoulders/chest/abs, dumbbells+pull-up bar. Key: elevated pike push-ups (feet on chair hips high) for anterior delt, lateral raises lead with pinky slow negative drop sets, wide grip pull-ups for V-taper. Protein 45min post-workout. 8hr sleep.',
+  lab:'You are Mr. Greg, Director of Technical Affairs. Patient senior developer mentor. Gable is learning Month 1: HTML/CSS/JS/Git, The Odin Project, CS50x, Eloquent JavaScript. GitHub: gable-sys. Building Life OS and Mr. Greg ACA widget for HB360. Explain clearly, help debug errors.',
+};
+var AI_HIST={finance:[],zengun:[],workout:[],lab:[]};
+var AI_NAMES={finance:'Constance',zengun:'Flora',workout:'Viktor',lab:'Mr. Greg'};
+function sendAI(dept){
+  var inp=document.getElementById('ai-i-'+dept);
+  var btn=document.getElementById('ai-b-'+dept);
+  var msgs=document.getElementById('am-'+dept);
+  if(!inp||!msgs)return;
+  var text=inp.value.trim();if(!text)return;
+  inp.value='';if(btn)btn.disabled=true;
+  AI_HIST[dept].push({role:'user',content:text});
+  var ud=document.createElement('div');ud.className='ai-msg u';ud.innerHTML='<div class="ai-who">You</div>'+text;msgs.appendChild(ud);
+  var tk=document.createElement('div');tk.style.cssText='font-family:IBM Plex Mono,monospace;font-size:9px;color:var(--muted);padding:4px 0;font-style:italic';tk.textContent=(AI_NAMES[dept]||'...')+' is thinking...';msgs.appendChild(tk);
+  msgs.scrollTop=msgs.scrollHeight;
+  fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:400,system:AI_SYS[dept]||'You are a helpful assistant.',messages:AI_HIST[dept]})})
+  .then(function(r){return r.json();})
+  .then(function(data){
+    tk.remove();
+    var reply=(data.content&&data.content[0]&&data.content[0].text)||'Something went wrong.';
+    AI_HIST[dept].push({role:'assistant',content:reply});
+    var ad=document.createElement('div');ad.className='ai-msg a';ad.innerHTML='<div class="ai-who">'+(AI_NAMES[dept]||dept)+'</div>'+reply.replace(/\n/g,'<br>');
+    msgs.appendChild(ad);msgs.scrollTop=msgs.scrollHeight;if(btn)btn.disabled=false;
+  })
+  .catch(function(){
+    tk.remove();var ad=document.createElement('div');ad.className='ai-msg a';ad.innerHTML='<div class="ai-who">'+(AI_NAMES[dept]||dept)+'</div>Connection issue. Check you are online.';
+    msgs.appendChild(ad);msgs.scrollTop=msgs.scrollHeight;if(btn)btn.disabled=false;
+  });
+}
+
+// ═══ MARCHING FIGURES ═══
+(function(){
+  var p=document.getElementById('parade');if(!p)return;
+  var SVG='<svg viewBox="0 0 36 56" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><ellipse cx="18" cy="6" rx="6" ry="6"/><rect x="12" y="13" width="12" height="19" rx="2"/><rect x="6" y="14" width="7" height="12" rx="2"/><rect x="23" y="14" width="7" height="12" rx="2"/><rect x="12" y="32" width="5" height="18" rx="2"/><rect x="19" y="32" width="5" height="18" rx="2"/></svg>';
+  for(var i=0;i<22;i++){
+    var f=document.createElement('div');f.className='fig';
+    var dur=15+Math.random()*15,dly=-(Math.random()*dur),sc=0.6+Math.random()*0.55,fl=Math.random()>.5?1:-1;
+    f.style.cssText='width:'+(22+Math.floor(sc*14))+'px;height:'+(34+Math.floor(sc*18))+'px;color:var(--gold);animation-duration:'+dur+'s;animation-delay:'+dly+'s;bottom:'+(Math.random()*7)+'px;transform:scaleX('+fl+') scale('+sc+');';
+    f.innerHTML=SVG;p.appendChild(f);
+  }
+})();
+
+// ═══ EXPORT / IMPORT ═══
+function exportData(){
+  var data={v:'7',date:new Date().toISOString(),
+    checks:JSON.parse(localStorage.getItem(CHECKS_KEY)||'null'),
+    events:JSON.parse(localStorage.getItem(CAL_KEY)||'null'),
+    dating:loadDating(),wiki:wikiData,stories:loadStories()};
+  var b=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='lifeos-'+new Date().toISOString().slice(0,10)+'.json';a.click();
+}
+function importData(e){
+  var f=e.target.files[0];if(!f)return;
+  var r=new FileReader();
+  r.onload=function(ev){
+    try{
+      var d=JSON.parse(ev.target.result);
+      if(d.checks)localStorage.setItem(CHECKS_KEY,JSON.stringify(d.checks));
+      if(d.events)localStorage.setItem(CAL_KEY,JSON.stringify(d.events));
+      if(d.dating)localStorage.setItem(DATING_KEY,JSON.stringify(d.dating));
+      if(d.wiki){wikiData=d.wiki;saveWiki(wikiData);}
+      if(d.stories)localStorage.setItem(STORY_KEY,JSON.stringify(d.stories));
+      renderAll();renderMiniCal();renderFullCal();renderDating();renderStories();renderTags();renderWiki();
+      alert('Data imported! Everything restored.');
+    }catch(err){alert('Import failed.');}
+  };r.readAsText(f);
+}
+</script>
+</body>
+</html>

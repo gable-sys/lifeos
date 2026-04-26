@@ -1359,7 +1359,7 @@ var LISTEN={
 var todayL=LISTEN[dayName]||[];
 var lEl=document.getElementById('today-listening');
 if(lEl&&todayL.length){
-  lEl.innerHTML=todayL.map(function(l){return '<div style="display:flex;gap:9px;padding:6px 0;border-bottom:1px solid rgba(212,160,23,0.07);"><div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--gold);min-width:36px;margin-top:2px;">'+l.time+'</div><div><div style="font-size:13px;font-weight:600;margin-bottom:2px;color:var(--paper);">'+l.title+'</div><div style="font-size:11px;color:var(--dust);line-height:1.5;">'+l.desc+'</div></div></div>';}).join('');
+  lEl.innerHTML=todayL.map(function(l){return '<div style="display:flex;gap:9px;padding:6px 0;border-bottom:1px solid rgba(212,160,23,0.07);"><div style="font-family:IBM Plex Mono,monospace;font-size:8px;color:var(--gold);min-width:36px;margin-top:2px;">'+l.time+'</div><div><div style="font-size:13px;font-weight:600;margin-bottom:2px;color:var(--paper);">'+l.title+'</div><div style="font-size:11px;color:var(--dust);line-height:1.5;">'+l.desc+'</div></div></div>';}).join('');
   var mv=document.getElementById('pv-music');if(mv)mv.textContent='Today: '+todayL[0].title;
 }
 
@@ -1631,7 +1631,7 @@ function renderDating(){
     if(!active.length){ovEl.innerHTML='<div style="font-size:11px;color:var(--dust);font-style:italic;">No active dates — add in Calendar tab</div>';}
     else{ovEl.innerHTML=active.map(function(p){
       return '<div style="padding:7px 0;border-bottom:1px solid rgba(212,160,23,0.08);">'
-        +'<div style="display:flex;justify-content:space-between;"><span style="font-size:13px;font-weight:600;color:var(--paper);">'+p.name+'</span><span style="font-size:9px;color:var(--pink2);font-family:'IBM Plex Mono',monospace;">'+SL[p.status]+'</span></div>'
+        +'<div style="display:flex;justify-content:space-between;"><span style="font-size:13px;font-weight:600;color:var(--paper);">'+p.name+'</span><span style="font-size:9px;color:var(--pink2);font-family:IBM Plex Mono,monospace;">'+SL[p.status]+'</span></div>'
         +(p.nextDate?'<div style="font-size:11px;color:var(--dust);margin-top:1px;">Next: '+new Date(p.nextDate+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'})+'</div>':'')
         +(p.note?'<div style="font-size:11px;font-style:italic;color:rgba(139,160,180,0.5);margin-top:1px;">'+p.note.substring(0,55)+(p.note.length>55?'...':'')+'</div>':'')
         +'</div>';
@@ -1766,7 +1766,7 @@ function renderStories(){
       +'<div class="sc-title">'+s.title+'</div>'
       +'<div class="sc-meta">'+(wc?wc+' words':'No text yet')+'</div></div></div>';
   }).join('');
-  html+='<div class="sc-add" onclick="newStory()"><div style="font-size:24px;color:var(--dust);margin-bottom:8px">+</div><div style="font-family:'IBM Plex Mono',monospace;font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dust)">New Story</div></div>';
+  html+='<div class="sc-add" onclick="newStory()"><div style="font-size:24px;color:var(--dust);margin-bottom:8px">+</div><div style="font-family:IBM Plex Mono,monospace;font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dust)">New Story</div></div>';
   grid.innerHTML=html;
 }
 function openStory(i){
@@ -1848,7 +1848,7 @@ function sendAI(dept){
   inp.value='';if(btn)btn.disabled=true;
   AI_HIST[dept].push({role:'user',content:text});
   var ud=document.createElement('div');ud.className='ai-msg u';ud.innerHTML='<div class="ai-who">You</div>'+text;msgs.appendChild(ud);
-  var tk=document.createElement('div');tk.style.cssText='font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--muted);padding:4px 0;font-style:italic';tk.textContent=(AI_NAMES[dept]||'...')+' is thinking...';msgs.appendChild(tk);
+  var tk=document.createElement('div');tk.style.cssText="font-family:IBM Plex Mono,monospace;font-size:9px;color:var(--muted);padding:4px 0;font-style:italic";tk.textContent=(AI_NAMES[dept]||'...')+' is thinking...';msgs.appendChild(tk);
   msgs.scrollTop=msgs.scrollHeight;
   fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:400,system:AI_SYS[dept]||'You are a helpful assistant.',messages:AI_HIST[dept]})})
   .then(function(r){return r.json();})
@@ -2030,7 +2030,7 @@ function initMusicPage() {
   var qEl = document.getElementById('music-quote');
   if(qEl) {
     var q = QUOTES[dayOfYear % QUOTES.length];
-    qEl.innerHTML = '&ldquo;' + q.q + '&rdquo; &nbsp;&mdash;&nbsp; <span style="font-style:normal;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.1em;color:var(--gold);">' + q.a + '</span>';
+    qEl.innerHTML = '&ldquo;' + q.q + '&rdquo; &nbsp;&mdash;&nbsp; <span style="font-style:normal;font-family:IBM Plex Mono,monospace;font-size:10px;letter-spacing:0.1em;color:var(--gold);">' + q.a + '</span>';
   }
 }
 

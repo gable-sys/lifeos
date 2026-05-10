@@ -85,7 +85,7 @@ body::after {
 .nav-tabs{display:flex;overflow-x:auto;gap:0;}
 .nav-tabs::-webkit-scrollbar{display:none;}
 .nav-tab {
-  font-family:'IBM Plex Mono',monospace;
+  font-family:IBM Plex Mono,monospace;
   font-size:8.5px;letter-spacing:0.16em;text-transform:uppercase;
   padding:0 13px;height:52px;
   display:flex;align-items:center;cursor:pointer;
@@ -98,7 +98,7 @@ body::after {
 .nav-tab:hover{color:var(--paper);}
 .nav-tab.active{color:var(--gold2);border-bottom-color:var(--gold);}
 .date-chip {
-  font-family:'IBM Plex Mono',monospace;font-size:9px;
+  font-family:IBM Plex Mono,monospace;font-size:9px;
   color:var(--dust);letter-spacing:0.08em;flex-shrink:0;
   background:rgba(212,160,23,0.07);
   border:1px solid var(--border2);
@@ -113,7 +113,7 @@ body::after {
 /* ── SECTION HEAD ── */
 .section-head{padding:26px 0 16px;margin-bottom:20px;position:relative;}
 .section-head::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--gold-border),transparent 60%);}
-.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold);margin-bottom:5px;}
+.eyebrow{font-family:IBM Plex Mono,monospace;font-size:8.5px;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold);margin-bottom:5px;}
 .section-head h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,5vw,52px);letter-spacing:0.05em;line-height:1;color:var(--paper);}
 .section-sub{font-family:'Lora',serif;font-style:italic;font-size:13px;color:var(--dust);margin-top:4px;}
 
@@ -142,12 +142,12 @@ body::after {
   padding:8px 10px;
   border-top:1px solid var(--gold-border);
 }
-.portal-dept{font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:2px;}
+.portal-dept{font-family:IBM Plex Mono,monospace;font-size:7px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:2px;}
 .portal-title{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:0.1em;color:var(--paper2);}
 .portal-status{font-size:10px;color:var(--dust);margin-top:1px;font-style:italic;}
 .portal-badge{
   position:absolute;top:8px;right:8px;
-  font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:0.08em;
+  font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:0.08em;
   background:var(--gold);color:var(--deep);
   padding:2px 6px;border-radius:1px;z-index:3;font-weight:500;
 }
@@ -160,7 +160,7 @@ body::after {
   display:flex;align-items:flex-start;gap:14px;
 }
 .signal-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
-.signal-label{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;}
+.signal-label{font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;}
 .signal-text{font-family:'Lora',serif;font-style:italic;font-size:15px;color:var(--paper);line-height:1.6;}
 
 /* ── MINI CALENDAR ── */
@@ -169,8 +169,8 @@ body::after {
 .mini-cal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
 .mini-cal-title{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:0.12em;color:var(--gold2);}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
-.cal-dow{font-family:'IBM Plex Mono',monospace;font-size:7px;text-align:center;color:var(--dust);padding:2px 0;letter-spacing:0.06em;}
-.cal-day{font-family:'IBM Plex Mono',monospace;font-size:10.5px;text-align:center;padding:5px 2px;border-radius:2px;color:rgba(240,232,216,0.35);line-height:1;position:relative;}
+.cal-dow{font-family:IBM Plex Mono,monospace;font-size:7px;text-align:center;color:var(--dust);padding:2px 0;letter-spacing:0.06em;}
+.cal-day{font-family:IBM Plex Mono,monospace;font-size:10.5px;text-align:center;padding:5px 2px;border-radius:2px;color:rgba(240,232,216,0.35);line-height:1;position:relative;}
 .cal-day.in-month{color:var(--text);}
 .cal-day.today{background:var(--gold);color:var(--deep);font-weight:700;}
 .cal-day.has-ev::after{content:'';position:absolute;bottom:1px;left:50%;transform:translateX(-50%);width:3px;height:3px;border-radius:50%;background:var(--gold2);}
@@ -180,13 +180,13 @@ body::after {
 .ev-row{display:flex;align-items:center;gap:8px;padding:4px 0;font-size:11px;border-bottom:1px solid rgba(212,160,23,0.08);}
 .ev-row:last-child{border-bottom:none;}
 .ev-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
-.ev-day-tag{font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--dust);min-width:30px;flex-shrink:0;}
+.ev-day-tag{font-family:IBM Plex Mono,monospace;font-size:8px;color:var(--dust);min-width:30px;flex-shrink:0;}
 .ev-name{flex:1;color:var(--text);}
-.ev-time-tag{font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--dust);white-space:nowrap;}
+.ev-time-tag{font-family:IBM Plex Mono,monospace;font-size:8px;color:var(--dust);white-space:nowrap;}
 
 /* ── CHECKLIST ── */
 .cl-block{background:var(--blue);border:1px solid var(--border2);padding:13px 15px;margin-bottom:10px;}
-.cl-head{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;display:flex;justify-content:space-between;}
+.cl-head{font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;display:flex;justify-content:space-between;}
 .cl-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid rgba(212,160,23,0.07);cursor:pointer;user-select:none;}
 .cl-row:last-child{border-bottom:none;}
 .cl-row:hover{opacity:0.85;}
@@ -194,7 +194,7 @@ body::after {
 .cl-box.done{background:rgba(90,170,90,0.2);border-color:var(--green2);color:var(--green2);}
 .cl-name{font-size:13px;flex:1;}
 .cl-name.done{text-decoration:line-through;color:var(--muted);}
-.cl-streak{font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--gold);background:rgba(212,160,23,0.1);border:1px solid var(--border2);padding:1px 6px;border-radius:2px;flex-shrink:0;}
+.cl-streak{font-family:IBM Plex Mono,monospace;font-size:8px;color:var(--gold);background:rgba(212,160,23,0.1);border:1px solid var(--border2);padding:1px 6px;border-radius:2px;flex-shrink:0;}
 
 /* ── STAT ROWS ── */
 .stat-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(212,160,23,0.08);font-size:13px;}
@@ -206,7 +206,7 @@ body::after {
 
 /* ── CARDS ── */
 .card{background:var(--blue);border:1px solid var(--border2);padding:13px 15px;}
-.card-lbl{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--dust);margin-bottom:4px;}
+.card-lbl{font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--dust);margin-bottom:4px;}
 .card-num{font-family:'Bebas Neue',sans-serif;font-size:28px;line-height:1;letter-spacing:0.03em;}
 .card-sub{font-size:10px;color:var(--dust);margin-top:2px;font-style:italic;}
 .num-a{color:var(--gold2);}
@@ -250,7 +250,7 @@ body::after {
 .modal-body{padding:18px;}
 .modal-link{
   display:inline-block;margin-top:12px;
-  font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;
+  font-family:IBM Plex Mono,monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;
   color:var(--gold);border:1px solid var(--gold-border);padding:6px 14px;
   text-decoration:none;cursor:pointer;transition:background 0.15s;
 }
@@ -261,7 +261,7 @@ body::after {
 
 /* ── PROGRESS ── */
 .prog-wrap{margin:6px 0;}
-.prog-lbl{display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:7.5px;color:var(--dust);margin-bottom:3px;}
+.prog-lbl{display:flex;justify-content:space-between;font-family:IBM Plex Mono,monospace;font-size:7.5px;color:var(--dust);margin-bottom:3px;}
 .prog-track{background:rgba(8,13,24,0.8);height:3px;overflow:hidden;}
 .prog-fill{height:3px;transition:width 0.6s ease;}
 .pf-gold{background:var(--gold);}
@@ -271,22 +271,22 @@ body::after {
 
 /* ── CF TABLE ── */
 .cf-table{width:100%;border-collapse:collapse;font-size:12px;}
-.cf-table th{padding:7px 9px;text-align:left;font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:0.12em;text-transform:uppercase;color:var(--dust);border-bottom:1px solid var(--border);}
+.cf-table th{padding:7px 9px;text-align:left;font-family:IBM Plex Mono,monospace;font-size:7px;letter-spacing:0.12em;text-transform:uppercase;color:var(--dust);border-bottom:1px solid var(--border);}
 .cf-table td{padding:7px 9px;border-bottom:1px solid rgba(212,160,23,0.06);vertical-align:middle;}
 .cf-table tr:last-child td{border-bottom:none;}
 .cf-table .in{color:var(--green2);font-weight:600;}
 .cf-table .out{color:var(--red2);}
-.cf-table .bal{font-family:'IBM Plex Mono',monospace;font-size:10px;}
-.cf-table .sec td{background:rgba(212,160,23,0.06);font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);padding:4px 9px;}
+.cf-table .bal{font-family:IBM Plex Mono,monospace;font-size:10px;}
+.cf-table .sec td{background:rgba(212,160,23,0.06);font-family:IBM Plex Mono,monospace;font-size:7px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);padding:4px 9px;}
 .cf-table .hl td{background:rgba(90,170,90,0.05);}
-.badge{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:7px;padding:2px 6px;border-radius:1px;}
+.badge{display:inline-block;font-family:IBM Plex Mono,monospace;font-size:7px;padding:2px 6px;border-radius:1px;}
 .badge-paid{background:rgba(58,138,90,0.2);border:1px solid var(--green);color:var(--green2);}
 .badge-owed{background:rgba(176,58,42,0.2);border:1px solid var(--red);color:var(--red2);}
 .badge-pending{background:rgba(26,58,92,0.4);border:1px solid #3a5a7a;color:#8ab4cc;}
 
 /* ── ZEN GUN PROJECTS ── */
 .zg-card{background:var(--blue);border:1px solid var(--border2);border-left:3px solid var(--gold);padding:13px 15px;margin-bottom:8px;}
-.zg-type{font-family:'IBM Plex Mono',monospace;font-size:7.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;}
+.zg-type{font-family:IBM Plex Mono,monospace;font-size:7.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;}
 .zg-card h3{font-size:15px;font-weight:600;margin-bottom:3px;color:var(--paper);}
 .zg-card p{font-size:12px;color:var(--dust);line-height:1.6;}
 
@@ -306,7 +306,7 @@ body::after {
 .ex-list{list-style:none;margin-top:8px;}
 .ex-list li{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(212,160,23,0.06);font-size:12px;}
 .ex-list li:last-child{border-bottom:none;}
-.ex-sets{font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:var(--gold);margin-left:auto;flex-shrink:0;}
+.ex-sets{font-family:IBM Plex Mono,monospace;font-size:8.5px;color:var(--gold);margin-left:auto;flex-shrink:0;}
 
 /* ── MUSIC SESSIONS ── */
 .sess{background:var(--blue);border:1px solid var(--border2);margin-bottom:4px;}
@@ -314,23 +314,23 @@ body::after {
 .sess-day{width:62px;flex-shrink:0;background:var(--blue2);padding:11px 9px;border-right:1px solid var(--border2);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:0.05em;color:var(--gold);}
 .sess-title{flex:1;padding:9px 12px;}
 .sess-title h4{font-size:13px;font-weight:600;margin-bottom:1px;color:var(--paper);}
-.sess-focus{font-family:'IBM Plex Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);}
+.sess-focus{font-family:IBM Plex Mono,monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);}
 .sess-body{display:none;border-top:1px solid var(--border2);padding:9px 12px;}
 .sess.open .sess-body{display:block;}
 .sess-item{display:flex;gap:8px;padding:5px 0;border-bottom:1px solid rgba(212,160,23,0.06);font-size:12px;}
 .sess-item:last-child{border-bottom:none;}
-.sess-time{font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--gold);min-width:32px;margin-top:1px;}
+.sess-time{font-family:IBM Plex Mono,monospace;font-size:8px;color:var(--gold);min-width:32px;margin-top:1px;}
 .sess-desc h5{font-size:12px;font-weight:600;margin-bottom:1px;color:var(--paper);}
 .sess-desc p{font-size:11px;color:var(--dust);line-height:1.5;}
 .chips{display:flex;flex-wrap:wrap;gap:3px;margin-top:4px;}
-.chip{font-family:'IBM Plex Mono',monospace;font-size:7px;padding:2px 5px;border-radius:1px;background:rgba(26,58,92,0.6);border:1px solid #3a5a7a;color:#8ab4cc;}
+.chip{font-family:IBM Plex Mono,monospace;font-size:7px;padding:2px 5px;border-radius:1px;background:rgba(26,58,92,0.6);border:1px solid #3a5a7a;color:#8ab4cc;}
 
 /* ── BOOK ITEMS ── */
 .book-row{display:flex;gap:9px;padding:8px 0;border-bottom:1px solid var(--border2);align-items:flex-start;}
 .book-row:last-child{border-bottom:none;}
 .book-spine{width:3px;flex-shrink:0;height:32px;border-radius:1px;margin-top:2px;}
 .book-info h4{font-size:13px;font-weight:600;margin-bottom:1px;color:var(--paper);}
-.book-info .auth{font-family:'IBM Plex Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--dust);margin-bottom:2px;}
+.book-info .auth{font-family:IBM Plex Mono,monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--dust);margin-bottom:2px;}
 .book-info .bnote{font-size:11px;font-style:italic;color:rgba(139,160,180,0.65);line-height:1.5;}
 
 /* ── PHASE BLOCKS (LAB) ── */
@@ -340,8 +340,8 @@ body::after {
 .phase-num{font-family:'Bebas Neue',sans-serif;font-size:26px;line-height:1;min-width:26px;}
 .phase-meta{flex:1;}
 .phase-title{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:0.07em;}
-.phase-when{font-family:'IBM Plex Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;margin-top:2px;}
-.phase-tag{font-family:'IBM Plex Mono',monospace;font-size:7.5px;padding:3px 9px;border-radius:1px;flex-shrink:0;}
+.phase-when{font-family:IBM Plex Mono,monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;margin-top:2px;}
+.phase-tag{font-family:IBM Plex Mono,monospace;font-size:7.5px;padding:3px 9px;border-radius:1px;flex-shrink:0;}
 .phase-body{display:none;border-top:1px solid var(--border2);padding:14px 15px;}
 .phase-block.open .phase-body{display:block;}
 .phase-block.open .chev{transform:rotate(180deg);color:var(--gold);}
@@ -363,11 +363,11 @@ body::after {
 .tl-seg{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1px;padding:5px;cursor:pointer;flex:1;border-right:1px solid rgba(255,255,255,0.12);transition:opacity 0.15s;}
 .tl-seg:last-child{border-right:none;}
 .tl-seg:hover{opacity:0.8;}
-.tl-label{font-family:'IBM Plex Mono',monospace;font-size:7.5px;font-weight:500;letter-spacing:0.06em;color:rgba(255,255,255,0.85);text-align:center;line-height:1.2;}
+.tl-label{font-family:IBM Plex Mono,monospace;font-size:7.5px;font-weight:500;letter-spacing:0.06em;color:rgba(255,255,255,0.85);text-align:center;line-height:1.2;}
 
 /* ── PROTOCOL TABLE ── */
 .proto-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;}
-.proto-table th{padding:6px 9px;text-align:left;font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:var(--dust);border-bottom:1px solid var(--border);}
+.proto-table th{padding:6px 9px;text-align:left;font-family:IBM Plex Mono,monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:var(--dust);border-bottom:1px solid var(--border);}
 .proto-table td{padding:7px 9px;border-bottom:1px solid rgba(212,160,23,0.06);vertical-align:top;line-height:1.5;}
 .proto-table tr:last-child td{border-bottom:none;}
 .tret{color:#aa88dd;font-weight:600;}
@@ -375,35 +375,35 @@ body::after {
 .rest-day{color:var(--dust);}
 
 /* ── WIKI ── */
-.wiki-search{width:100%;background:var(--blue2);border:1px solid var(--border);color:var(--text);padding:8px 11px;font-family:'IBM Plex Mono',monospace;font-size:11px;outline:none;margin-bottom:9px;}
+.wiki-search{width:100%;background:var(--blue2);border:1px solid var(--border);color:var(--text);padding:8px 11px;font-family:IBM Plex Mono,monospace;font-size:11px;outline:none;margin-bottom:9px;}
 .wiki-search:focus{border-color:var(--gold);}
 .wiki-search::placeholder{color:var(--dust);}
 .wiki-entry{padding:9px 0;border-bottom:1px solid rgba(212,160,23,0.07);}
 .wiki-entry:last-child{border-bottom:none;}
-.wiki-tag{font-family:'IBM Plex Mono',monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:2px;}
+.wiki-tag{font-family:IBM Plex Mono,monospace;font-size:7.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:2px;}
 .wiki-topic{font-size:13px;font-weight:600;margin-bottom:2px;color:var(--paper);}
 .wiki-note{font-size:11.5px;color:var(--dust);line-height:1.5;}
 .tag-filter{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:9px;}
-.tag-btn{font-family:'IBM Plex Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;padding:3px 9px;border:1px solid var(--border2);background:transparent;color:var(--dust);cursor:pointer;}
+.tag-btn{font-family:IBM Plex Mono,monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;padding:3px 9px;border:1px solid var(--border2);background:transparent;color:var(--dust);cursor:pointer;}
 .tag-btn:hover{color:var(--text);border-color:var(--dust);}
 .tag-btn.active{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);}
 .add-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
-.add-row input,.add-row select{background:var(--blue2);border:1px solid var(--border);color:var(--text);padding:7px 9px;font-family:'IBM Plex Mono',monospace;font-size:10px;outline:none;min-width:0;}
+.add-row input,.add-row select{background:var(--blue2);border:1px solid var(--border);color:var(--text);padding:7px 9px;font-family:IBM Plex Mono,monospace;font-size:10px;outline:none;min-width:0;}
 .add-row input:focus,.add-row select:focus{border-color:var(--gold);}
 .add-row input::placeholder{color:var(--dust);}
-.add-btn{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:7px 14px;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:0.1em;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+.add-btn{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:7px 14px;font-family:IBM Plex Mono,monospace;font-size:8.5px;letter-spacing:0.1em;cursor:pointer;white-space:nowrap;flex-shrink:0;}
 .add-btn:hover{background:var(--gold-dim);}
-.del-btn{background:transparent;border:1px solid var(--red);color:var(--red2);padding:4px 8px;font-family:'IBM Plex Mono',monospace;font-size:7.5px;cursor:pointer;}
+.del-btn{background:transparent;border:1px solid var(--red);color:var(--red2);padding:4px 8px;font-family:IBM Plex Mono,monospace;font-size:7.5px;cursor:pointer;}
 .del-btn:hover{background:rgba(176,58,42,0.1);}
 
 /* ── CALENDAR / DATING ── */
 .full-cal-nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
-.cal-nav-btn{background:transparent;border:1px solid var(--gold-border);color:var(--gold);padding:4px 11px;font-family:'IBM Plex Mono',monospace;font-size:9px;cursor:pointer;transition:background 0.15s;}
+.cal-nav-btn{background:transparent;border:1px solid var(--gold-border);color:var(--gold);padding:4px 11px;font-family:IBM Plex Mono,monospace;font-size:9px;cursor:pointer;transition:background 0.15s;}
 .cal-nav-btn:hover{background:var(--gold-dim);}
 .cal-month-label{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:0.1em;color:var(--gold2);}
 .date-card{background:var(--blue);border:1px solid var(--border2);border-left:3px solid var(--pink2);padding:13px 15px;margin-bottom:8px;}
 .date-name{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:0.08em;color:var(--paper);}
-.date-status-badge{font-family:'IBM Plex Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;padding:2px 8px;border-radius:1px;}
+.date-status-badge{font-family:IBM Plex Mono,monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;padding:2px 8px;border-radius:1px;}
 .ds-active{background:rgba(196,90,138,0.2);border:1px solid var(--pink);color:var(--pink2);}
 .ds-maybe{background:rgba(212,160,23,0.15);border:1px solid var(--gold);color:var(--gold2);}
 .ds-past{background:rgba(37,36,32,0.3);border:1px solid var(--border);color:var(--dust);}
@@ -412,30 +412,30 @@ body::after {
 .date-log{margin-top:7px;}
 .date-log-row{display:flex;gap:8px;padding:3px 0;border-bottom:1px solid rgba(212,160,23,0.06);font-size:11px;}
 .date-log-row:last-child{border-bottom:none;}
-.date-log-d{font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:var(--gold);flex-shrink:0;}
+.date-log-d{font-family:IBM Plex Mono,monospace;font-size:8.5px;color:var(--gold);flex-shrink:0;}
 /* add event form */
 .ev-form{background:var(--blue2);border:1px solid var(--border2);padding:12px 14px;margin-bottom:10px;}
-.ev-form-title{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:9px;}
+.ev-form-title{font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:9px;}
 .form-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;}
-.form-row input,.form-row select,.form-row textarea{background:var(--deep);border:1px solid var(--border);color:var(--text);padding:7px 9px;font-family:'IBM Plex Mono',monospace;font-size:10px;outline:none;min-width:0;}
+.form-row input,.form-row select,.form-row textarea{background:var(--deep);border:1px solid var(--border);color:var(--text);padding:7px 9px;font-family:IBM Plex Mono,monospace;font-size:10px;outline:none;min-width:0;}
 .form-row input:focus,.form-row select:focus{border-color:var(--gold);}
 .form-row input::placeholder,.form-row textarea::placeholder{color:var(--dust);}
 
 /* resource table */
 .res-table{width:100%;border-collapse:collapse;font-size:11.5px;}
-.res-table th{padding:7px 9px;text-align:left;font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:0.12em;text-transform:uppercase;color:var(--dust);border-bottom:1px solid var(--border);}
+.res-table th{padding:7px 9px;text-align:left;font-family:IBM Plex Mono,monospace;font-size:7px;letter-spacing:0.12em;text-transform:uppercase;color:var(--dust);border-bottom:1px solid var(--border);}
 .res-table td{padding:7px 9px;border-bottom:1px solid rgba(212,160,23,0.06);}
 .res-table tr:last-child td{border-bottom:none;}
 
 /* ── BALANCE HERO ── */
 .bal-hero{background:var(--blue);border:1px solid var(--gold-border);padding:18px 20px 0;margin-bottom:12px;}
 .bal-top{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:16px;gap:14px;flex-wrap:wrap;}
-.bal-label{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--dust);margin-bottom:3px;}
+.bal-label{font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--dust);margin-bottom:3px;}
 .bal-num{font-family:'Bebas Neue',sans-serif;font-size:68px;line-height:0.9;color:var(--gold2);}
 .bal-asof{font-size:11px;color:var(--dust);font-style:italic;margin-top:4px;}
 .bal-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);margin:0 -20px;}
 .bm{background:var(--blue2);padding:10px 13px;}
-.bm-lbl{font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:0.14em;text-transform:uppercase;color:var(--dust);margin-bottom:2px;}
+.bm-lbl{font-family:IBM Plex Mono,monospace;font-size:7px;letter-spacing:0.14em;text-transform:uppercase;color:var(--dust);margin-bottom:2px;}
 .bm-val{font-family:'Bebas Neue',sans-serif;font-size:20px;line-height:1;}
 .bm-sub{font-size:10px;color:var(--dust);font-style:italic;margin-top:1px;}
 
@@ -453,7 +453,7 @@ body::after {
 .sc-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:34px;opacity:.07;pointer-events:none;}
 .sc-ov{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 30%,rgba(6,9,15,.92) 100%);pointer-events:none;}
 .sc-lbl{position:relative;z-index:2;padding:10px 12px;}
-.sc-type{font-family:'IBM Plex Mono',monospace;font-size:6.5px;letter-spacing:.15em;text-transform:uppercase;margin-bottom:4px;}
+.sc-type{font-family:IBM Plex Mono,monospace;font-size:6.5px;letter-spacing:.15em;text-transform:uppercase;margin-bottom:4px;}
 .sc-title{font-family:'Special Elite',cursive;font-size:14px;color:var(--paper);line-height:1.3;margin-bottom:3px;}
 .sc-meta{font-size:9px;color:var(--dust);font-style:italic;}
 .sc-add{background:rgba(212,160,23,.03);border:2px dashed rgba(212,160,23,.25);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;aspect-ratio:2/3;transition:border-color .15s;}
@@ -463,22 +463,22 @@ body::after {
 #se.open{display:flex}
 .se-top{background:rgba(6,9,15,.98);border-bottom:1px solid var(--gold-border);padding:0 18px;height:50px;display:flex;align-items:center;gap:12px;flex-shrink:0;}
 #se-ttl{font-family:'Special Elite',cursive;font-size:17px;background:transparent;border:none;color:var(--gold2);outline:none;flex:1;}
-#se-info{font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--dust);white-space:nowrap;}
-.se-close{background:transparent;border:1px solid var(--border2);color:var(--dust);padding:5px 12px;font-family:'IBM Plex Mono',monospace;font-size:8px;cursor:pointer;}
+#se-info{font-family:IBM Plex Mono,monospace;font-size:8px;color:var(--dust);white-space:nowrap;}
+.se-close{background:transparent;border:1px solid var(--border2);color:var(--dust);padding:5px 12px;font-family:IBM Plex Mono,monospace;font-size:8px;cursor:pointer;}
 .se-close:hover{border-color:var(--gold);color:var(--gold)}
 .se-body{flex:1;display:flex;overflow:hidden;}
 .se-side{width:195px;flex-shrink:0;background:var(--blue);border-right:1px solid var(--border2);padding:14px;overflow-y:auto;display:flex;flex-direction:column;gap:11px;}
-.se-lbl{font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:.18em;text-transform:uppercase;color:var(--dust);margin-bottom:4px;}
-.se-sel{background:var(--deep);border:1px solid var(--border2);color:var(--text);padding:5px 7px;font-family:'IBM Plex Mono',monospace;font-size:9px;outline:none;width:100%;}
+.se-lbl{font-family:IBM Plex Mono,monospace;font-size:7px;letter-spacing:.18em;text-transform:uppercase;color:var(--dust);margin-bottom:4px;}
+.se-sel{background:var(--deep);border:1px solid var(--border2);color:var(--text);padding:5px 7px;font-family:IBM Plex Mono,monospace;font-size:9px;outline:none;width:100%;}
 .se-sel:focus{border-color:var(--gold)}
 #se-notes{background:rgba(6,9,15,.6);border:1px solid var(--border2);color:var(--text);padding:7px;font-family:'Lora',serif;font-size:11px;outline:none;resize:none;width:100%;min-height:90px;line-height:1.6;}
-.se-btn{background:transparent;border:1px solid var(--gold-border);color:var(--gold);padding:7px;font-family:'IBM Plex Mono',monospace;font-size:8px;cursor:pointer;width:100%;transition:background .15s;}
+.se-btn{background:transparent;border:1px solid var(--gold-border);color:var(--gold);padding:7px;font-family:IBM Plex Mono,monospace;font-size:8px;cursor:pointer;width:100%;transition:background .15s;}
 .se-btn:hover{background:rgba(212,160,23,.09)}
 .se-btn.del{border-color:var(--red);color:var(--red2);}
 .se-btn.del:hover{background:rgba(176,58,42,.1)}
 #se-ta{flex:1;background:var(--deep);border:none;color:var(--text);padding:36px 44px;font-family:'Lora',serif;font-size:16px;line-height:1.85;outline:none;resize:none;overflow-y:auto;}
 #se-ta::placeholder{color:rgba(139,160,180,.22);font-style:italic}
-#se-wc{position:fixed;bottom:14px;right:18px;z-index:810;font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--dust);background:rgba(6,9,15,.85);border:1px solid var(--border2);padding:4px 10px;}
+#se-wc{position:fixed;bottom:14px;right:18px;z-index:810;font-family:IBM Plex Mono,monospace;font-size:8px;color:var(--dust);background:rgba(6,9,15,.85);border:1px solid var(--border2);padding:4px 10px;}
 /* DAY PANEL */
 .day-panel{background:var(--blue2);border:1px solid var(--gold-border);padding:13px 15px;margin-top:10px;display:none;}
 .day-panel.open{display:block}
@@ -486,7 +486,7 @@ body::after {
 .dp-ev{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid rgba(212,160,23,.07);font-size:12px;}
 .dp-ev:last-child{border-bottom:none}
 .dp-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:4px;}
-.dp-time{font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--dust);min-width:40px;flex-shrink:0;margin-top:2px;}
+.dp-time{font-family:IBM Plex Mono,monospace;font-size:8px;color:var(--dust);min-width:40px;flex-shrink:0;margin-top:2px;}
 .dp-title{flex:1;color:var(--text);line-height:1.4}
 .dp-note{font-size:10.5px;color:var(--dust);font-style:italic;margin-top:1px;}
 /* AI BOX */
@@ -494,7 +494,7 @@ body::after {
 .ai-hdr-v7{background:var(--blue2);padding:9px 13px;display:flex;align-items:center;gap:10px;cursor:pointer;border-bottom:1px solid var(--border2);user-select:none;}
 .ai-av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;border:1px solid var(--gold-border);background:rgba(212,160,23,.07);}
 .ai-nm{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:.1em;color:var(--gold2);}
-.ai-rl{font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:.12em;text-transform:uppercase;color:var(--dust);}
+.ai-rl{font-family:IBM Plex Mono,monospace;font-size:7px;letter-spacing:.12em;text-transform:uppercase;color:var(--dust);}
 .ai-chv{margin-left:auto;font-size:10px;color:var(--dust);transition:transform .2s;}
 .ai-box-v7.open .ai-chv{transform:rotate(180deg);color:var(--gold)}
 .ai-bd{display:none;padding:12px 13px;}
@@ -503,11 +503,11 @@ body::after {
 .ai-msg{padding:8px 11px;font-size:12px;line-height:1.6;}
 .ai-msg.a{background:rgba(212,160,23,.06);border-left:2px solid var(--gold);}
 .ai-msg.u{background:rgba(26,58,92,.35);border-right:2px solid #5a9acc;text-align:right;}
-.ai-who{font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px;}
+.ai-who{font-family:IBM Plex Mono,monospace;font-size:7px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px;}
 .ai-msg.a .ai-who{color:var(--gold)}.ai-msg.u .ai-who{color:#8ab4cc}
 .ai-inp-v7{flex:1;background:rgba(6,9,15,.6);border:1px solid var(--border);color:var(--text);padding:7px 10px;font-family:'Lora',serif;font-size:12px;outline:none;}
 .ai-inp-v7:focus{border-color:var(--gold)}.ai-inp-v7::placeholder{color:var(--dust);font-style:italic}
-.ai-snd{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:7px 13px;font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.1em;cursor:pointer;transition:background .15s;white-space:nowrap;}
+.ai-snd{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:7px 13px;font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.1em;cursor:pointer;transition:background .15s;white-space:nowrap;}
 .ai-snd:hover{background:rgba(212,160,23,.09)}.ai-snd:disabled{opacity:.35;cursor:default}
 ::-webkit-scrollbar{width:4px;}
 ::-webkit-scrollbar-track{background:var(--deep);}
@@ -529,7 +529,7 @@ body::after {
 
 <div id="se">
   <div class="se-top">
-    <span style="font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.15em;color:var(--dust);text-transform:uppercase;flex-shrink:0">ZEN GUN</span>
+    <span style="font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.15em;color:var(--dust);text-transform:uppercase;flex-shrink:0">ZEN GUN</span>
     <input id="se-ttl" placeholder="Story title...">
     <span id="se-info"></span>
     <button class="se-close" onclick="closeEditor()">CLOSE &times;</button>
@@ -550,10 +550,10 @@ body::after {
   <div id="se-wc">0 words</div>
 </div>
 <div id="io-panel" style="display:none;background:var(--blue);border:1px solid var(--gold-border);padding:12px 16px;margin:8px 20px 0;position:relative;z-index:10;">
-  <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:9px;">Data Export / Import</div>
+  <div style="font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:9px;">Data Export / Import</div>
   <div style="display:flex;gap:8px;flex-wrap:wrap;">
-    <button onclick="exportData()" style="font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;background:transparent;border:1px solid var(--gold-border);color:var(--gold);padding:7px 14px;cursor:pointer;">Export All Data &darr;</button>
-    <label style="font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;background:transparent;border:1px solid var(--gold-border);color:var(--gold);padding:7px 14px;cursor:pointer;display:inline-block;">Import Data &uarr;<input type="file" accept=".json" style="display:none" onchange="importData(event)"></label>
+    <button onclick="exportData()" style="font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;background:transparent;border:1px solid var(--gold-border);color:var(--gold);padding:7px 14px;cursor:pointer;">Export All Data &darr;</button>
+    <label style="font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;background:transparent;border:1px solid var(--gold-border);color:var(--gold);padding:7px 14px;cursor:pointer;display:inline-block;">Import Data &uarr;<input type="file" accept=".json" style="display:none" onchange="importData(event)"></label>
   </div>
   <div style="font-size:10.5px;color:var(--dust);font-style:italic;margin-top:7px;">Export saves everything as JSON. Import into any new version to restore.</div>
 </div>
@@ -572,7 +572,7 @@ body::after {
     <div class="nav-tab" data-page="wiki">Wiki</div>
   </div>
   <div class="date-chip" id="date-disp"></div>
-  <button onclick="document.getElementById('io-panel').style.display=document.getElementById('io-panel').style.display==='none'?'block':'none'" style="font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:.1em;text-transform:uppercase;background:transparent;border:1px solid rgba(212,160,23,.45);color:var(--gold);padding:4px 9px;cursor:pointer;white-space:nowrap;flex-shrink:0;">Data &harr;</button>
+  <button onclick="document.getElementById('io-panel').style.display=document.getElementById('io-panel').style.display==='none'?'block':'none'" style="font-family:IBM Plex Mono,monospace;font-size:7px;letter-spacing:.1em;text-transform:uppercase;background:transparent;border:1px solid rgba(212,160,23,.45);color:var(--gold);padding:4px 9px;cursor:pointer;white-space:nowrap;flex-shrink:0;">Data &harr;</button>
 </nav>
 
 <div class="main">
@@ -677,7 +677,7 @@ body::after {
     <div class="mini-cal" onclick="goTo('calendar')">
       <div class="mini-cal-header">
         <div class="mini-cal-title" id="mini-month-label"></div>
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--dust);">tap → full calendar</div>
+        <div style="font-family:IBM Plex Mono,monospace;font-size:8px;color:var(--dust);">tap → full calendar</div>
       </div>
       <div class="cal-grid" id="mini-cal-grid"></div>
       <div class="upcoming-list" id="mini-upcoming"></div>
@@ -901,11 +901,11 @@ body::after {
     <!-- OBLIQUE STRATEGY CARD -->
   <div id="oblique-card" style="background:linear-gradient(135deg,var(--blue2),var(--blue));border:1px solid var(--gold-border);border-left:4px solid var(--gold);padding:16px 20px;margin-bottom:14px;position:relative;overflow:hidden;">
     <div style="position:absolute;top:0;right:0;width:80px;height:80px;background:radial-gradient(ellipse at top right,rgba(212,160,23,0.08),transparent);pointer-events:none;"></div>
-    <div style="font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Oblique Strategy — Card of the Day</div>
+    <div style="font-family:IBM Plex Mono,monospace;font-size:7px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Oblique Strategy — Card of the Day</div>
     <div id="oblique-text" style="font-family:'Special Elite',cursive;font-size:18px;color:var(--paper);line-height:1.5;margin-bottom:8px;"></div>
     <div style="display:flex;justify-content:space-between;align-items:center;">
       <div id="oblique-sub" style="font-size:11px;color:var(--dust);font-style:italic;"></div>
-      <button onclick="newOblique()" style="font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;background:transparent;border:1px solid var(--border2);color:var(--dust);padding:3px 9px;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--dust)'">New Card ↻</button>
+      <button onclick="newOblique()" style="font-family:IBM Plex Mono,monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;background:transparent;border:1px solid var(--border2);color:var(--dust);padding:3px 9px;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--dust)'">New Card ↻</button>
     </div>
   </div>
 
@@ -914,35 +914,35 @@ body::after {
 
     <!-- GUITAR TODAY -->
     <div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:7.5px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:7px;">Guitar — Today</div>
+      <div style="font-family:IBM Plex Mono,monospace;font-size:7.5px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:7px;">Guitar — Today</div>
       <div id="guitar-today-card" onclick="toggleInstrument('guitar')" style="background:var(--blue);border:2px solid var(--gold-border);padding:14px 16px;cursor:pointer;transition:border-color 0.18s;position:relative;">
         <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),transparent);"></div>
         <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
           <div>
             <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.08em;color:var(--gold2);" id="guitar-today-name">Loading...</div>
-            <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--dust);" id="guitar-today-focus"></div>
+            <div style="font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--dust);" id="guitar-today-focus"></div>
           </div>
           <div style="font-size:22px;opacity:0.4;">🎸</div>
         </div>
         <div id="guitar-today-items" style="font-size:11.5px;color:var(--dust);line-height:1.7;border-top:1px solid var(--border2);padding-top:8px;margin-top:4px;"></div>
-        <div style="margin-top:10px;font-family:'IBM Plex Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);opacity:0.7;" id="guitar-expand-hint">↓ Click to see full week</div>
+        <div style="margin-top:10px;font-family:IBM Plex Mono,monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);opacity:0.7;" id="guitar-expand-hint">↓ Click to see full week</div>
       </div>
     </div>
 
     <!-- PIANO TODAY -->
     <div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:7.5px;letter-spacing:0.2em;text-transform:uppercase;color:var(--dust);margin-bottom:7px;">Piano — Today <span style="color:rgba(139,160,180,0.4);font-size:6.5px;">(NYC)</span></div>
+      <div style="font-family:IBM Plex Mono,monospace;font-size:7.5px;letter-spacing:0.2em;text-transform:uppercase;color:var(--dust);margin-bottom:7px;">Piano — Today <span style="color:rgba(139,160,180,0.4);font-size:6.5px;">(NYC)</span></div>
       <div id="piano-today-card" onclick="toggleInstrument('piano')" style="background:var(--blue);border:2px solid rgba(139,160,180,0.25);padding:14px 16px;cursor:pointer;transition:border-color 0.18s;position:relative;opacity:0.75;">
         <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,rgba(139,160,180,0.4),transparent);"></div>
         <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
           <div>
             <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.08em;color:var(--dust);" id="piano-today-name">Loading...</div>
-            <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(139,160,180,0.5);" id="piano-today-focus"></div>
+            <div style="font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(139,160,180,0.5);" id="piano-today-focus"></div>
           </div>
           <div style="font-size:22px;opacity:0.3;">🎹</div>
         </div>
         <div id="piano-today-items" style="font-size:11.5px;color:rgba(139,160,180,0.5);line-height:1.7;border-top:1px solid rgba(139,160,180,0.12);padding-top:8px;margin-top:4px;"></div>
-        <div style="margin-top:10px;font-family:'IBM Plex Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--dust);opacity:0.5;" id="piano-expand-hint">↓ Click to see full week</div>
+        <div style="margin-top:10px;font-family:IBM Plex Mono,monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--dust);opacity:0.5;" id="piano-expand-hint">↓ Click to see full week</div>
       </div>
     </div>
   </div>
@@ -954,7 +954,7 @@ body::after {
   <div id="guitar-weekly" style="display:none;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;">
       <div class="eyebrow">Guitar — Full Week</div>
-      <button onclick="toggleInstrument('guitar')" style="font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;background:transparent;border:1px solid var(--border2);color:var(--dust);padding:3px 9px;cursor:pointer;">↑ Collapse</button>
+      <button onclick="toggleInstrument('guitar')" style="font-family:IBM Plex Mono,monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;background:transparent;border:1px solid var(--border2);color:var(--dust);padding:3px 9px;cursor:pointer;">↑ Collapse</button>
     </div>
   <div class="sess open"><div class="sess-header" onclick="toggleSess(this)"><div class="sess-day" id="gd-mon">MON</div><div class="sess-title"><h4>Blues Scale &amp; Bends</h4><div class="sess-focus">Minor Pentatonic · 12-bar jam · Major Scale theory</div></div></div><div class="sess-body"><div class="sess-item"><div class="sess-time">5 min</div><div class="sess-desc"><h5>Chromatic warmup</h5><p>Spider exercises, metronome 60 bpm.</p></div></div><div class="sess-item"><div class="sess-time">15 min</div><div class="sess-desc"><h5>Minor Pentatonic + Blues Scale in A</h5><p>Focus on bends and vibrato.</p><div class="chips"><span class="chip">YT: Marty Music — Blues Scale 5 Positions</span></div></div></div><div class="sess-item"><div class="sess-time">10 min</div><div class="sess-desc"><h5>Jam over 12-bar blues in A</h5><p>iReal Pro. Improvise. No stopping.</p></div></div></div></div>
   <div class="sess open"><div class="sess-header" onclick="toggleSess(this)"><div class="sess-day" id="gd-tue">TUE</div><div class="sess-title"><h4>Jazz Shell Chords</h4><div class="sess-focus">Cmaj7 Cm7 C7 · ii-V-I · Autumn Leaves</div></div></div><div class="sess-body"><div class="sess-item"><div class="sess-time">20 min</div><div class="sess-desc"><h5>Shell Chords → ii-V-I</h5><p>Root, 3rd, 7th. Dm7→G7→Cmaj7.</p><div class="chips"><span class="chip">YT: Adam Rafferty — Jazz Shell Chords</span></div></div></div></div></div>
@@ -963,13 +963,28 @@ body::after {
   <div class="sess open"><div class="sess-header" onclick="toggleSess(this)"><div class="sess-day" id="gd-fri">FRI</div><div class="sess-title"><h4>Gypsy Jazz</h4><div class="sess-focus">La Pompe · Minor Swing · Django listen</div></div></div><div class="sess-body"><div class="sess-item"><div class="sess-time">20 min</div><div class="sess-desc"><h5>La Pompe + Minor Swing Shapes</h5><div class="chips"><span class="chip">YT: Gonzalo Bergara — La Pompe (essential)</span></div></div></div><div class="sess-item"><div class="sess-time">10 min</div><div class="sess-desc"><h5>Active Listen: one Django track</h5><p>3 listens: pleasure → melody → rhythm only.</p></div></div></div></div>
   <div class="sess open"><div class="sess-header" onclick="toggleSess(this)"><div class="sess-day" id="gd-sat">SAT</div><div class="sess-title"><h4>Blues Deep Dive</h4><div class="sess-focus">One complete lick · Full 12-bar jam</div></div></div><div class="sess-body"><div class="sess-item"><div class="sess-time">35 min</div><div class="sess-desc"><h5>Learn + perform one blues lick</h5><p>BB King vibrato wk 1–2. SRV double-stops wk 3–4.</p><div class="chips"><span class="chip">YT: TrueFire — BB King Licks</span></div></div></div></div></div>
   <div style="background:var(--blue);border:1px solid var(--border2);padding:10px 12px;margin-top:3px;font-size:11.5px;color:var(--dust);font-style:italic;">Sunday — Ears only. 2 full records. Full attention. No guitar.</div>
+
+  <div class="eyebrow" style="margin:14px 0 8px;">Piano Weekly Sessions <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--dust);letter-spacing:0.08em;">(Resumes NYC — 90 min/day)</span></div>
+  <div class="sess open"><div class="sess-header" onclick="toggleSess(this)"><div class="sess-day" style="color:var(--dust)">MON</div><div class="sess-title"><h4>Blues + Gospel Foundation</h4><div class="sess-focus">12-bar blues voicings · Gospel left hand · Schubert</div></div><div class="chev">&#x25BC;</div></div><div class="sess-body"><div class="sess-item"><div class="sess-time">20 min</div><div class="sess-desc"><h5>Block 1 — Hanon + Scales</h5><p>Hanon No.1 hands separate then together at 60bpm. C, G, F major scales. C blues scale: C-Eb-F-F#-G-Bb-C.</p></div></div><div class="sess-item"><div class="sess-time">20 min</div><div class="sess-desc"><h5>Block 4 — 12-bar blues in C</h5><p>Left hand: root-fifth pattern. Right hand: blues scale melody. Slow — feel every note. Junior Mance Ch.1.</p><div class="chips"><span class="chip">YT: Jonah Nilsson — Blues Piano Basics</span><span class="chip">Book: Junior Mance — How to Play Blues Piano</span></div></div></div><div class="sess-item"><div class="sess-time">25 min</div><div class="sess-desc"><h5>Block 3 — Schubert Moment Musical No.3</h5><p>F minor. Open the score. Left hand bars 1-8 only, very slowly. Hands separate always first.</p><div class="chips"><span class="chip">Listen: Radu Lupu or Alfred Brendel recording first</span></div></div></div></div></div>
+
+  <div class="sess open"><div class="sess-header" onclick="toggleSess(this)"><div class="sess-day" style="color:var(--dust)">TUE</div><div class="sess-title"><h4>Classical Focus — Schubert</h4><div class="sess-focus">Sight reading · Hands separate → together</div></div><div class="chev">&#x25BC;</div></div><div class="sess-body"><div class="sess-item"><div class="sess-time">13 min</div><div class="sess-desc"><h5>Block 2 — Sight Reading</h5><p>Mikrokosmos Vol.2, piece #1. Keep moving — never stop to fix mistakes. Bass clef drilling in disguise.</p></div></div><div class="sess-item"><div class="sess-time">25 min</div><div class="sess-desc"><h5>Block 3 — Schubert bars 1-16</h5><p>Left hand until fluent. Right hand alone. Then together at 60% tempo. Never rush the hands-together step.</p></div></div><div class="sess-item"><div class="sess-time">20 min</div><div class="sess-desc"><h5>Block 4 — 12-bar blues + Gospel</h5><p>Gospel left hand: root-octave-fifth-octave. Add right hand melody. Ethel Caffie-Austin: one video, apply immediately.</p><div class="chips"><span class="chip">YT: Ethel Caffie-Austin gospel piano</span></div></div></div></div></div>
+
+  <div class="sess open"><div class="sess-header" onclick="toggleSess(this)"><div class="sess-day" style="color:var(--dust)">WED</div><div class="sess-title"><h4>Jazz Standards</h4><div class="sess-focus">Shell voicings · ii-V-I · Autumn Leaves</div></div><div class="chev">&#x25BC;</div></div><div class="sess-body"><div class="sess-item"><div class="sess-time">20 min</div><div class="sess-desc"><h5>Block 5 — Shell Voicings</h5><p>Left hand: root + 7th. Right hand: 3rd + melody. Dm7-G7-Cmaj7. Berkeley Jazz Piano p.1.</p><div class="chips"><span class="chip">YT: Adam Maness — Jazz Piano Shell Voicings</span><span class="chip">Book: Berkeley Jazz Piano — Santisi</span></div></div></div><div class="sess-item"><div class="sess-time">25 min</div><div class="sess-desc"><h5>Block 3 — Autumn Leaves lead sheet</h5><p>Melody right hand only first. Then add left hand shell chords. Don't rush both hands.</p></div></div><div class="sess-item"><div class="sess-time">20 min</div><div class="sess-desc"><h5>Block 4 — 12-bar blues in G</h5><p>New key: G7-C7-D7. Same form. Also: major triads C, F, G, D — root position both hands.</p></div></div></div></div>
+
+  <div class="sess open"><div class="sess-header" onclick="toggleSess(this)"><div class="sess-day" style="color:var(--dust)">THU</div><div class="sess-title"><h4>Classical + Theory</h4><div class="sess-focus">Schubert continued · Interval recognition</div></div><div class="chev">&#x25BC;</div></div><div class="sess-body"><div class="sess-item"><div class="sess-time">25 min</div><div class="sess-desc"><h5>Block 3 — Schubert next section</h5><p>Add bars 17-24. Hands separate first — always. Don't glue hands together until each hand knows its part.</p></div></div><div class="sess-item"><div class="sess-time">15 min</div><div class="sess-desc"><h5>Block 5 — Interval recognition</h5><p>Play any two notes, name the interval. Work through 2nds, 3rds, 4ths, 5ths, 6ths, octaves.</p></div></div><div class="sess-item"><div class="sess-time">20 min</div><div class="sess-desc"><h5>Block 4 — Full blues run</h5><p>12-bar in C, G, and F — once through each. Three minutes total. Then Junior Mance: review week's examples.</p></div></div></div></div>
+
+  <div class="sess open"><div class="sess-header" onclick="toggleSess(this)"><div class="sess-day" style="color:var(--dust)">FRI</div><div class="sess-title"><h4>Blues Deep + Improv</h4><div class="sess-focus">Turnaround · Right hand improv begins</div></div><div class="chev">&#x25BC;</div></div><div class="sess-body"><div class="sess-item"><div class="sess-time">25 min</div><div class="sess-desc"><h5>Block 4 — Turnaround + Improv</h5><p>Add turnaround bars 11-12: V7-IV7-I. Then right hand improvises over left hand blues pattern. Blues pentatonic in C. Let it breathe.</p></div></div><div class="sess-item"><div class="sess-time">25 min</div><div class="sess-desc"><h5>Block 3 — Schubert full first section</h5><p>Hands together through full first section. If it breaks, back to hands separate. Your tempo — don't match the recording.</p></div></div></div></div>
+
+  <div class="sess open"><div class="sess-header" onclick="toggleSess(this)"><div class="sess-day" style="color:var(--dust)">SAT</div><div class="sess-title"><h4>Full Run + Ear Training</h4><div class="sess-focus">Everything this week · Record yourself</div></div><div class="chev">&#x25BC;</div></div><div class="sess-body"><div class="sess-item"><div class="sess-time">30 min</div><div class="sess-desc"><h5>Full run-through</h5><p>Blues (C, G, F) → Gospel pattern → Autumn Leaves melody + chords → Schubert bars 1-24. Record on your phone. Listen back. This is how you hear your own progress.</p></div></div><div class="sess-item"><div class="sess-time">20 min</div><div class="sess-desc"><h5>Active listening at the piano</h5><p>Schubert Impromptus D.899 — Radu Lupu. Follow along at the keyboard. Find the notes as they play. Don't worry about keeping up.</p></div></div></div></div>
+
+  <div style="background:var(--blue);border:1px solid var(--border2);padding:10px 12px;margin-top:3px;font-size:11.5px;color:var(--dust);font-style:italic;">Sunday — Piano rest. 30 min only. One run through Schubert, one 12-bar blues in C. Then close the books. Listen to one complete Schubert piano recording.</div>
   </div>
 
   <!-- PIANO WEEKLY ACCORDION (hidden by default) -->
   <div id="piano-weekly" style="display:none;margin-top:10px;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;">
       <div class="eyebrow">Piano — Full Week <span style="color:var(--dust);font-size:9px;">(Resumes NYC Apr 17)</span></div>
-      <button onclick="toggleInstrument('piano')" style="font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;background:transparent;border:1px solid var(--border2);color:var(--dust);padding:3px 9px;cursor:pointer;">↑ Collapse</button>
+      <button onclick="toggleInstrument('piano')" style="font-family:IBM Plex Mono,monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;background:transparent;border:1px solid var(--border2);color:var(--dust);padding:3px 9px;cursor:pointer;">↑ Collapse</button>
     </div>
   <div class="sess open"><div class="sess-header" onclick="toggleSess(this)"><div class="sess-day" style="color:var(--dust);" id="pd-mon">MON</div><div class="sess-title"><h4>Blues + Gospel Foundation</h4><div class="sess-focus">12-bar blues voicings · Gospel left hand</div></div></div><div class="sess-body"><div class="sess-item"><div class="sess-time">20 min</div><div class="sess-desc"><h5>12-bar blues in C — two hands</h5><p>Left hand: root-fifth pattern. Right hand: blues scale melody. Slow, feel every note.</p><div class="chips"><span class="chip">YT: Jonah Nilsson — Blues Piano Basics</span></div></div></div><div class="sess-item"><div class="sess-time">20 min</div><div class="sess-desc"><h5>Gospel left hand pattern</h5><p>Root → octave → fifth → octave.</p></div></div><div class="sess-item"><div class="sess-time">20 min</div><div class="sess-desc"><h5>Schubert — Moment Musical No.3</h5><p>Learn 2 bars at a time. Hands separate first.</p></div></div></div></div>
   <div class="sess open"><div class="sess-header" onclick="toggleSess(this)"><div class="sess-day" style="color:var(--dust);" id="pd-tue">TUE</div><div class="sess-title"><h4>Classical — Schubert Focus</h4><div class="sess-focus">Moment Musical No.3 · Hands separate → together</div></div></div><div class="sess-body"><div class="sess-item"><div class="sess-time">30 min</div><div class="sess-desc"><h5>Schubert D.780 No.3 in F minor</h5><p>Bars 1–16 this week. Left hand alone until fluent. Right hand alone. Then together at 60% tempo. Never rush.</p><div class="chips"><span class="chip">Listen: Radu Lupu or Alfred Brendel recording</span></div></div></div><div class="sess-item"><div class="sess-time">20 min</div><div class="sess-desc"><h5>Scales — F minor, F major</h5><p>Two octaves, both hands together. Metronome 60→80→100.</p></div></div></div></div>
@@ -1184,6 +1199,25 @@ body::after {
         </div>
       </div>
 
+      <!-- DAY PANEL -->
+      <div id="day-panel" style="display:none;background:var(--blue2);border:1px solid var(--gold-border);padding:13px 15px;margin-top:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <div id="dp-title" style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:0.1em;color:var(--gold2);"></div>
+          <button onclick="document.getElementById('day-panel').style.display='none'" style="font-family:IBM Plex Mono,monospace;font-size:7px;letter-spacing:0.1em;text-transform:uppercase;background:transparent;border:1px solid var(--border2);color:var(--dust);padding:3px 8px;cursor:pointer;">close</button>
+        </div>
+        <div id="dp-events"></div>
+        <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border2);">
+          <div class="eyebrow" style="margin-bottom:7px;">Add Event on This Day</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <input type="text" id="qev-t" placeholder="Event title" style="flex:2;background:rgba(6,9,15,0.6);border:1px solid var(--border);color:var(--text);padding:6px 9px;font-family:IBM Plex Mono,monospace;font-size:10px;outline:none;">
+            <input type="time" id="qev-tm" style="flex:0.7;background:rgba(6,9,15,0.6);border:1px solid var(--border);color:var(--text);padding:6px 9px;font-family:IBM Plex Mono,monospace;font-size:10px;outline:none;">
+            <select id="qev-c" style="flex:0.8;background:rgba(6,9,15,0.6);border:1px solid var(--border);color:var(--text);padding:6px 9px;font-family:IBM Plex Mono,monospace;font-size:10px;outline:none;">
+              <option value="event">Event</option><option value="date">Date</option><option value="friend">Friend</option><option value="finance">Finance</option><option value="work">Work</option><option value="personal">Personal</option>
+            </select>
+            <button onclick="addQuickEv()" style="background:transparent;border:1px solid var(--gold);color:var(--gold);padding:6px 12px;font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:0.1em;cursor:pointer;">ADD</button>
+          </div>
+        </div>
+      </div>
       <div class="eyebrow" style="margin:12px 0 8px;">Upcoming — Next 14 Days</div>
       <div class="card" style="padding:12px 14px;">
         <div id="full-upcoming"></div>
@@ -1217,7 +1251,7 @@ body::after {
         <div class="ev-row"><div class="ev-dot" style="background:var(--gold);"></div><div class="ev-day-tag">Daily</div><div class="ev-name">Meditate · Workout · Shower · Cook · Read · Hair routine</div><div class="ev-time-tag">5:50am–10:30pm</div></div>
         <div class="ev-row"><div class="ev-dot" style="background:#8a6aaa;"></div><div class="ev-day-tag">Weekdays</div><div class="ev-name">Coffee break + write — Zen Gun</div><div class="ev-time-tag">12–1pm</div></div>
         <div class="ev-row"><div class="ev-dot" style="background:#8a6aaa;"></div><div class="ev-day-tag">Daily</div><div class="ev-name">Zen Gun — write / music / edit</div><div class="ev-time-tag">6:15–7:30pm</div></div>
-        <div style="margin-top:8px;font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--dust);">Say "add [event] [date] [time]" and I'll push it to Google Calendar live.</div>
+        <div style="margin-top:8px;font-family:IBM Plex Mono,monospace;font-size:8px;color:var(--dust);">Say "add [event] [date] [time]" and I'll push it to Google Calendar live.</div>
       </div>
     </div>
 
@@ -1348,13 +1382,38 @@ if(todayWO){
 
 // ── MUSIC LISTENING
 var LISTEN={
-  Monday:[{time:'30 min',title:'Classical — Bach',desc:'Goldberg Variations, Glenn Gould 1981. One variation at a time. Full attention.'},{time:'20 min',title:'Norwegian Folk',desc:'Hardanger fiddle tradition. Annbjørg Lien or Agnes Buen Garnås.'}],
-  Tuesday:[{time:'30 min',title:'Indian Classical — Morning Raga',desc:'Ravi Shankar. Notice the alap — slow unfolding before rhythm enters.'},{time:'20 min',title:'Schubert D.960',desc:'Your long-term piano goal. Know it from the inside before you play it.'}],
-  Wednesday:[{time:'30 min',title:'Norwegian + Swedish Folk',desc:'Ale Möller or Väsen. Folk music as geography — you hear the landscape.'},{time:'20 min',title:'Beethoven — Late Quartets',desc:'Op. 131. The most radical music ever written for a small group.'}],
-  Thursday:[{time:'30 min',title:'Indian Classical — Sarod or Shehnai',desc:'Bismillah Khan or Ali Akbar Khan. Focus on ornament and breath.'},{time:'20 min',title:'Brahms — Intermezzo Op.118 No.2',desc:'The most beautiful sad thing.'}],
-  Friday:[{time:'40 min',title:'Shostakovich — String Quartet No.8',desc:'One of the most personal pieces ever written. Full attention. No interruption.'}],
-  Saturday:[{time:'30 min',title:'European Folk — Wide',desc:'Bulgarian State Radio Choir, or Pentangle.'},{time:'20 min',title:'Indian Classical — Long Form',desc:'A full Hindustani performance. Notice how time works differently.'}],
-  Sunday:[{time:'60 min',title:'Free Listening Sunday',desc:'2 full records. No analysis. No guitar. Just listen as a person, not a student.'}],
+  Monday:[
+    {time:'30 min',title:'Classical — Bach',desc:'Goldberg Variations, Glenn Gould 1981. One variation at a time. Full attention.'},
+    {time:'15 min',title:'Blues — Robert Johnson or Muddy Waters',desc:'Delta blues as the root. Listen for the feeling behind the notes, not the technique.'},
+    {time:'15 min',title:'Norwegian Folk',desc:'Hardanger fiddle tradition. Annbjorg Lien or Agnes Buen Garnas.'}
+  ],
+  Tuesday:[
+    {time:'30 min',title:'Indian Classical — Morning Raga',desc:'Ravi Shankar. Notice the alap — slow unfolding before rhythm enters.'},
+    {time:'20 min',title:'Jazz — Miles Davis',desc:'Kind of Blue or Birth of the Cool. Active listening — follow one instrument at a time.'},
+    {time:'10 min',title:'Schubert D.960',desc:'Your long-term piano goal. Know it from the inside before you play it.'}
+  ],
+  Wednesday:[
+    {time:'25 min',title:'Norwegian + Swedish Folk',desc:'Ale Moller or Vasen. Folk music as geography — you hear the landscape.'},
+    {time:'20 min',title:'Great American Songbook',desc:'Ella Fitzgerald or Billie Holiday singing Cole Porter or Gershwin. The standard as art form.'},
+    {time:'15 min',title:'Beethoven — Late Quartets',desc:'Op. 131. The most radical music ever written for a small group.'}
+  ],
+  Thursday:[
+    {time:'30 min',title:'Indian Classical — Sarod or Shehnai',desc:'Bismillah Khan or Ali Akbar Khan. Focus on ornament and breath.'},
+    {time:'20 min',title:'Jazz — Bill Evans or Thelonious Monk',desc:'Piano as a complete world. Notice how much space they leave.'},
+    {time:'10 min',title:'Brahms — Intermezzo Op.118 No.2',desc:'The most beautiful sad thing.'}
+  ],
+  Friday:[
+    {time:'25 min',title:'Shostakovich — String Quartet No.8',desc:'One of the most personal pieces ever written. Full attention. No interruption.'},
+    {time:'20 min',title:'Blues/Jazz — John Coltrane',desc:'A Love Supreme or My Favorite Things. Coltrane as the bridge between blues feeling and jazz intellect.'}
+  ],
+  Saturday:[
+    {time:'20 min',title:'European Folk — Wide',desc:'Bulgarian State Radio Choir, or Pentangle.'},
+    {time:'20 min',title:'Great American Songbook — Deep Cut',desc:'Frank Sinatra, Nat King Cole, or Chet Baker. The voice as instrument.'},
+    {time:'20 min',title:'Indian Classical — Long Form',desc:'A full Hindustani performance. Notice how time works differently.'}
+  ],
+  Sunday:[
+    {time:'60 min',title:'Free Listening Sunday',desc:'2 full records. No analysis. No guitar. No structure. Just listen as a person, not a student.'}
+  ]
 };
 var todayL=LISTEN[dayName]||[];
 var lEl=document.getElementById('today-listening');
@@ -1674,6 +1733,10 @@ function delPerson(i){var data=loadDating();data.splice(i,1);saveDating(data);re
 // ── WIKI
 var WIKI_KEY='lifeos_wiki_v4';
 var DEFAULT_WIKI=[
+  {topic:'Hair — Core Principle',note:'Blow dry for volume then hat on damp to shape then remove hat for natural result. The hat molds your hair as it finishes drying underneath.',tag:'hair'},
+  {topic:'Hair — Date Day Routine',note:'1. Shower 2. Pat dry never rub 3. Sea salt spray damp hair 4. Wide tooth comb detangle from ends up 5. Flip upside down blow dry 2-3 min 6. Flip up blow dry backwards while fingers go forward 7. Cold shot 30s 8. Volume powder roots only fingertips only 9. Style forward and to sides 10. Hat on while slightly damp 11. Leave 30-60 min 12. Remove hat, lift roots with fingers, quick shape, stop touching.',tag:'hair'},
+  {topic:'Hair — Key Rules',note:'Never comb dry hair — fingers only for final styling. Cold shot always — seals cuticle locks style. Powder roots only — applying to lengths weighs down. Style forward and to sides for NW2 coverage. Never touch constantly — hand oils flatten fast. Medium heat only with constant movement.',tag:'hair'},
+  {topic:'Hair — Products',note:'Sea salt spray on damp hair for texture and body. Volume powder light dusting at roots holds all day. Wide tooth comb for detangling only. Paperboy hat as shaping tool — brings hair forward and to sides as it dries, covers temple recession naturally.',tag:'hair'},
   {topic:'Finasteride',note:'1mg oral daily. Same time every day. Never skip — consistency is everything.',tag:'hair'},
   {topic:'Minoxidil',note:'1ml to scalp in thinning areas. Massage gently. Do not wash hair for 4 hours after.',tag:'hair'},
   {topic:'Tretinoin protocol',note:'Apply scalp + face Mon/Wed/Fri. Wait 20–30 min then minox. Never minox immediately after. 0.025% ideal.',tag:'hair'},

@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Life OS</title>
+<script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Special+Elite&family=IBM+Plex+Mono:wght@300;400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -714,6 +715,53 @@ body::after {
       <div style="display:flex;gap:7px"><input class="ai-inp-v7" id="ai-i-finance" placeholder="Ask Constance about your finances..." onkeydown="if(event.key==='Enter')sendAI('finance')"><button class="ai-snd" id="ai-b-finance" onclick="sendAI('finance')">Send &rarr;</button></div>
     </div>
   </div>
+
+  <!-- PLAID BANK CONNECTION -->
+  <div id="plaid-section" style="background:var(--blue);border:1px solid var(--gold-border);padding:14px 16px;margin-bottom:12px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);">Live Bank Connection</div>
+      <div id="bank-status" style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--dust);">Not connected</div>
+    </div>
+    <div id="bank-not-connected">
+      <button onclick="connectBank()" style="font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;background:transparent;border:1px solid var(--gold);color:var(--gold);padding:8px 18px;cursor:pointer;transition:background 0.15s;" onmouseover="this.style.background='rgba(212,160,23,0.09)'" onmouseout="this.style.background='transparent'">&#x1F3E6; Connect Your Bank</button>
+      <div style="font-size:10.5px;color:var(--dust);font-style:italic;margin-top:7px;">Connects securely via Plaid. Your credentials go directly to your bank — never stored here.</div>
+    </div>
+    <div id="bank-connected" style="display:none;">
+      <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:10px;">
+        <div><div style="font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:0.14em;text-transform:uppercase;color:var(--dust);margin-bottom:2px;">Available Balance</div>
+          <div id="live-balance" style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--gold2);line-height:1;">--</div></div>
+      </div>
+      <div id="accounts-list" style="margin-bottom:10px;"></div>
+      <!-- TODAY'S SPEND VS CAP -->
+      <div id="daily-spend-section" style="margin-bottom:12px;background:rgba(6,9,15,0.4);border:1px solid var(--border2);padding:11px 13px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:7.5px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);">Today's Spend</div>
+          <div id="daily-cap-label" style="font-family:'IBM Plex Mono',monospace;font-size:7.5px;color:var(--dust);">Cap: $15/day</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:7px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;line-height:1;" id="today-spent">$0.00</div>
+          <div style="font-size:11px;color:var(--dust);">remaining: <span id="today-remaining" style="color:var(--green2);font-weight:600;">$15.00</span></div>
+        </div>
+        <div style="background:rgba(6,9,15,0.7);height:4px;border-radius:2px;overflow:hidden;">
+          <div id="spend-bar" style="height:4px;background:var(--green2);width:0%;transition:width 0.6s ease;border-radius:2px;"></div>
+        </div>
+        <div id="today-txns" style="margin-top:9px;font-size:11px;color:var(--dust);"></div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button onclick="refreshBalance()" style="font-family:'IBM Plex Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;background:transparent;border:1px solid var(--gold-border);color:var(--gold);padding:5px 12px;cursor:pointer;">&#x21BB; Refresh</button>
+        <button onclick="loadTransactions()" style="font-family:'IBM Plex Mono',monospace;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;background:transparent;border:1px solid var(--border2);color:var(--dust);padding:5px 12px;cursor:pointer;">View Transactions</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRANSACTIONS -->
+  <div id="transactions-section" style="display:none;background:var(--blue);border:1px solid var(--border2);padding:0;overflow:hidden;margin-bottom:12px;">
+    <div style="padding:8px 14px;border-bottom:1px solid var(--border2);display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);">Recent Transactions</div>
+      <button onclick="document.getElementById('transactions-section').style.display='none'" style="font-family:'IBM Plex Mono',monospace;font-size:7px;background:transparent;border:none;color:var(--dust);cursor:pointer;">close</button>
+    </div>
+    <div id="transactions-list" style="max-height:300px;overflow-y:auto;"></div>
+  </div>
   <div class="bal-hero">
     <div class="bal-top">
       <div>
@@ -1335,7 +1383,35 @@ function goTo(pg){
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.toggle('active',t.dataset.page===pg));
   document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+pg));
 }
-document.querySelectorAll('.nav-tab').forEach(t=>t.addEventListener('click',function(){goTo(this.dataset.page);}));
+document.querySelectorAll('.nav-tab').forEach(function(t){t.addEventListener('click',function(){
+  var pg=this.dataset.page;
+  goTo(pg);
+  if(pg==='finance'){
+    setTimeout(function(){
+      fetch('https://lifeos-backend-nf15.onrender.com/balance')
+      .then(function(r){return r.json();})
+      .then(function(data){
+        if(data.connected){
+          plaidConnected=true;
+          document.getElementById('bank-not-connected').style.display='none';
+          document.getElementById('bank-connected').style.display='block';
+          document.getElementById('bank-status').textContent='● Connected';
+          document.getElementById('bank-status').style.color='var(--green2)';
+          document.getElementById('live-balance').textContent='$'+data.total_available.toFixed(2);
+          var bn=document.querySelector('.bn2');if(bn)bn.textContent='$'+data.total_available.toFixed(2);
+          var pb=document.getElementById('pv-bal');if(pb)pb.textContent='$'+data.total_available.toFixed(2);
+          var al=document.getElementById('accounts-list');
+          if(al&&data.accounts){al.innerHTML=data.accounts.map(function(a){return '<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(212,160,23,0.07);font-size:12px;"><span style="color:var(--dust)">'+a.name+' ...'+a.mask+'</span><span style="color:var(--gold2);font-weight:600">$'+(a.available||a.current||0).toFixed(2)+'</span></div>';}).join('');}
+        }
+      }).catch(function(){});
+      // Also load transactions for daily spend
+      fetch('https://lifeos-backend-nf15.onrender.com/transactions')
+      .then(function(r){return r.json();})
+      .then(function(data){if(data.connected)updateDailySpend(data.transactions||[]);})
+      .catch(function(){});
+    },200);
+  }
+});});
 
 // ── DATE
 var now=new Date();
@@ -2121,6 +2197,144 @@ function toggleInstrument(which) {
 }
 
 initMusicPage();
+
+
+// ═══ PLAID BANK CONNECTION ═══
+var BACKEND = 'https://lifeos-backend-nf15.onrender.com';
+var plaidConnected = false;
+
+function connectBank() {
+  var btn = document.querySelector('#bank-not-connected button');
+  if(btn) { btn.textContent = 'Connecting...'; btn.disabled = true; }
+  
+  fetch(BACKEND + '/create_link_token', {method:'POST', headers:{'Content-Type':'application/json'}})
+  .then(function(r){return r.json();})
+  .then(function(data){
+    if(data.error) { alert('Backend error: ' + JSON.stringify(data.error)); return; }
+    var handler = Plaid.create({
+      token: data.link_token,
+      onSuccess: function(public_token, metadata) {
+        fetch(BACKEND + '/exchange_token', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({public_token: public_token})
+        })
+        .then(function(r){return r.json();})
+        .then(function(d){
+          if(d.success) {
+            plaidConnected = true;
+            localStorage.setItem('plaid_connected', '1');
+            // Save connection state to Supabase so it persists
+            if(typeof supa !== 'undefined') {
+              supa.from('lifeos_data').upsert({id:'plaid_state', data:{connected:true, connected_at:new Date().toISOString()}});
+            }
+            document.getElementById('bank-not-connected').style.display = 'none';
+            document.getElementById('bank-connected').style.display = 'block';
+            document.getElementById('bank-status').textContent = '● Connected';
+            document.getElementById('bank-status').style.color = 'var(--green2)';
+            refreshBalance();
+            loadTransactions();
+          }
+        });
+      },
+      onExit: function(err) {
+        if(btn) { btn.textContent = '🏦 Connect Your Bank'; btn.disabled = false; }
+      }
+    });
+    handler.open();
+  })
+  .catch(function(e){
+    alert('Could not reach backend. It may be waking up — wait 30 seconds and try again.');
+    if(btn) { btn.textContent = '🏦 Connect Your Bank'; btn.disabled = false; }
+  });
+}
+
+function refreshBalance() {
+  document.getElementById('live-balance').textContent = 'Loading...';
+  fetch(BACKEND + '/balance')
+  .then(function(r){return r.json();})
+  .then(function(data){
+    if(!data.connected) { return; }
+    document.getElementById('live-balance').textContent = '$' + data.total_available.toFixed(2);
+    // Update the main balance display too
+    var bn = document.querySelector('.bn2');
+    if(bn) bn.textContent = '$' + data.total_available.toFixed(2);
+    var pvbal = document.getElementById('pv-bal');
+    if(pvbal) pvbal.textContent = '$' + data.total_available.toFixed(2);
+    // Show accounts
+    var al = document.getElementById('accounts-list');
+    if(al && data.accounts) {
+      al.innerHTML = data.accounts.map(function(a){
+        return '<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(212,160,23,0.07);font-size:12px;">'
+          +'<span style="color:var(--dust)">' + a.name + ' &middot;&middot;&middot;' + a.mask + '</span>'
+          +'<span style="color:var(--gold2);font-weight:600">$' + (a.available || a.current || 0).toFixed(2) + '</span>'
+          +'</div>';
+      }).join('');
+    }
+  })
+  .catch(function(){ document.getElementById('live-balance').textContent = 'Error — retry'; });
+}
+
+function loadTransactions() {
+  var el = document.getElementById('transactions-section');
+  var list = document.getElementById('transactions-list');
+  el.style.display = 'block';
+  list.innerHTML = '<div style="padding:12px 14px;font-size:11px;color:var(--dust);font-style:italic;">Loading transactions...</div>';
+  
+  fetch(BACKEND + '/transactions')
+  .then(function(r){return r.json();})
+  .then(function(data){
+    updateDailySpend(data.transactions||[]);
+    if(!data.connected || !data.transactions) { list.innerHTML = '<div style="padding:12px 14px;font-size:11px;color:var(--dust)">No transactions found.</div>'; return; }
+    list.innerHTML = data.transactions.map(function(t){
+      var amt = t.amount > 0 ? '-$' + t.amount.toFixed(2) : '+$' + Math.abs(t.amount).toFixed(2);
+      var col = t.amount > 0 ? 'var(--red2)' : 'var(--green2)';
+      return '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 14px;border-bottom:1px solid rgba(212,160,23,0.06);font-size:12px;">'
+        +'<div><div style="color:var(--text);margin-bottom:1px">' + t.merchant + '</div>'
+        +'<div style="font-family:IBM Plex Mono,monospace;font-size:8px;color:var(--dust)">' + t.date + ' &middot; ' + (t.category||'') + '</div></div>'
+        +'<div style="font-weight:600;color:' + col + '">' + amt + '</div>'
+        +'</div>';
+    }).join('');
+  })
+  .catch(function(){ list.innerHTML = '<div style="padding:12px 14px;font-size:11px;color:var(--dust)">Error loading transactions.</div>'; });
+}
+
+
+function updateDailySpend(transactions) {
+  var today = new Date().toISOString().slice(0,10);
+  // Determine daily cap based on location hint
+  var cap = 15; // Wisconsin default
+  var capLabel = document.getElementById('daily-cap-label');
+  if(capLabel) capLabel.textContent = 'Cap: $' + cap + '/day';
+  
+  var todayTxns = (transactions||[]).filter(function(t){ return t.date === today && t.amount > 0; });
+  var spent = todayTxns.reduce(function(sum,t){ return sum + t.amount; }, 0);
+  var remaining = Math.max(0, cap - spent);
+  var pct = Math.min(100, (spent/cap)*100);
+  
+  var spentEl = document.getElementById('today-spent');
+  var remEl = document.getElementById('today-remaining');
+  var bar = document.getElementById('spend-bar');
+  var txnEl = document.getElementById('today-txns');
+  
+  if(spentEl) spentEl.textContent = '$' + spent.toFixed(2);
+  if(remEl) {
+    remEl.textContent = '$' + remaining.toFixed(2);
+    remEl.style.color = remaining < 5 ? 'var(--red2)' : remaining < 8 ? 'var(--gold2)' : 'var(--green2)';
+  }
+  if(bar) {
+    bar.style.width = pct + '%';
+    bar.style.background = pct > 90 ? 'var(--red2)' : pct > 70 ? 'var(--gold2)' : 'var(--green2)';
+  }
+  if(txnEl && todayTxns.length) {
+    txnEl.innerHTML = todayTxns.map(function(t){
+      return '<div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid rgba(212,160,23,0.05);">'
+        +'<span>'+t.merchant+'</span><span style="color:var(--red2)">-$'+t.amount.toFixed(2)+'</span></div>';
+    }).join('');
+  } else if(txnEl) {
+    txnEl.innerHTML = '<div style="font-style:italic;">No transactions yet today.</div>';
+  }
+}
 
 </script>
 </body>

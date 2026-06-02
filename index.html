@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Life OS — Overview (Prototype v3)</title>
-<script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400;1,9..144,600&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -649,7 +648,15 @@ function finShowLive(){var c=document.getElementById('fin-connect'),l=document.g
 function financeBoot(){fetch(PLAID_BACKEND+'/balance').then(function(r){return r.json();}).then(function(d){if(d&&d.connected){finShowLive();finRenderBalance(d);finLoadTx();}}).catch(function(){});}
 function connectBank(){
  var btn=document.getElementById('fin-connect-btn');
- if(typeof Plaid==='undefined'){alert('Plaid script is blocked in this preview, but it loads fine on your live Netlify site. (Connect works there once PLAID_ENV=production.)');return;}
+ if(typeof Plaid==='undefined'){
+  if(btn){btn.textContent='Loading…';btn.disabled=true;}
+  var sc=document.createElement('script');
+  sc.src='https://cdn.plaid.com/link/v2/stable/link-initialize.js';
+  sc.onload=function(){resetFinBtn(btn);connectBank();};
+  sc.onerror=function(){alert('Could not load Plaid here (this preview blocks it) — it loads fine on your live Netlify site.');resetFinBtn(btn);};
+  document.head.appendChild(sc);
+  return;
+ }
  if(btn){btn.textContent='Connecting…';btn.disabled=true;}
  fetch(PLAID_BACKEND+'/create_link_token',{method:'POST',headers:{'Content-Type':'application/json'}})
   .then(function(r){return r.json();}).then(function(data){

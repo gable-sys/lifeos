@@ -9,30 +9,30 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400;1,9..144,600&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --paper:#efe4cb;--paper2:#e7d9ba;--paper3:#dfceaa;
-  --ink:#211b14;--ink2:#41372a;--ink3:#6b5d49;
-  --line:rgba(33,27,20,0.28);--line2:rgba(33,27,20,0.14);
-  --terra:#b34a26;--terra2:#cd6438;--green:#2f5a40;--green2:#3f7253;--gold:#9a6b1e;
-  --shadow:rgba(33,27,20,0.22);
+  --paper:#f3e9d1;--paper2:#ebdebf;--paper3:#e0d0a9;
+  --ink:#1e1710;--ink2:#3c3225;--ink3:#6b5d49;
+  --line:rgba(30,23,16,0.34);--line2:rgba(30,23,16,0.13);
+  --terra:#c44c24;--terra2:#d9622e;--green:#2c603f;--green2:#3f7253;--gold:#9a6b1e;
+  --shadow:rgba(30,23,16,0.32);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 body{background:var(--paper);color:var(--ink);font-family:'Spectral',Georgia,serif;font-size:15px;line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased;position:relative;}
-body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");mix-blend-mode:multiply;opacity:0.5;}
-body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:1;background:radial-gradient(ellipse at 50% -10%,rgba(0,0,0,0) 55%,rgba(33,27,20,0.10) 100%);}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");mix-blend-mode:multiply;opacity:0.18;}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:1;background:radial-gradient(ellipse at 50% -10%,rgba(0,0,0,0) 60%,rgba(30,23,16,0.045) 100%);}
 .mono{font-family:'IBM Plex Mono',monospace;}
 .label{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:0.22em;text-transform:uppercase;color:var(--green);}
 .wrap{max-width:1180px;margin:0 auto;padding:0 22px 90px;position:relative;z-index:2;}
 
 /* MASTHEAD */
-.masthead{margin:18px 0 6px;border:1.5px solid var(--ink);background:var(--paper2);box-shadow:3px 3px 0 var(--shadow);}
+.masthead{margin:18px 0 6px;border:1.5px solid var(--ink);background:var(--paper2);box-shadow:5px 5px 0 var(--shadow);}
 .band{display:flex;align-items:center;justify-content:space-between;padding:5px 16px;gap:10px;}
 .band.t{background:var(--terra);color:var(--paper);border-bottom:1.5px solid var(--ink);}
 .band.t .label{color:rgba(255,255,255,0.85);}
 .band.m{padding:9px 16px;}
 .band.b{background:var(--green);color:var(--paper);border-top:1.5px solid var(--ink);}
 .band.b .label{color:rgba(255,255,255,0.82);}
-.brand{font-family:'Fraunces',serif;font-weight:900;font-size:30px;letter-spacing:0.02em;line-height:1;color:var(--ink);}
+.brand{font-family:'Fraunces',serif;font-weight:900;font-size:36px;letter-spacing:-0.015em;line-height:1;color:var(--ink);}
 .brand-sub{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink3);}
 .colophon{width:26px;height:26px;flex-shrink:0;}
 .cat-no{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--paper);}
@@ -55,8 +55,8 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:1;back
 .sect-head h2{font-family:'Fraunces',serif;font-weight:900;font-size:20px;}
 
 /* NOW PANEL */
-.now{border:1.5px solid var(--ink);background:var(--paper2);box-shadow:3px 3px 0 var(--shadow);margin-bottom:24px;cursor:pointer;transition:transform .14s,box-shadow .14s;}
-.now:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--shadow);}
+.now{border:1.5px solid var(--ink);background:var(--paper2);box-shadow:4px 4px 0 var(--shadow);margin-bottom:24px;cursor:pointer;transition:transform .14s,box-shadow .14s;}
+.now:hover{transform:translate(-1px,-1px);box-shadow:6px 6px 0 var(--shadow);}
 .now-top{display:flex;align-items:center;justify-content:space-between;padding:7px 16px;border-bottom:1.5px solid var(--ink);background:var(--green);color:var(--paper);}
 .now-top .label{color:rgba(255,255,255,0.85);}
 .now-top .open-hint{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.14em;opacity:0.85;}
@@ -75,8 +75,8 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:1;back
 
 /* PORTALS */
 .portals{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;}
-.portal{border:1.5px solid var(--ink);background:var(--paper2);box-shadow:2px 2px 0 var(--shadow);cursor:pointer;transition:transform .14s,box-shadow .14s,background .14s;display:flex;flex-direction:column;overflow:hidden;min-height:138px;}
-.portal:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--shadow);background:var(--paper3);}
+.portal{border:1.5px solid var(--ink);background:var(--paper2);box-shadow:3px 3px 0 var(--shadow);cursor:pointer;transition:transform .14s,box-shadow .14s,background .14s;display:flex;flex-direction:column;overflow:hidden;min-height:138px;}
+.portal:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--shadow);background:var(--paper3);}
 .portal-top{display:flex;align-items:center;justify-content:space-between;padding:5px 9px;border-bottom:1px solid var(--line);}
 .portal-no{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--ink3);}
 .portal-mid{flex:1;display:flex;align-items:center;justify-content:center;padding:8px;}
@@ -88,13 +88,16 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:1;back
 
 /* SIDEBAR */
 .side>div{margin-bottom:20px;}
-.panel{border:1.5px solid var(--ink);background:var(--paper2);box-shadow:2px 2px 0 var(--shadow);}
+.panel{border:1.5px solid var(--ink);background:var(--paper2);box-shadow:3px 3px 0 var(--shadow);}
 .panel-head{display:flex;align-items:center;justify-content:space-between;padding:6px 12px;border-bottom:1.5px solid var(--ink);background:var(--terra);color:var(--paper);}
 .panel-head.green{background:var(--green);}
 .panel-head .label{color:rgba(255,255,255,0.85);}
 .panel-body{padding:13px;}
-.lp-frame{aspect-ratio:16/9;width:100%;border:1.5px solid var(--ink);background:#000;}
-.lp-frame iframe{width:100%;height:100%;display:block;border:0;}
+.lp-frame{aspect-ratio:16/9;width:100%;border:1.5px solid var(--ink);background:var(--green);color:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;text-align:center;padding:12px;cursor:pointer;transition:background .15s;}
+.lp-frame:hover{background:var(--ink);}
+.lp-play{font-size:30px;line-height:1;}
+.lp-now-t{font-family:'Fraunces',serif;font-weight:600;font-size:15px;line-height:1.15;}
+.lp-now-d{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;color:rgba(255,255,255,0.72);}
 .lp-cap{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--ink3);margin-top:5px;}
 .lp-list{list-style:none;}
 .lp-item{padding:7px 0;border-top:1px dotted var(--line);cursor:pointer;display:flex;gap:9px;align-items:baseline;}
@@ -294,7 +297,7 @@ details.lib .lib-body{padding:4px 14px 12px;border-top:1px solid var(--line);}
       <div class="panel">
         <div class="panel-head"><span class="label">Listening Today</span><span class="label" id="lp-day">—</span></div>
         <div class="panel-body">
-          <div class="lp-frame"><iframe id="lp-frame" allow="encrypted-media" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+          <div class="lp-frame" id="lp-now" onclick="playCued()"></div>
           <div class="lp-cap" id="lp-cap">Cued · full attention</div>
           <ul class="lp-list" id="lp-list"></ul>
         </div>
@@ -466,7 +469,9 @@ function renderListen(){
  document.getElementById('lp-list').innerHTML=list.map(function(it,i){return '<li class="lp-item" onclick="cueListen('+d+','+i+')"><span class="lp-dur">'+it.dur+'</span><span><span class="lp-t">'+it.t+'</span><br><span class="lp-d">'+it.d+'</span></span></li>';}).join('');
  if(list.length)cueListen(d,0);
 }
-function cueListen(d,i){var it=LISTEN[d][i];document.getElementById('lp-frame').src='https://www.youtube.com/embed?listType=search&list='+encodeURIComponent(it.q);document.getElementById('lp-cap').textContent='Cued: '+it.t;}
+var CUED=null;
+function cueListen(d,i){var it=LISTEN[d][i];CUED=it;document.getElementById('lp-now').innerHTML='<div class="lp-play">▶</div><div class="lp-now-t">'+it.t+'</div><div class="lp-now-d">'+it.dur+' · tap to play on YouTube</div>';document.getElementById('lp-cap').textContent='Cued: '+it.t;}
+function playCued(){if(CUED)window.open('https://www.youtube.com/results?search_query='+encodeURIComponent(CUED.q),'_blank');}
 function drawStrat(){document.getElementById('stratText').textContent=STRATS[Math.floor(Math.random()*STRATS.length)];}
 function drawQuote(){var q=QUOTES[Math.floor(Math.random()*QUOTES.length)];document.getElementById('quoteText').textContent='“'+q.q+'”';document.getElementById('quoteBy').textContent='— '+q.by;}
 

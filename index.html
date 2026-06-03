@@ -670,45 +670,31 @@ function financeBoot(){fetch(PLAID_BACKEND+'/balance').then(function(r){return r
 function lsGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
 function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
 function lsDel(k){try{localStorage.removeItem(k);}catch(e){}}
-function loadPlaid(cb){
- if(typeof Plaid!=='undefined'){cb();return;}
- var sc=document.createElement('script');
- sc.src='https://cdn.plaid.com/link/v2/stable/link-initialize.js';
- sc.onload=cb;
- sc.onerror=function(){alert('Could not load Plaid here (this preview blocks it) — it loads fine on your live Netlify site.');var b=document.getElementById('fin-connect-btn');resetFinBtn(b);};
- document.head.appendChild(sc);
-}
-function cleanOAuthUrl(){if(window.history&&window.history.replaceState){window.history.replaceState({},document.title,window.location.pathname);}}
-function startLink(linkToken,received){
- var cfg={token:linkToken,
-  onSuccess:function(public_token){
-   fetch(PLAID_BACKEND+'/exchange_token',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({public_token:public_token})})
-    .then(function(r){return r.json();}).then(function(d){if(d.success){lsDel('plaid_link_token');cleanOAuthUrl();openModal('finance');}});
-  },
-  onExit:function(err,metadata){var b=document.getElementById('fin-connect-btn');resetFinBtn(b);cleanOAuthUrl();if(err){alert('Plaid stopped here:\n\ncode: '+(err.error_code||'(none)')+'\ntype: '+(err.error_type||'(none)')+'\n\n'+(err.error_message||err.display_message||JSON.stringify(err)));}}
- };
- if(received){cfg.receivedRedirectUri=received;}
- Plaid.create(cfg).open();
-}
+function loToast(msg){var t=document.getElementById('lo-toast');if(!t){t=document.createElement('div');t.id='lo-toast';t.style.cssText='position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--green);color:var(--paper);font-family:IBM Plex Mono,monospace;font-size:12px;letter-spacing:.04em;padding:10px 16px;border:1.5px solid var(--ink);z-index:400;box-shadow:3px 3px 0 var(--shadow);';document.body.appendChild(t);}t.textContent=msg;return t;}
+/* HOSTED LINK: send the user to Plaid's own page; catch them on return. */
 function connectBank(){
  var btn=document.getElementById('fin-connect-btn');
- if(btn){btn.textContent='Connecting…';btn.disabled=true;}
- loadPlaid(function(){
-  fetch(PLAID_BACKEND+'/create_link_token',{method:'POST',headers:{'Content-Type':'application/json'}})
-   .then(function(r){return r.json();}).then(function(data){
-    if(!data.link_token){alert('Backend error: '+JSON.stringify(data));resetFinBtn(btn);return;}
-    lsSet('plaid_link_token',data.link_token);
-    resetFinBtn(btn);
-    startLink(data.link_token,null);
-   }).catch(function(){alert('Could not reach the backend — it may be waking up. Wait ~30s and retry.');resetFinBtn(btn);});
- });
+ if(btn){btn.textContent='Opening…';btn.disabled=true;}
+ fetch(PLAID_BACKEND+'/create_link_token',{method:'POST',headers:{'Content-Type':'application/json'}})
+  .then(function(r){return r.json();}).then(function(data){
+   if(!data.hosted_link_url){alert('Backend error: '+JSON.stringify(data));resetFinBtn(btn);return;}
+   lsSet('plaid_link_token',data.link_token);
+   lsSet('plaid_hosted','1');
+   window.location.href=data.hosted_link_url;   // Plaid hosts the whole bank login
+  }).catch(function(){alert('Could not reach the backend — it may be waking up. Wait ~30s and retry.');resetFinBtn(btn);});
 }
-/* If Bank of America redirected us back, finish the connection automatically. */
-function checkOAuthReturn(){
- if(window.location.search.indexOf('oauth_state_id')>-1){
-  var lt=lsGet('plaid_link_token');
-  if(lt){loadPlaid(function(){startLink(lt,window.location.href);});}
- }
+/* On return from Plaid's hosted page, finish the connection automatically. */
+function checkHostedReturn(){
+ if(lsGet('plaid_hosted')!=='1')return;
+ lsDel('plaid_hosted');
+ var lt=lsGet('plaid_link_token');
+ if(!lt)return;
+ var t=loToast('Finishing bank connection…');
+ fetch(PLAID_BACKEND+'/finish_link',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({link_token:lt})})
+  .then(function(r){return r.json();}).then(function(d){
+   if(d.success){lsDel('plaid_link_token');t.remove();openModal('finance');}
+   else{t.textContent="Didn't finish — open Finance and try again";setTimeout(function(){t.remove();},5000);}
+  }).catch(function(){t.textContent='Connection check failed — try again';setTimeout(function(){t.remove();},5000);});
 }
 function finRenderBalance(d){
  var b=document.getElementById('fin-balance');if(b)b.textContent='$'+(d.total_available||0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -813,7 +799,7 @@ function openCloset(){
 }
 
 /* ════════ BOOT ════════ */
-paintHeader();paintSky();paintNow();renderPortals();renderListen();drawStrat();drawQuote();checkOAuthReturn();
+paintHeader();paintSky();paintNow();renderPortals();renderListen();drawStrat();drawQuote();checkHostedReturn();
 setInterval(function(){paintSky();paintNow();},60000);
 </script>
 </body>

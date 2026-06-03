@@ -685,7 +685,7 @@ function startLink(linkToken,received){
    fetch(PLAID_BACKEND+'/exchange_token',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({public_token:public_token})})
     .then(function(r){return r.json();}).then(function(d){if(d.success){lsDel('plaid_link_token');cleanOAuthUrl();openModal('finance');}});
   },
-  onExit:function(err){var b=document.getElementById('fin-connect-btn');resetFinBtn(b);cleanOAuthUrl();}
+  onExit:function(err,metadata){var b=document.getElementById('fin-connect-btn');resetFinBtn(b);cleanOAuthUrl();if(err){alert('Plaid stopped here:\n\ncode: '+(err.error_code||'(none)')+'\ntype: '+(err.error_type||'(none)')+'\n\n'+(err.error_message||err.display_message||JSON.stringify(err)));}}
  };
  if(received){cfg.receivedRedirectUri=received;}
  Plaid.create(cfg).open();

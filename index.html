@@ -9,11 +9,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400;1,9..144,600&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --paper:#f3e9d1;--paper2:#ebdebf;--paper3:#e0d0a9;
-  --ink:#1e1710;--ink2:#3c3225;--ink3:#6b5d49;
-  --line:rgba(30,23,16,0.34);--line2:rgba(30,23,16,0.13);
-  --terra:#c44c24;--terra2:#d9622e;--green:#2c603f;--green2:#3f7253;--gold:#9a6b1e;
-  --shadow:rgba(30,23,16,0.32);
+  --paper:#f4ecd6;--paper2:#e6d8b4;--paper3:#dccca3;
+  --ink:#191309;--ink2:#372d20;--ink3:#574a37;
+  --line:rgba(25,19,9,0.45);--line2:rgba(25,19,9,0.18);
+  --terra:#bd441f;--terra2:#d35e2a;--green:#255637;--green2:#3a6b4d;--gold:#8f6219;
+  --shadow:rgba(25,19,9,0.38);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
@@ -252,6 +252,18 @@ details.lib .lib-body{padding:4px 14px 12px;border-top:1px solid var(--line);}
 .wk-ex .nm{font-weight:600;font-size:13.5px;}
 .wk-ex .tip{font-size:11.5px;color:var(--ink3);font-style:italic;}
 .wk-ex .rx{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--terra);white-space:nowrap;font-weight:600;}
+/* FRIDGE / CLOSET / LINKS */
+.add-row{display:flex;gap:8px;margin:6px 0 12px;}
+.add-row input{flex:1;font-family:'Spectral',serif;font-size:14px;padding:8px 11px;border:1.5px solid var(--ink);background:var(--paper);color:var(--ink);}
+.add-row input:focus{outline:none;border-color:var(--terra);}
+.add-row button{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;border:1.5px solid var(--ink);background:var(--green);color:var(--paper);padding:0 14px;cursor:pointer;}
+.add-row button:hover{background:var(--ink);}
+.ck{display:flex;align-items:center;gap:10px;}
+.ck.done span{text-decoration:line-through;color:var(--ink3);}
+.del-x{background:none;border:none;color:var(--ink3);cursor:pointer;font-size:13px;line-height:1;}
+.del-x:hover{color:var(--terra);}
+.shop-link{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;border:1.5px solid var(--ink);padding:7px 13px;margin:0 7px 8px 0;cursor:pointer;color:var(--ink);text-decoration:none;background:var(--paper2);}
+.shop-link:hover{background:var(--terra);color:var(--paper);border-color:var(--terra);}
 .foot{margin-top:34px;border-top:1.5px solid var(--ink);padding-top:10px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--ink3);text-transform:uppercase;}
 </style>
 </head>
@@ -372,7 +384,9 @@ var glyphs={
  body:'<path d="M12 4a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm0 4v8m0-5l-4 2m4-2l4 2m-4 5l-3 3m3-3l3 3"/>',
  lab:'<path d="M9 3v6l-5 9a2 2 0 0 0 2 3h12a2 2 0 0 0 2-3l-5-9V3M8 3h8M7 14h10"/>',
  library:'<path d="M5 4h4v16H5zM10 4h4v16h-4zM15 5l4 1-3 14-4-1z"/>',
- calendar:'<path d="M4 6h16v15H4zM4 9h16M8 3v4M16 3v4M8 13h2M14 13h2"/>'
+ calendar:'<path d="M4 6h16v15H4zM4 9h16M8 3v4M16 3v4M8 13h2M14 13h2"/>',
+ fridge:'<path d="M6 2h12v20H6zM6 9h12M9 5v2M9 12v3"/>',
+ closet:'<path d="M12 3a2 2 0 1 1 1.5 3.5L21 13H3l7.5-6.5"/><path d="M3 16h18v3H3z"/>'
 };
 var PORTALS=[
  {id:'calendar',no:'No. 02',dept:'Schedule',title:'Calendar'},
@@ -383,7 +397,9 @@ var PORTALS=[
  {id:'creative',no:'No. 07',dept:'Creative · Zen Gun',title:'Creative'},
  {id:'body',no:'No. 08',dept:'The Body',title:'Body'},
  {id:'lab',no:'No. 09',dept:'Technical',title:'Lab'},
- {id:'library',no:'No. 10',dept:'Reference',title:'Library'}
+ {id:'library',no:'No. 10',dept:'Reference',title:'Library'},
+ {id:'fridge',no:'No. 11',dept:'Provisions',title:'Fridge'},
+ {id:'closet',no:'No. 12',dept:'Wardrobe',title:'Closet'}
 ];
 
 /* ════════ SCHEDULE — seeded from your real Google Calendar (recurring daily) ════════ */
@@ -458,8 +474,8 @@ function paintSky(){
 }
 function renderPortals(){
  document.getElementById('portals').innerHTML=PORTALS.map(function(p){
-  var click=p.id==='calendar'?'openSchedule()':(p.id==='library'?"openLibrary()":(p.id==='creative'?"openCreative()":"openModal('"+p.id+"')"));
-  var sub=ADV[p.id]?'Advisor: '+ADV[p.id].name:(p.id==='library'?'Full lists':'Today + month');
+  var click=p.id==='calendar'?'openSchedule()':(p.id==='library'?"openLibrary()":(p.id==='creative'?"openCreative()":(p.id==='fridge'?"openFridge()":(p.id==='closet'?"openCloset()":"openModal('"+p.id+"')"))));
+  var sub=ADV[p.id]?'Advisor: '+ADV[p.id].name:(p.id==='library'?'Full lists':(p.id==='calendar'?'Today + month':(p.id==='fridge'?'Food + grocery':(p.id==='closet'?'Depop + wishlist':'Open'))));
   return '<div class="portal" onclick="'+click+'"><div class="portal-top"><span class="portal-no">'+p.no+'</span><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--terra)" stroke-width="1.5"><circle cx="12" cy="12" r="9.5"/><circle cx="12" cy="12" r="1.6" fill="var(--terra)"/></svg></div><div class="portal-mid"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">'+glyphs[p.id]+'</svg></div><div class="portal-foot"><div class="portal-dept">'+p.dept+'</div><div class="portal-title">'+p.title+'</div><div class="portal-adv">'+sub+'</div></div></div>';
  }).join('');
 }
@@ -488,7 +504,7 @@ function modalBody(id){
   case 'music':return '<h3>Today — '+WD[new Date().getDay()]+'</h3><ul>'+(LISTEN[new Date().getDay()]||[]).map(function(it){return '<li><span class="k">'+it.dur+'</span><span class="vv"><b>'+it.t+'</b> — <em>'+it.d+'</em></span></li>';}).join('')+'</ul><h3>Practice</h3><ul><li><span class="k">Daily</span><span class="vv">Guitar + piano 30–45 min · sight reading → Schubert</span></li><li><span class="k">Method</span><span class="vv">Hands separate → together at 60% · never rush the join</span></li></ul>';
   case 'reading':return '<h3>Currently</h3><ul><li><span class="k">KJV Bible</span><span class="vv">Job → Psalms → Gospels <em>· daily</em></span></li><li><span class="k">S. Foote</span><span class="vv">The Civil War Vol. I</span></li><li><span class="k">Homer</span><span class="vv">Iliad / the Oresteia</span></li><li><span class="k">Daily</span><span class="vv">One Dhammapada chapter</span></li></ul><p><em>Full reading list lives in the Library (No. 10).</em></p>';
   case 'body':return '<h3>Daily Protocol</h3><ul><li><span class="k">Finasteride</span><span class="vv">1mg · same time daily · never skip</span></li><li><span class="k">Minoxidil</span><span class="vv">1ml scalp · no wash 4 hrs</span></li><li><span class="k">Tretinoin</span><span class="vv">M/W/F · wait 20–30 min <b>then</b> minox</span></li><li><span class="k">Castor oil</span><span class="vv">Lash line + brows, nightly</span></li><li><span class="k">Derma roll</span><span class="vv">70% isopropyl before + after</span></li></ul><p><em>Full hair guide + the 17-step date-day routine are in the Library. Dr. August advises on protocol, not diagnosis.</em></p>';
-  case 'lab':return '<h3>Month 1 — Foundations</h3><ul><li><span class="k">Daily min</span><span class="vv">1 hour — no exceptions</span></li><li><span class="k">Track</span><span class="vv">The Odin Project · CS50x · Eloquent JS</span></li><li><span class="k">GitHub</span><span class="vv">gable-sys · push daily</span></li></ul><h3>Six-Month Arc</h3><ul><li><span class="k">M1</span><span class="vv">HTML/CSS/JS/Git — Life OS live on Netlify</span></li><li><span class="k">M2</span><span class="vv">Supabase + Plaid + async</span></li><li><span class="k">M3</span><span class="vv">Mr. Greg v1 — Python + Flask + Claude</span></li><li><span class="k">M4–5</span><span class="vv">Integrations</span></li><li><span class="k">M6</span><span class="vv">Ship both</span></li></ul>';
+  case 'lab':return '<p><a class="shop-link" href="https://www.theodinproject.com/dashboard" target="_blank" rel="noopener">▸ Open The Odin Project</a><a class="shop-link" href="https://cs50.harvard.edu/x/" target="_blank" rel="noopener">▸ CS50x</a><a class="shop-link" href="https://eloquentjavascript.net/" target="_blank" rel="noopener">▸ Eloquent JS</a></p><h3>Month 1 — Foundations</h3><ul><li><span class="k">Daily min</span><span class="vv">1 hour — no exceptions</span></li><li><span class="k">Track</span><span class="vv">The Odin Project · CS50x · Eloquent JS</span></li><li><span class="k">GitHub</span><span class="vv">gable-sys · push daily</span></li></ul><h3>Six-Month Arc</h3><ul><li><span class="k">M1</span><span class="vv">HTML/CSS/JS/Git — Life OS live on Netlify</span></li><li><span class="k">M2</span><span class="vv">Supabase + Plaid + async</span></li><li><span class="k">M3</span><span class="vv">Mr. Greg v1 — Python + Flask + Claude</span></li><li><span class="k">M4–5</span><span class="vv">Integrations</span></li><li><span class="k">M6</span><span class="vv">Ship both</span></li></ul>';
  }
  return '<p>—</p>';
 }
@@ -651,26 +667,48 @@ var PLAID_BACKEND='https://lifeos-backend-nf15.onrender.com';
 function resetFinBtn(b){if(b){b.textContent='🏦 Connect bank';b.disabled=false;}}
 function finShowLive(){var c=document.getElementById('fin-connect'),l=document.getElementById('fin-live');if(c)c.style.display='none';if(l)l.style.display='block';}
 function financeBoot(){fetch(PLAID_BACKEND+'/balance').then(function(r){return r.json();}).then(function(d){if(d&&d.connected){finShowLive();finRenderBalance(d);finLoadTx();}}).catch(function(){});}
+function lsGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+function lsDel(k){try{localStorage.removeItem(k);}catch(e){}}
+function loadPlaid(cb){
+ if(typeof Plaid!=='undefined'){cb();return;}
+ var sc=document.createElement('script');
+ sc.src='https://cdn.plaid.com/link/v2/stable/link-initialize.js';
+ sc.onload=cb;
+ sc.onerror=function(){alert('Could not load Plaid here (this preview blocks it) — it loads fine on your live Netlify site.');var b=document.getElementById('fin-connect-btn');resetFinBtn(b);};
+ document.head.appendChild(sc);
+}
+function cleanOAuthUrl(){if(window.history&&window.history.replaceState){window.history.replaceState({},document.title,window.location.pathname);}}
+function startLink(linkToken,received){
+ var cfg={token:linkToken,
+  onSuccess:function(public_token){
+   fetch(PLAID_BACKEND+'/exchange_token',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({public_token:public_token})})
+    .then(function(r){return r.json();}).then(function(d){if(d.success){lsDel('plaid_link_token');cleanOAuthUrl();openModal('finance');}});
+  },
+  onExit:function(err){var b=document.getElementById('fin-connect-btn');resetFinBtn(b);cleanOAuthUrl();}
+ };
+ if(received){cfg.receivedRedirectUri=received;}
+ Plaid.create(cfg).open();
+}
 function connectBank(){
  var btn=document.getElementById('fin-connect-btn');
- if(typeof Plaid==='undefined'){
-  if(btn){btn.textContent='Loading…';btn.disabled=true;}
-  var sc=document.createElement('script');
-  sc.src='https://cdn.plaid.com/link/v2/stable/link-initialize.js';
-  sc.onload=function(){resetFinBtn(btn);connectBank();};
-  sc.onerror=function(){alert('Could not load Plaid here (this preview blocks it) — it loads fine on your live Netlify site.');resetFinBtn(btn);};
-  document.head.appendChild(sc);
-  return;
- }
  if(btn){btn.textContent='Connecting…';btn.disabled=true;}
- fetch(PLAID_BACKEND+'/create_link_token',{method:'POST',headers:{'Content-Type':'application/json'}})
-  .then(function(r){return r.json();}).then(function(data){
-   if(!data.link_token){alert('Backend error: '+JSON.stringify(data));resetFinBtn(btn);return;}
-   var handler=Plaid.create({token:data.link_token,
-    onSuccess:function(pt){fetch(PLAID_BACKEND+'/exchange_token',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({public_token:pt})}).then(function(r){return r.json();}).then(function(d){if(d.success){finShowLive();financeBoot();}});},
-    onExit:function(){resetFinBtn(btn);}});
-   handler.open();
-  }).catch(function(){alert('Could not reach the backend — it may be waking up. Wait ~30s and retry.');resetFinBtn(btn);});
+ loadPlaid(function(){
+  fetch(PLAID_BACKEND+'/create_link_token',{method:'POST',headers:{'Content-Type':'application/json'}})
+   .then(function(r){return r.json();}).then(function(data){
+    if(!data.link_token){alert('Backend error: '+JSON.stringify(data));resetFinBtn(btn);return;}
+    lsSet('plaid_link_token',data.link_token);
+    resetFinBtn(btn);
+    startLink(data.link_token,null);
+   }).catch(function(){alert('Could not reach the backend — it may be waking up. Wait ~30s and retry.');resetFinBtn(btn);});
+ });
+}
+/* If Bank of America redirected us back, finish the connection automatically. */
+function checkOAuthReturn(){
+ if(window.location.search.indexOf('oauth_state_id')>-1){
+  var lt=lsGet('plaid_link_token');
+  if(lt){loadPlaid(function(){startLink(lt,window.location.href);});}
+ }
 }
 function finRenderBalance(d){
  var b=document.getElementById('fin-balance');if(b)b.textContent='$'+(d.total_available||0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -737,8 +775,45 @@ function workoutWeekHTML(){
 }
 function wkInit(){var heads=document.querySelectorAll('#m-body .wk-head');for(var i=0;i<heads.length;i++){heads[i].addEventListener('click',function(){this.parentNode.classList.toggle('open');});}}
 
+/* ════════ FRIDGE + CLOSET ════════ */
+function openSimpleModal(no,title,dept,bodyHTML){
+ document.getElementById('m-no').textContent=no;
+ document.getElementById('m-title').textContent=title;
+ document.getElementById('m-dept').textContent=dept;
+ document.getElementById('m-body').innerHTML=bodyHTML;
+ document.getElementById('m-advisor').innerHTML='';
+ document.getElementById('m-body').scrollTop=0;openScrim();
+}
+/* Fridge — running food + grocery list */
+var FRIDGE_KEY='lifeos_fridge_v1';
+function loadFridge(){try{return JSON.parse(lsGet(FRIDGE_KEY)||'[]');}catch(e){return [];}}
+function saveFridge(d){lsSet(FRIDGE_KEY,JSON.stringify(d));}
+function fridgeItemHTML(it,i){return '<li class="ck'+(it.done?' done':'')+'"><span onclick="toggleFridge('+i+')" style="cursor:pointer;flex:1">'+(it.done?'✓ ':'○ ')+esc(it.t)+'</span><button class="del-x" onclick="delFridge('+i+')">✕</button></li>';}
+function refreshFridge(){var ul=document.getElementById('fridge-list');if(ul)ul.innerHTML=loadFridge().map(fridgeItemHTML).join('');}
+function addFridge(){var inp=document.getElementById('fridge-input');var v=inp.value.trim();if(!v)return;var d=loadFridge();d.push({t:v,done:false});saveFridge(d);inp.value='';refreshFridge();inp.focus();}
+function toggleFridge(i){var d=loadFridge();d[i].done=!d[i].done;saveFridge(d);refreshFridge();}
+function delFridge(i){var d=loadFridge();d.splice(i,1);saveFridge(d);refreshFridge();}
+function openFridge(){
+ openSimpleModal('No. 11','Fridge','Provisions','<p style="margin-bottom:4px"><em>Running food + grocery list. Tap to check off; adds save automatically.</em></p><div class="add-row"><input id="fridge-input" placeholder="Add — eggs, oats, olive oil…" onkeydown="if(event.key===\'Enter\')addFridge()"><button onclick="addFridge()">Add</button></div><ul id="fridge-list">'+loadFridge().map(fridgeItemHTML).join('')+'</ul>');
+ var i=document.getElementById('fridge-input');if(i)setTimeout(function(){i.focus();},50);
+}
+/* Closet — shop links + wishlist */
+var CLOSET_KEY='lifeos_closet_v1';
+function loadCloset(){try{return JSON.parse(lsGet(CLOSET_KEY)||'[]');}catch(e){return [];}}
+function saveCloset(d){lsSet(CLOSET_KEY,JSON.stringify(d));}
+function closetItemHTML(it,i){return '<li class="ck'+(it.done?' done':'')+'"><span onclick="toggleCloset('+i+')" style="cursor:pointer;flex:1">'+(it.done?'✓ ':'○ ')+esc(it.t)+'</span><button class="del-x" onclick="delCloset('+i+')">✕</button></li>';}
+function refreshCloset(){var ul=document.getElementById('closet-list');if(ul)ul.innerHTML=loadCloset().map(closetItemHTML).join('');}
+function addCloset(){var inp=document.getElementById('closet-input');var v=inp.value.trim();if(!v)return;var d=loadCloset();d.push({t:v,done:false});saveCloset(d);inp.value='';refreshCloset();inp.focus();}
+function toggleCloset(i){var d=loadCloset();d[i].done=!d[i].done;saveCloset(d);refreshCloset();}
+function delCloset(i){var d=loadCloset();d.splice(i,1);saveCloset(d);refreshCloset();}
+function openCloset(){
+ var links='<h3>Shops</h3><p><a class="shop-link" href="https://www.depop.com" target="_blank" rel="noopener">▸ Depop</a><a class="shop-link" href="https://www.grailed.com" target="_blank" rel="noopener">▸ Grailed</a><a class="shop-link" href="https://www.vinted.com" target="_blank" rel="noopener">▸ Vinted</a><a class="shop-link" href="https://www.ebay.com" target="_blank" rel="noopener">▸ eBay</a></p>';
+ var wish='<h3>Want / Watching</h3><div class="add-row"><input id="closet-input" placeholder="Add — vintage Carhartt, suede boots…" onkeydown="if(event.key===\'Enter\')addCloset()"><button onclick="addCloset()">Add</button></div><ul id="closet-list">'+loadCloset().map(closetItemHTML).join('')+'</ul>';
+ openSimpleModal('No. 12','Closet','Wardrobe',links+wish);
+}
+
 /* ════════ BOOT ════════ */
-paintHeader();paintSky();paintNow();renderPortals();renderListen();drawStrat();drawQuote();
+paintHeader();paintSky();paintNow();renderPortals();renderListen();drawStrat();drawQuote();checkOAuthReturn();
 setInterval(function(){paintSky();paintNow();},60000);
 </script>
 </body>

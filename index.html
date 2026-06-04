@@ -428,6 +428,23 @@ var CLAUDE_MODEL='claude-sonnet-4-20250514';
 var GCAL_CLIENT_ID='';
 var GCAL_ID='lonningb10@gmail.com';
 
+/* ════════ SUPABASE ════════ */
+var SB_URL='https://gruebngputtvwbhroswc.supabase.co';
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdydWVibmdwdXR0dndiaHJvc3djIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc5MzgyMTgsImV4cCI6MjA5MzUxNDIxOH0.kepdvBLZDISHYl8LzUkkjSob9-EFjzLrnhv1m-9LzoE';
+function sbH(){return{'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY};}
+async function sbSave(key,val){
+  try{await fetch(SB_URL+'/rest/v1/lifeos_data',{method:'POST',headers:Object.assign({},sbH(),{'Prefer':'resolution=merge-duplicates'}),body:JSON.stringify({id:key,data:val,updated_at:new Date().toISOString()})});}
+  catch(e){console.warn('sbSave',e);}
+}
+async function sbLoad(key){
+  try{var r=await fetch(SB_URL+'/rest/v1/lifeos_data?id=eq.'+encodeURIComponent(key)+'&select=data',{headers:sbH()});var d=await r.json();return(d&&d[0])?d[0].data:null;}
+  catch(e){return null;}
+}
+/* Advisor memory */
+async function sbSaveAdv(id,msgs){await sbSave('adv_'+id,msgs);}
+async function sbLoadAdv(id){return await sbLoad('adv_'+id)||[];}
+async function loadAllAdv(){var ids=Object.keys(ADV);for(var i=0;i<ids.length;i++){var h=await sbLoadAdv(ids[i]);if(h&&h.length)HIST[ids[i]]=h;}}
+
 /* ════════ NIGHT MODE ════════ */
 function toggleNight(){
   var on=document.body.classList.toggle('night');
@@ -901,7 +918,7 @@ function defaultStories(){return[
  {id:'s9',title:'The Dromedary',type:'Notes',status:'Gestating',notes:'A fable. Nothing yet.',body:''}
 ];}
 function loadStories(){try{var d=JSON.parse(localStorage.getItem(STORY_KEY)||'null');return(d&&d.length)?d:defaultStories();}catch(e){return defaultStories();}}
-function saveStories(d){try{localStorage.setItem(STORY_KEY,JSON.stringify(d));}catch(e){}}
+function saveStories(d){try{localStorage.setItem(STORY_KEY,JSON.stringify(d));}catch(e){}sbSave('stories',d);}
 var ICONS={'Short Story':'✍','Poem':'📜','Novel':'📖','Film':'🎞','Song':'♪','Essay':'📄','Notes':'💡','Gestation':'🌱','Journal':'📔'};
 var curStory=null;
 
@@ -953,7 +970,7 @@ function sendAdvisor(id){
  box.insertAdjacentHTML('beforeend',bubHTML(id,'user',text));
  var tk=document.createElement('div');tk.className='thinking';tk.textContent=ADV[id].name+' is thinking…';box.appendChild(tk);box.scrollTop=box.scrollHeight;
  fetch(CLAUDE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:CLAUDE_MODEL,max_tokens:1000,system:ADV[id].sys,messages:HIST[id]})})
- .then(function(r){return r.json();}).then(function(data){tk.remove();var reply=(data.content&&data.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('\n'))||'…';HIST[id].push({role:'assistant',content:reply});box.insertAdjacentHTML('beforeend',bubHTML(id,'assistant',reply));box.scrollTop=box.scrollHeight;if(btn)btn.disabled=false;})
+ .then(function(r){return r.json();}).then(function(data){tk.remove();var reply=(data.content&&data.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('\n'))||'…';HIST[id].push({role:'assistant',content:reply});box.insertAdjacentHTML('beforeend',bubHTML(id,'assistant',reply));box.scrollTop=box.scrollHeight;if(btn)btn.disabled=false;sbSaveAdv(id,HIST[id]);})
  .catch(function(){tk.remove();box.insertAdjacentHTML('beforeend',bubHTML(id,'assistant','Connection issue. On the live site, point CLAUDE_ENDPOINT at your Render backend so the key stays server-side.'));box.scrollTop=box.scrollHeight;if(btn)btn.disabled=false;});
 }
 
@@ -1079,7 +1096,7 @@ function openSimpleModal(no,title,dept,bodyHTML){
 }
 var FRIDGE_KEY='lifeos_fridge_v1';
 function loadFridge(){try{return JSON.parse(lsGet(FRIDGE_KEY)||'[]');}catch(e){return[];}}
-function saveFridge(d){lsSet(FRIDGE_KEY,JSON.stringify(d));}
+function saveFridge(d){lsSet(FRIDGE_KEY,JSON.stringify(d));sbSave('fridge',d);}
 function fridgeItemHTML(it,i){return '<li class="ck'+(it.done?' done':'')+'"><span onclick="toggleFridge('+i+')" style="cursor:pointer;flex:1">'+(it.done?'✓ ':'○ ')+esc(it.t)+'</span><button class="del-x" onclick="delFridge('+i+')">✕</button></li>';}
 function refreshFridge(){var ul=document.getElementById('fridge-list');if(ul)ul.innerHTML=loadFridge().map(fridgeItemHTML).join('');}
 function addFridge(){var inp=document.getElementById('fridge-input');var v=inp.value.trim();if(!v)return;var d=loadFridge();d.push({t:v,done:false});saveFridge(d);inp.value='';refreshFridge();inp.focus();}
@@ -1091,7 +1108,7 @@ function openFridge(){
 }
 var CLOSET_KEY='lifeos_closet_v1';
 function loadCloset(){try{return JSON.parse(lsGet(CLOSET_KEY)||'[]');}catch(e){return[];}}
-function saveCloset(d){lsSet(CLOSET_KEY,JSON.stringify(d));}
+function saveCloset(d){lsSet(CLOSET_KEY,JSON.stringify(d));sbSave('closet',d);}
 function closetItemHTML(it,i){return '<li class="ck'+(it.done?' done':'')+'"><span onclick="toggleCloset('+i+')" style="cursor:pointer;flex:1">'+(it.done?'✓ ':'○ ')+esc(it.t)+'</span><button class="del-x" onclick="delCloset('+i+')">✕</button></li>';}
 function refreshCloset(){var ul=document.getElementById('closet-list');if(ul)ul.innerHTML=loadCloset().map(closetItemHTML).join('');}
 function addCloset(){var inp=document.getElementById('closet-input');var v=inp.value.trim();if(!v)return;var d=loadCloset();d.push({t:v,done:false});saveCloset(d);inp.value='';refreshCloset();inp.focus();}
@@ -1106,6 +1123,15 @@ function openCloset(){
 /* ════════ BOOT ════════ */
 paintHeader();paintSky();paintNow();renderPortals();renderListen();drawStrat();drawQuote();checkHostedReturn();
 setInterval(function(){paintSky();paintNow();},60000);
+/* Load Supabase data async on boot */
+(async function(){
+  await loadAllAdv();
+  /* Sync fridge from Supabase if newer than localStorage */
+  var sf=await sbLoad('fridge');if(sf&&sf.length){lsSet(FRIDGE_KEY,JSON.stringify(sf));}
+  var sc=await sbLoad('closet');if(sc&&sc.length){lsSet(CLOSET_KEY,JSON.stringify(sc));}
+  var ss=await sbLoad('stories');if(ss&&ss.length){try{localStorage.setItem(STORY_KEY,JSON.stringify(ss));}catch(e){}}
+  console.log('✓ Supabase sync complete');
+})();
 </script>
 </body>
 </html>

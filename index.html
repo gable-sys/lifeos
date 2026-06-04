@@ -424,7 +424,7 @@ body.night .sc-lbl{background:rgba(22,19,14,0.9);}
 <script>
 /* ════════ CONFIG ════════ */
 var CLAUDE_ENDPOINT='https://lifeos-backend-nf15.onrender.com/advisor';
-var CLAUDE_MODEL='claude-sonnet-4-20250514';
+var CLAUDE_MODEL='claude-sonnet-4-6';
 var GCAL_CLIENT_ID='';
 var GCAL_ID='lonningb10@gmail.com';
 
@@ -1122,6 +1122,8 @@ function openCloset(){
 
 /* ════════ BOOT ════════ */
 paintHeader();paintSky();paintNow();renderPortals();renderListen();drawStrat();drawQuote();checkHostedReturn();
+/* Warm up Render backend on page load */
+fetch('https://lifeos-backend-nf15.onrender.com/').catch(function(){});
 setInterval(function(){paintSky();paintNow();},60000);
 /* Load Supabase data async on boot */
 (async function(){

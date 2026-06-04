@@ -3,11 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Life OS — Overview (Prototype v3)</title>
+<title>Life OS — Overview</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400;1,9..144,600&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+/* ── LIGHT MODE (default) ── */
 :root{
   --paper:#f4ecd6;--paper2:#e6d8b4;--paper3:#dccca3;
   --ink:#191309;--ink2:#372d20;--ink3:#574a37;
@@ -15,9 +16,20 @@
   --terra:#bd441f;--terra2:#d35e2a;--green:#255637;--green2:#3a6b4d;--gold:#8f6219;
   --shadow:rgba(25,19,9,0.38);
 }
+/* ── NIGHT MODE ── */
+body.night{
+  --paper:#0e0c09;--paper2:#16130e;--paper3:#1e1a13;
+  --ink:#f0e8d5;--ink2:#c8bc9e;--ink3:#8a7d66;
+  --line:rgba(240,232,213,0.13);--line2:rgba(240,232,213,0.07);
+  --terra:#c94f28;--terra2:#a33d1a;--green:#2e6b42;--green2:#3d8f59;--gold:#b8891a;
+  --shadow:rgba(0,0,0,0.6);
+}
+body.night::before{opacity:0.08;}
+body.night::after{background:radial-gradient(ellipse at 50% -10%,rgba(0,0,0,0) 60%,rgba(0,0,0,0.18) 100%);}
+
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
-body{background:var(--paper);color:var(--ink);font-family:'Spectral',Georgia,serif;font-size:15px;line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased;position:relative;}
+body{background:var(--paper);color:var(--ink);font-family:'Spectral',Georgia,serif;font-size:15px;line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased;position:relative;transition:background .35s,color .25s;}
 body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");mix-blend-mode:multiply;opacity:0.18;}
 body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:1;background:radial-gradient(ellipse at 50% -10%,rgba(0,0,0,0) 60%,rgba(30,23,16,0.045) 100%);}
 .mono{font-family:'IBM Plex Mono',monospace;}
@@ -36,6 +48,8 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:1;back
 .brand-sub{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink3);}
 .colophon{width:26px;height:26px;flex-shrink:0;}
 .cat-no{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--paper);}
+.night-btn{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;border:1px solid rgba(255,255,255,0.5);background:none;color:var(--paper);padding:3px 9px;cursor:pointer;transition:background .2s;}
+.night-btn:hover{background:rgba(255,255,255,0.15);}
 
 /* CELESTIAL */
 .celestial{border:1.5px solid var(--ink);border-top:none;background:repeating-linear-gradient(180deg,transparent,transparent 27px,var(--line2) 27px,var(--line2) 28px),var(--paper2);padding:18px 16px 14px;position:relative;overflow:hidden;}
@@ -85,6 +99,19 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:1;back
 .portal-dept{font-family:'IBM Plex Mono',monospace;font-size:7.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--green);margin-bottom:1px;}
 .portal-title{font-family:'Fraunces',serif;font-weight:600;font-size:16px;line-height:1.05;}
 .portal-adv{font-size:10.5px;font-style:italic;color:var(--ink3);margin-top:1px;}
+
+/* MAP PORTAL — special parchment treatment */
+.portal.portal-map{background:var(--paper3);position:relative;overflow:hidden;}
+.portal.portal-map .portal-mid{padding:0;position:relative;}
+.portal.portal-map:hover{background:var(--paper2);}
+.map-mini-canvas{width:100%;height:80px;display:block;}
+
+/* FRIDGE PORTAL — subtle green tint */
+.portal.portal-fridge{border-color:var(--green2);}
+.portal.portal-fridge .portal-dept{color:var(--green2);}
+/* CLOSET PORTAL — subtle gold tint */
+.portal.portal-closet{border-color:var(--gold);}
+.portal.portal-closet .portal-dept{color:var(--gold);}
 
 /* SIDEBAR */
 .side>div{margin-bottom:20px;}
@@ -184,19 +211,20 @@ details.lib .lib-body{padding:4px 14px 12px;border-top:1px solid var(--line);}
 .cal .ev{display:block;font-family:'Spectral',serif;font-size:8.5px;line-height:1.1;color:var(--terra);font-style:italic;}
 .cal td.today .ev{color:var(--paper);}
 
-/* CREATIVE STUDIO — story grid */
+/* CREATIVE STUDIO */
 .studio-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;}
 .sc{border:1.5px solid var(--ink);background:var(--paper2);cursor:pointer;min-height:118px;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden;transition:transform .12s;box-shadow:2px 2px 0 var(--shadow);}
 .sc:hover{transform:translate(-1px,-1px);}
 .sc-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:40px;opacity:0.10;}
 .sc-lbl{position:relative;padding:8px 9px;border-top:1px solid var(--line);background:rgba(239,228,203,0.85);}
+body.night .sc-lbl{background:rgba(22,19,14,0.9);}
 .sc-type{font-family:'IBM Plex Mono',monospace;font-size:7.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--green);}
 .sc-title{font-family:'Fraunces',serif;font-weight:600;font-size:14px;line-height:1.12;margin:1px 0;}
 .sc-meta{font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:var(--ink3);}
 .sc-add{border:1.5px dashed var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;color:var(--ink3);min-height:118px;}
 .sc-add:hover{border-color:var(--terra);color:var(--terra);}
 
-/* WRITING DESK — fullscreen */
+/* WRITING DESK */
 .desk{position:fixed;inset:0;z-index:300;background:var(--paper);display:none;flex-direction:column;}
 .desk.on{display:flex;}
 .desk::before{content:'';position:absolute;inset:0;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");mix-blend-mode:multiply;opacity:0.5;}
@@ -230,6 +258,7 @@ details.lib .lib-body{padding:4px 14px 12px;border-top:1px solid var(--line);}
 .fin-tx .meta{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--ink3);}
 .fin-tx .amt{font-family:'IBM Plex Mono',monospace;font-weight:600;}
 .fin-tx .amt.out{color:var(--terra);}.fin-tx .amt.in{color:var(--green);}
+
 /* WORKOUT WEEK */
 .wk-day{border:1px solid var(--line);margin-bottom:8px;background:var(--paper2);}
 .wk-day.is-today{border-color:var(--terra);box-shadow:2px 2px 0 var(--shadow);}
@@ -252,6 +281,7 @@ details.lib .lib-body{padding:4px 14px 12px;border-top:1px solid var(--line);}
 .wk-ex .nm{font-weight:600;font-size:13.5px;}
 .wk-ex .tip{font-size:11.5px;color:var(--ink3);font-style:italic;}
 .wk-ex .rx{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--terra);white-space:nowrap;font-weight:600;}
+
 /* FRIDGE / CLOSET / LINKS */
 .add-row{display:flex;gap:8px;margin:6px 0 12px;}
 .add-row input{flex:1;font-family:'Spectral',serif;font-size:14px;padding:8px 11px;border:1.5px solid var(--ink);background:var(--paper);color:var(--ink);}
@@ -264,6 +294,33 @@ details.lib .lib-body{padding:4px 14px 12px;border-top:1px solid var(--line);}
 .del-x:hover{color:var(--terra);}
 .shop-link{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;border:1.5px solid var(--ink);padding:7px 13px;margin:0 7px 8px 0;cursor:pointer;color:var(--ink);text-decoration:none;background:var(--paper2);}
 .shop-link:hover{background:var(--terra);color:var(--paper);border-color:var(--terra);}
+
+/* MAP MODAL */
+.map-full-svg{width:100%;border:1.5px solid var(--ink);display:block;margin-bottom:12px;}
+.map-place-list{list-style:none;}
+.map-place-list li{display:flex;gap:12px;padding:7px 0;border-bottom:1px dotted var(--line);align-items:baseline;}
+.map-place-list .mk{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--terra);min-width:110px;}
+.map-place-list .mv{font-size:13.5px;font-style:italic;}
+.map-place-list .msub{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--ink3);display:block;margin-top:1px;}
+
+/* MOBILE */
+@media(max-width:600px){
+  .portals{grid-template-columns:1fr 1fr;}
+  .portal{min-height:90px;}
+  .portal-mid{padding:5px;}
+  .portal-mid svg{width:32px;height:32px;}
+  .portal-adv{display:none;}
+  .brand{font-size:26px;}
+  .grid{gap:14px;}
+  .celestial{padding:10px 10px 8px;}
+  .sky{height:90px;}
+  .timetable-row{flex-direction:column;}
+  .tt-cell{border-right:none;border-bottom:1px solid var(--line);padding:6px 12px;}
+  .now-body{padding:10px 12px 12px;}
+  .cur .meat h3{font-size:20px;}
+  .side{display:none;}
+}
+
 .foot{margin-top:34px;border-top:1.5px solid var(--ink);padding-top:10px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--ink3);text-transform:uppercase;}
 </style>
 </head>
@@ -271,7 +328,14 @@ details.lib .lib-body{padding:4px 14px 12px;border-top:1px solid var(--line);}
 <div class="wrap">
 
   <div class="masthead">
-    <div class="band t"><span class="label">A Rebellion Against Attention-Economy Slop</span><span style="display:flex;gap:16px;align-items:center"><span class="cat-no" onclick="openLibrary()" style="cursor:pointer;text-decoration:underline;text-underline-offset:3px">☰ LIBRARY / WIKI</span><span class="cat-no">No. 001 · MMXXVI</span></span></div>
+    <div class="band t">
+      <span class="label">A Rebellion Against Attention-Economy Slop</span>
+      <span style="display:flex;gap:16px;align-items:center">
+        <span class="cat-no" onclick="openLibrary()" style="cursor:pointer;text-decoration:underline;text-underline-offset:3px">☰ LIBRARY / WIKI</span>
+        <button class="night-btn" id="night-btn" onclick="toggleNight()">☾ Night</button>
+        <span class="cat-no">No. 001 · MMXXVI</span>
+      </span>
+    </div>
     <div class="band m">
       <div><div class="brand">Life&nbsp;OS</div><div class="brand-sub">Unified Personal Infrastructure</div></div>
       <svg class="colophon" viewBox="0 0 40 40" fill="none" stroke="var(--ink)" stroke-width="1.4"><circle cx="20" cy="20" r="13"/><circle cx="20" cy="20" r="2.4" fill="var(--ink)"/><g stroke-width="1"><line x1="20" y1="3" x2="20" y2="8"/><line x1="20" y1="32" x2="20" y2="37"/><line x1="3" y1="20" x2="8" y2="20"/><line x1="32" y1="20" x2="37" y2="20"/></g></svg>
@@ -325,7 +389,7 @@ details.lib .lib-body{padding:4px 14px 12px;border-top:1px solid var(--line);}
     </div>
   </div>
 
-  <div class="foot"><span>Life OS · Prototype v2</span><span id="foot-stamp">—</span></div>
+  <div class="foot"><span>Life OS · v3</span><span id="foot-stamp">—</span></div>
 </div>
 
 <!-- MODAL -->
@@ -359,10 +423,18 @@ details.lib .lib-body{padding:4px 14px 12px;border-top:1px solid var(--line);}
 
 <script>
 /* ════════ CONFIG ════════ */
-var CLAUDE_ENDPOINT='https://api.anthropic.com/v1/messages';   // LIVE: point at your Render proxy e.g. https://lifeos-backend-nf15.onrender.com/advisor
+var CLAUDE_ENDPOINT='https://lifeos-backend-nf15.onrender.com/advisor';
 var CLAUDE_MODEL='claude-sonnet-4-20250514';
-var GCAL_CLIENT_ID='';        // paste your Google OAuth Client ID to enable live two-way calendar sync
+var GCAL_CLIENT_ID='';
 var GCAL_ID='lonningb10@gmail.com';
+
+/* ════════ NIGHT MODE ════════ */
+function toggleNight(){
+  var on=document.body.classList.toggle('night');
+  document.getElementById('night-btn').textContent=on?'☀ Day':'☾ Night';
+  try{localStorage.setItem('lifeos_night',on?'1':'0');}catch(e){}
+}
+(function(){try{if(localStorage.getItem('lifeos_night')==='1'){document.body.classList.add('night');document.getElementById('night-btn').textContent='☀ Day';}}catch(e){}})();
 
 /* ════════ ADVISORS ════════ */
 var ADV={
@@ -386,8 +458,10 @@ var glyphs={
  library:'<path d="M5 4h4v16H5zM10 4h4v16h-4zM15 5l4 1-3 14-4-1z"/>',
  calendar:'<path d="M4 6h16v15H4zM4 9h16M8 3v4M16 3v4M8 13h2M14 13h2"/>',
  fridge:'<path d="M6 2h12v20H6zM6 9h12M9 5v2M9 12v3"/>',
- closet:'<path d="M12 3a2 2 0 1 1 1.5 3.5L21 13H3l7.5-6.5"/><path d="M3 16h18v3H3z"/>'
+ closet:'<path d="M12 3a2 2 0 1 1 1.5 3.5L21 13H3l7.5-6.5"/><path d="M3 16h18v3H3z"/>',
+ map:'<path d="M1 6l7-3 8 3 7-3v15l-7 3-8-3-7 3V6zM8 3v15M16 6v15"/>'
 };
+
 var PORTALS=[
  {id:'calendar',no:'No. 02',dept:'Schedule',title:'Calendar'},
  {id:'finance',no:'No. 03',dept:'Treasury',title:'Finance'},
@@ -399,10 +473,11 @@ var PORTALS=[
  {id:'lab',no:'No. 09',dept:'Technical',title:'Lab'},
  {id:'library',no:'No. 10',dept:'Reference',title:'Library'},
  {id:'fridge',no:'No. 11',dept:'Provisions',title:'Fridge'},
- {id:'closet',no:'No. 12',dept:'Wardrobe',title:'Closet'}
+ {id:'closet',no:'No. 12',dept:'Wardrobe',title:'Closet'},
+ {id:'map',no:'No. 13',dept:'Soul · Gestation',title:'The Map'}
 ];
 
-/* ════════ SCHEDULE — seeded from your real Google Calendar (recurring daily) ════════ */
+/* ════════ SCHEDULE ════════ */
 var TT=[
  {s:'05:50',e:'06:00',t:'Meditate',d:'Breathe, set the intention',dept:'Mind'},
  {s:'06:00',e:'06:45',t:'Workout',d:'Stay consistent — the foundation',dept:'Performance'},
@@ -432,7 +507,6 @@ var LISTEN={
 
 var STRATS=["Honour the error as a hidden intention.","What would you do if it were easy?","Remove the most impressive part.","Work at a different speed.","Use an old idea.","Turn it upside down.","What is the smallest version that still works?","Repetition is a form of change.","Listen to the quiet voice.","Do the thing you've been avoiding — first.","Whose problem is this, really?","Leave it unfinished on purpose.","Trust the part you can't explain.","Subtract until it breaks, then add one thing back.","Begin in the middle.","Make it more like a letter to one person.","What would the patient version do?","Change nothing and look again.","Give it a ten-minute deadline.","Follow the most boring path all the way.","Let the constraint be the idea.","Name what you are actually afraid of.","Do less, but mean it more.","Return to the first instinct."];
 var QUOTES=[{q:"You have power over your mind — not outside events. Realise this, and you find strength.",by:"Marcus Aurelius"},{q:"The happiness of your life depends on the quality of your thoughts.",by:"Marcus Aurelius"},{q:"All that we are is the result of what we have thought.",by:"The Dhammapada"},{q:"Better than a thousand hollow words is one that brings peace.",by:"The Dhammapada"},{q:"Three things cannot be long hidden: the sun, the moon, and the truth.",by:"The Buddha"},{q:"What you seek is seeking you.",by:"Rumi"},{q:"The wound is the place where the light enters you.",by:"Rumi"},{q:"We suffer more often in imagination than in reality.",by:"Seneca"},{q:"It is not what happens to you, but how you respond, that matters.",by:"Epictetus"},{q:"A journey of a thousand miles begins beneath one's feet.",by:"Lao Tzu"},{q:"Keep the beginner's mind — it holds every possibility; the expert's holds almost none.",by:"after Shunryu Suzuki"},{q:"Freedom begins where the wish to become someone else ends.",by:"after J. Krishnamurti"}];
-
 var EVENTS=[{date:'2026-06-01',t:'Connor debt clears',type:'finance'},{date:'2026-06-14',t:'Guitar review',type:'music'},{date:'2026-06-17',t:'Ellen — Bird book gift',type:'social'},{date:'2026-06-19',t:'Shuffleboard · Golrokh',type:'social'}];
 
 /* ════════ HELPERS ════════ */
@@ -472,13 +546,254 @@ function paintSky(){
  else{s+='<g transform="translate('+x+','+y+')"><circle r="15" fill="var(--green)"/><circle r="13" cx="7" cy="-3" fill="var(--paper2)"/></g>';}
  document.getElementById('sky').innerHTML=s;
 }
+
+/* ════════ MAP SVG ════════ */
+/* Mini map for portal card */
+function mapMiniSVG(){
+ return '<svg class="map-mini-canvas" viewBox="0 0 300 80" xmlns="http://www.w3.org/2000/svg">'
+  /* parchment bg */
+  +'<rect width="300" height="80" fill="#e8d8a8"/>'
+  /* grid lines - old map style */
+  +'<line x1="0" y1="20" x2="300" y2="20" stroke="#c4aa70" stroke-width="0.4" stroke-dasharray="3 4"/>'
+  +'<line x1="0" y1="40" x2="300" y2="40" stroke="#c4aa70" stroke-width="0.4" stroke-dasharray="3 4"/>'
+  +'<line x1="0" y1="60" x2="300" y2="60" stroke="#c4aa70" stroke-width="0.4" stroke-dasharray="3 4"/>'
+  +'<line x1="60" y1="0" x2="60" y2="80" stroke="#c4aa70" stroke-width="0.4" stroke-dasharray="3 4"/>'
+  +'<line x1="120" y1="0" x2="120" y2="80" stroke="#c4aa70" stroke-width="0.4" stroke-dasharray="3 4"/>'
+  +'<line x1="180" y1="0" x2="180" y2="80" stroke="#c4aa70" stroke-width="0.4" stroke-dasharray="3 4"/>'
+  +'<line x1="240" y1="0" x2="240" y2="80" stroke="#c4aa70" stroke-width="0.4" stroke-dasharray="3 4"/>'
+  /* landmasses — rough gestural shapes */
+  /* North America blob */
+  +'<path d="M10 15 Q40 8 80 12 Q100 18 90 35 Q85 50 70 55 Q50 60 30 52 Q10 44 8 30 Z" fill="#c8a860" stroke="#8a6820" stroke-width="0.8" opacity="0.7"/>'
+  /* small island — Belize */
+  +'<circle cx="62" cy="54" r="4" fill="#c8a860" stroke="#8a6820" stroke-width="0.8" opacity="0.7"/>'
+  /* Europe/Scandinavia blob */
+  +'<path d="M185 8 Q210 5 230 12 Q240 20 235 32 Q228 40 215 38 Q200 35 188 25 Q180 16 185 8 Z" fill="#c8a860" stroke="#8a6820" stroke-width="0.8" opacity="0.7"/>'
+  /* small Denmark detail */
+  +'<circle cx="218" cy="14" r="3.5" fill="#c8a860" stroke="#8a6820" stroke-width="0.7" opacity="0.9"/>'
+  /* Bornholm */
+  +'<circle cx="228" cy="18" r="2" fill="#c8a860" stroke="#8a6820" stroke-width="0.6" opacity="0.8"/>'
+  /* YOU ARE HERE — La Crosse */
+  +'<circle cx="52" cy="28" r="3.5" fill="#bd441f" stroke="#7a2810" stroke-width="1"/>'
+  +'<line x1="52" y1="28" x2="52" y2="14" stroke="#bd441f" stroke-width="1"/>'
+  +'<text x="55" y="12" font-family="serif" font-size="6" fill="#bd441f" font-style="italic">La Crosse</text>'
+  /* Brooklyn */
+  +'<circle cx="80" cy="22" r="2.5" fill="#574a37" stroke="#3a2e1a" stroke-width="0.8"/>'
+  +'<text x="83" y="21" font-family="serif" font-size="5.5" fill="#574a37" font-style="italic">Brooklyn</text>'
+  /* Denmark */
+  +'<circle cx="218" cy="14" r="2.5" fill="#255637" stroke="#1a3a22" stroke-width="0.8"/>'
+  +'<text x="221" y="13" font-family="serif" font-size="5" fill="#255637" font-style="italic">DK ✈</text>'
+  /* Belize */
+  +'<circle cx="62" cy="54" r="2" fill="#8f6219" stroke="#5a3e10" stroke-width="0.7"/>'
+  +'<text x="65" y="53" font-family="serif" font-size="5" fill="#8f6219" font-style="italic">Belize</text>'
+  /* Decorah */
+  +'<circle cx="55" cy="30" r="1.5" fill="#574a37" stroke="#3a2e1a" stroke-width="0.6" opacity="0.8"/>'
+  /* compass rose — top right */
+  +'<g transform="translate(275,18)">'
+  +'<line x1="0" y1="-12" x2="0" y2="12" stroke="#8a6820" stroke-width="1"/>'
+  +'<line x1="-12" y1="0" x2="12" y2="0" stroke="#8a6820" stroke-width="1"/>'
+  +'<polygon points="0,-12 3,-5 0,-2 -3,-5" fill="#bd441f"/>'
+  +'<polygon points="0,12 3,5 0,2 -3,5" fill="#8a6820"/>'
+  +'<text x="-2" y="-14" font-family="serif" font-size="6" fill="#bd441f">N</text>'
+  +'</g>'
+  /* title */
+  +'<text x="150" y="74" font-family="serif" font-size="5.5" fill="#8a6820" text-anchor="middle" font-style="italic" letter-spacing="1">CARTA · VITAE · MMXXVI</text>'
+  +'</svg>';
+}
+
+/* Full map for modal */
+function mapFullSVG(){
+ return '<svg class="map-full-svg" viewBox="0 0 700 380" xmlns="http://www.w3.org/2000/svg" style="background:#e8d8a8;">'
+  /* outer border - old map double rule */
+  +'<rect x="8" y="8" width="684" height="364" fill="none" stroke="#8a6820" stroke-width="2"/>'
+  +'<rect x="12" y="12" width="676" height="356" fill="none" stroke="#8a6820" stroke-width="0.6"/>'
+  /* subtle parchment texture via gradient */
+  +'<defs><radialGradient id="parch" cx="50%" cy="40%" r="70%"><stop offset="0%" stop-color="#f0e0b0" stop-opacity="0.5"/><stop offset="100%" stop-color="#c8a840" stop-opacity="0.15"/></radialGradient></defs>'
+  +'<rect x="12" y="12" width="676" height="356" fill="url(#parch)"/>'
+  /* map title block */
+  +'<text x="350" y="36" font-family="Georgia,serif" font-size="16" fill="#574a37" text-anchor="middle" font-weight="bold" letter-spacing="3">CARTA VITAE</text>'
+  +'<text x="350" y="50" font-family="Georgia,serif" font-size="9" fill="#8a6820" text-anchor="middle" font-style="italic" letter-spacing="2">A Map of the Gestation Places · MMXXVI</text>'
+  +'<line x1="200" y1="56" x2="500" y2="56" stroke="#8a6820" stroke-width="0.8"/>'
+  /* grid lines */
+  +[100,200,300,400,500,600].map(function(x){return '<line x1="'+x+'" y1="60" x2="'+x+'" y2="360" stroke="#c4aa70" stroke-width="0.4" stroke-dasharray="4 6" opacity="0.6"/>';}).join('')
+  +[100,150,200,250,300].map(function(y){return '<line x1="20" y1="'+y+'" x2="680" y2="'+y+'" stroke="#c4aa70" stroke-width="0.4" stroke-dasharray="4 6" opacity="0.6"/>';}).join('')
+  /* ─── LANDMASSES ─── */
+  /* North America — main body */
+  +'<path d="M30 70 Q90 60 150 68 Q200 75 230 100 Q250 120 240 160 Q230 200 210 230 Q190 260 160 270 Q130 278 100 265 Q70 250 50 220 Q28 188 25 150 Q22 110 30 70 Z" fill="#d4b870" stroke="#8a6820" stroke-width="1.2" opacity="0.8"/>'
+  /* Florida peninsula */
+  +'<path d="M175 230 Q185 250 178 275 Q172 290 165 282 Q158 268 162 248 Z" fill="#d4b870" stroke="#8a6820" stroke-width="0.8" opacity="0.8"/>'
+  /* Central America */
+  +'<path d="M145 270 Q155 285 148 300 Q142 308 135 300 Q130 288 135 275 Z" fill="#d4b870" stroke="#8a6820" stroke-width="0.8" opacity="0.8"/>'
+  /* Belize area island - Caye Caulker */
+  +'<ellipse cx="132" cy="295" rx="7" ry="4" fill="#d4b870" stroke="#8a6820" stroke-width="0.8" opacity="0.85"/>'
+  /* Cuba */
+  +'<path d="M168 280 Q195 275 205 282 Q208 288 195 292 Q178 294 168 288 Z" fill="#d4b870" stroke="#8a6820" stroke-width="0.8" opacity="0.7"/>'
+  /* Greenland */
+  +'<ellipse cx="310" cy="75" rx="55" ry="35" fill="#d4b870" stroke="#8a6820" stroke-width="1" opacity="0.6"/>'
+  /* Iceland */
+  +'<ellipse cx="370" cy="95" rx="20" ry="14" fill="#d4b870" stroke="#8a6820" stroke-width="0.9" opacity="0.7"/>'
+  /* Great Britain */
+  +'<path d="M440 110 Q455 105 462 118 Q465 130 458 140 Q450 148 440 142 Q432 132 434 118 Z" fill="#d4b870" stroke="#8a6820" stroke-width="0.9" opacity="0.8"/>'
+  /* Ireland */
+  +'<ellipse cx="430" cy="128" rx="9" ry="12" fill="#d4b870" stroke="#8a6820" stroke-width="0.8" opacity="0.75"/>'
+  /* Scandinavia */
+  +'<path d="M490 70 Q520 65 540 80 Q555 95 548 120 Q540 145 525 155 Q508 160 498 145 Q488 128 486 105 Q484 85 490 70 Z" fill="#d4b870" stroke="#8a6820" stroke-width="1" opacity="0.8"/>'
+  /* Denmark peninsula */
+  +'<path d="M487 130 Q494 125 498 133 Q498 142 492 144 Q486 142 485 135 Z" fill="#d4b870" stroke="#8a6820" stroke-width="0.9" opacity="0.9"/>'
+  /* Bornholm island */
+  +'<ellipse cx="506" cy="148" rx="8" ry="5" fill="#d4b870" stroke="#8a6820" stroke-width="0.8" opacity="0.85"/>'
+  /* Europe mainland */
+  +'<path d="M455 140 Q490 145 530 155 Q560 165 570 185 Q575 205 560 220 Q540 232 515 228 Q490 222 472 205 Q455 188 452 168 Q450 152 455 140 Z" fill="#d4b870" stroke="#8a6820" stroke-width="1" opacity="0.75"/>'
+  /* NJ blob */
+  +'<ellipse cx="192" cy="175" rx="4" ry="6" fill="#c8a860" stroke="#8a6820" stroke-width="0.7" opacity="0.9"/>'
+
+  /* ─── DECORATIVE ELEMENTS ─── */
+  /* mountain ranges - hand-drawn style */
+  +'<g stroke="#a08030" stroke-width="0.8" fill="none" opacity="0.5">'
+  +'<path d="M100 180 L108 168 L116 180"/><path d="M112 180 L120 166 L128 180"/>'
+  +'<path d="M55 160 L62 150 L69 160"/><path d="M66 160 L73 148 L80 160"/>'
+  +'</g>'
+  /* sea serpent decorative */
+  +'<path d="M280 200 Q300 188 320 200 Q340 212 360 198 Q380 184 400 198" stroke="#8a9860" stroke-width="1.2" fill="none" opacity="0.4" stroke-dasharray="1 3"/>'
+  +'<text x="310" y="185" font-family="Georgia,serif" font-size="7" fill="#8a9860" font-style="italic" opacity="0.5">OCEANUS</text>'
+
+  /* ─── PLACE MARKERS ─── */
+  /* YOU ARE HERE — La Crosse, WI */
+  +'<g transform="translate(118,180)">'
+  +'<circle r="7" fill="#bd441f" stroke="#7a2810" stroke-width="1.5"/>'
+  +'<circle r="2.5" fill="#f4ecd6"/>'
+  +'<line x1="0" y1="-7" x2="0" y2="-22" stroke="#bd441f" stroke-width="1.2"/>'
+  +'<rect x="-18" y="-38" width="36" height="14" fill="#bd441f" stroke="#7a2810" stroke-width="0.8" rx="1"/>'
+  +'<text x="0" y="-27" font-family="Georgia,serif" font-size="7" fill="#f4ecd6" text-anchor="middle" font-weight="bold">HERE</text>'
+  +'<text x="0" y="16" font-family="Georgia,serif" font-size="8" fill="#7a2810" text-anchor="middle" font-style="italic">La Crosse</text>'
+  +'<text x="0" y="26" font-family="Georgia,serif" font-size="6" fill="#8a6820" text-anchor="middle">Wisconsin</text>'
+  +'</g>'
+  /* Brooklyn / Dumbo */
+  +'<g transform="translate(190,170)">'
+  +'<circle r="5" fill="#574a37" stroke="#3a2e1a" stroke-width="1"/>'
+  +'<circle r="2" fill="#e8d8a8"/>'
+  +'<text x="8" y="-6" font-family="Georgia,serif" font-size="8.5" fill="#372d20" font-style="italic" font-weight="bold">Dumbo, Brooklyn</text>'
+  +'<text x="8" y="4" font-family="Georgia,serif" font-size="6.5" fill="#8a6820">the meat palace</text>'
+  +'</g>'
+  /* NJ / Essex County */
+  +'<g transform="translate(192,175)">'
+  +'<circle r="3" fill="#8a7050" stroke="#5a4a30" stroke-width="0.8"/>'
+  +'<text x="-35" y="12" font-family="Georgia,serif" font-size="6.5" fill="#574a37" font-style="italic">Essex Co., NJ</text>'
+  +'</g>'
+  /* East/West Village */
+  +'<g transform="translate(188,172)">'
+  +'<circle r="2" fill="#a08050" stroke="#6a5030" stroke-width="0.7"/>'
+  +'<text x="-50" y="-6" font-family="Georgia,serif" font-size="6" fill="#574a37" font-style="italic">E+W Village</text>'
+  +'</g>'
+  /* Decorah, Iowa */
+  +'<g transform="translate(108,175)">'
+  +'<circle r="4" fill="#3a6b4d" stroke="#255637" stroke-width="1"/>'
+  +'<circle r="1.5" fill="#e8d8a8"/>'
+  +'<text x="-40" y="14" font-family="Georgia,serif" font-size="7.5" fill="#255637" font-style="italic">Decorah</text>'
+  +'<text x="-40" y="23" font-family="Georgia,serif" font-size="6" fill="#8a6820">Iowa · recurring</text>'
+  +'</g>'
+  /* Caye Caulker / Belize City */
+  +'<g transform="translate(132,295)">'
+  +'<circle r="5" fill="#8f6219" stroke="#5a3e10" stroke-width="1"/>'
+  +'<circle r="2" fill="#e8d8a8"/>'
+  +'<text x="10" y="-2" font-family="Georgia,serif" font-size="8" fill="#6a4810" font-style="italic" font-weight="bold">Caye Caulker</text>'
+  +'<text x="10" y="8" font-family="Georgia,serif" font-size="6.5" fill="#8a6820">Belize · gestation</text>'
+  +'</g>'
+  /* Denmark */
+  +'<g transform="translate(490,134)">'
+  +'<circle r="6" fill="#255637" stroke="#1a3a22" stroke-width="1.2"/>'
+  +'<circle r="2.2" fill="#e8d8a8"/>'
+  +'<line x1="0" y1="-6" x2="0" y2="-20" stroke="#255637" stroke-width="1"/>'
+  +'<text x="-30" y="-22" font-family="Georgia,serif" font-size="9" fill="#1a3a22" font-style="italic" font-weight="bold">Denmark</text>'
+  +'<text x="-30" y="-12" font-family="Georgia,serif" font-size="6.5" fill="#8a6820">✈ Jun 12–16 · Nikolaj</text>'
+  +'</g>'
+  /* Bornholm */
+  +'<g transform="translate(506,148)">'
+  +'<circle r="4" fill="#3a6b4d" stroke="#255637" stroke-width="0.9"/>'
+  +'<circle r="1.5" fill="#e8d8a8"/>'
+  +'<text x="10" y="4" font-family="Georgia,serif" font-size="7.5" fill="#255637" font-style="italic">Bornholm</text>'
+  +'</g>'
+
+  /* ─── COMPASS ROSE ─── */
+  +'<g transform="translate(630,310)">'
+  /* outer ring */
+  +'<circle r="34" fill="none" stroke="#8a6820" stroke-width="0.8" stroke-dasharray="2 3"/>'
+  +'<circle r="28" fill="none" stroke="#8a6820" stroke-width="0.5"/>'
+  /* cardinal arms */
+  +'<polygon points="0,-28 4,-8 0,-4 -4,-8" fill="#bd441f" stroke="#7a2810" stroke-width="0.5"/>'
+  +'<polygon points="0,28 4,8 0,4 -4,8" fill="#c8a860" stroke="#8a6820" stroke-width="0.5"/>'
+  +'<polygon points="28,0 8,4 4,0 8,-4" fill="#c8a860" stroke="#8a6820" stroke-width="0.5"/>'
+  +'<polygon points="-28,0 -8,4 -4,0 -8,-4" fill="#c8a860" stroke="#8a6820" stroke-width="0.5"/>'
+  /* ordinal arms */
+  +'<polygon points="20,-20 8,-6 4,-10" fill="#d4b870" stroke="#8a6820" stroke-width="0.5"/>'
+  +'<polygon points="20,20 8,6 4,10" fill="#d4b870" stroke="#8a6820" stroke-width="0.5"/>'
+  +'<polygon points="-20,20 -8,6 -4,10" fill="#d4b870" stroke="#8a6820" stroke-width="0.5"/>'
+  +'<polygon points="-20,-20 -8,-6 -4,-10" fill="#d4b870" stroke="#8a6820" stroke-width="0.5"/>'
+  /* center */
+  +'<circle r="4" fill="#bd441f" stroke="#7a2810" stroke-width="0.8"/>'
+  /* N label */
+  +'<text x="-3" y="-32" font-family="Georgia,serif" font-size="9" fill="#bd441f" font-weight="bold">N</text>'
+  +'<text x="-2.5" y="40" font-family="Georgia,serif" font-size="7" fill="#8a6820">S</text>'
+  +'<text x="30" y="3" font-family="Georgia,serif" font-size="7" fill="#8a6820">E</text>'
+  +'<text x="-36" y="3" font-family="Georgia,serif" font-size="7" fill="#8a6820">W</text>'
+  +'</g>'
+
+  /* ─── LEGEND ─── */
+  +'<g transform="translate(25,300)">'
+  +'<rect width="130" height="52" fill="#e0cc90" stroke="#8a6820" stroke-width="0.8" rx="1"/>'
+  +'<text x="65" y="12" font-family="Georgia,serif" font-size="7" fill="#574a37" text-anchor="middle" letter-spacing="1" font-style="italic">LEGENDA</text>'
+  +'<circle cx="16" cy="22" r="5" fill="#bd441f" stroke="#7a2810" stroke-width="0.8"/>'
+  +'<text x="26" y="26" font-family="Georgia,serif" font-size="7" fill="#372d20">Present location</text>'
+  +'<circle cx="16" cy="36" r="4" fill="#255637" stroke="#1a3a22" stroke-width="0.8"/>'
+  +'<text x="26" y="40" font-family="Georgia,serif" font-size="7" fill="#372d20">Gestation place</text>'
+  +'<circle cx="16" cy="48" r="3.5" fill="#574a37" stroke="#3a2e1a" stroke-width="0.7"/>'
+  +'<text x="26" y="52" font-family="Georgia,serif" font-size="7" fill="#372d20">Home base</text>'
+  +'</g>'
+
+  /* cartouche footer */
+  +'<text x="350" y="360" font-family="Georgia,serif" font-size="7" fill="#8a6820" text-anchor="middle" font-style="italic" letter-spacing="1">Fecit pro usum Gabelis · MMXXVI · These are the places where the work happens</text>'
+  +'</svg>';
+}
+
+/* ════════ PORTALS ════════ */
 function renderPortals(){
  document.getElementById('portals').innerHTML=PORTALS.map(function(p){
-  var click=p.id==='calendar'?'openSchedule()':(p.id==='library'?"openLibrary()":(p.id==='creative'?"openCreative()":(p.id==='fridge'?"openFridge()":(p.id==='closet'?"openCloset()":"openModal('"+p.id+"')"))));
-  var sub=ADV[p.id]?'Advisor: '+ADV[p.id].name:(p.id==='library'?'Full lists':(p.id==='calendar'?'Today + month':(p.id==='fridge'?'Food + grocery':(p.id==='closet'?'Depop + wishlist':'Open'))));
-  return '<div class="portal" onclick="'+click+'"><div class="portal-top"><span class="portal-no">'+p.no+'</span><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--terra)" stroke-width="1.5"><circle cx="12" cy="12" r="9.5"/><circle cx="12" cy="12" r="1.6" fill="var(--terra)"/></svg></div><div class="portal-mid"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">'+glyphs[p.id]+'</svg></div><div class="portal-foot"><div class="portal-dept">'+p.dept+'</div><div class="portal-title">'+p.title+'</div><div class="portal-adv">'+sub+'</div></div></div>';
+  var extraClass='';
+  if(p.id==='fridge')extraClass=' portal-fridge';
+  if(p.id==='closet')extraClass=' portal-closet';
+  if(p.id==='map')extraClass=' portal-map';
+  var click=p.id==='calendar'?'openSchedule()':(p.id==='library'?"openLibrary()":(p.id==='creative'?"openCreative()":(p.id==='fridge'?"openFridge()":(p.id==='closet'?"openCloset()":(p.id==='map'?"openMap()":"openModal('"+p.id+"')")))));
+  var sub=ADV[p.id]?'Advisor: '+ADV[p.id].name:(p.id==='library'?'Full lists':(p.id==='calendar'?'Today + month':(p.id==='fridge'?'Food + grocery':(p.id==='closet'?'Depop + wishlist':(p.id==='map'?'Gestation places':'Open')))));
+  var midContent=p.id==='map'
+   ?mapMiniSVG()
+   :'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">'+glyphs[p.id]+'</svg>';
+  var midClass=p.id==='map'?'portal-mid" style="padding:0':'portal-mid';
+  return '<div class="portal'+extraClass+'" onclick="'+click+'"><div class="portal-top"><span class="portal-no">'+p.no+'</span><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--terra)" stroke-width="1.5"><circle cx="12" cy="12" r="9.5"/><circle cx="12" cy="12" r="1.6" fill="var(--terra)"/></svg></div><div class="'+midClass+'">'+midContent+'</div><div class="portal-foot"><div class="portal-dept">'+p.dept+'</div><div class="portal-title">'+p.title+'</div><div class="portal-adv">'+sub+'</div></div></div>';
  }).join('');
 }
+
+/* ════════ MAP MODAL ════════ */
+function openMap(){
+ document.getElementById('m-no').textContent='No. 13';
+ document.getElementById('m-title').textContent='The Map';
+ document.getElementById('m-dept').textContent='Soul · Gestation Places';
+ document.getElementById('m-body').innerHTML=
+  mapFullSVG()
+  +'<ul class="map-place-list">'
+  +'<li><span class="mk">La Crosse, WI</span><span class="mv">Present location · with Connor<span class="msub">Wisconsin · home ground · working</span></span></li>'
+  +'<li><span class="mk">Dumbo, Brooklyn</span><span class="mv">The meat palace · home base<span class="msub">Where the city life is · Leo + Gus</span></span></li>'
+  +'<li><span class="mk">East + West Village</span><span class="mv">The city within the city<span class="msub">Wandering ground · restaurants · old New York</span></span></li>'
+  +'<li><span class="mk">Essex County, NJ</span><span class="mv">Out of the city, into the trees<span class="msub">Recurring escape · quiet</span></span></li>'
+  +'<li><span class="mk">Decorah, Iowa</span><span class="mv">Recurring gestation place<span class="msub">Nordic Midwest · landscape feeds the work</span></span></li>'
+  +'<li><span class="mk">Denmark</span><span class="mv">Where The Drinker was made · Jun 12–16 ✈<span class="msub">Nikolaj · rent delivery · Scandinavian light</span></span></li>'
+  +'<li><span class="mk">Bornholm</span><span class="mv">The island beyond Denmark<span class="msub">Baltic · rough + quiet · on the list</span></span></li>'
+  +'<li><span class="mk">Caye Caulker, Belize</span><span class="mv">Warm water · open sky · gestation<span class="msub">Belize City · Ambergris Caye · the Caribbean side of the work</span></span></li>'
+  +'</ul>';
+ document.getElementById('m-advisor').innerHTML='';
+ document.getElementById('m-body').scrollTop=0;
+ openScrim();
+}
+
+/* ════════ LISTEN / STRATEGY / QUOTE ════════ */
 function renderListen(){
  var d=new Date().getDay(),list=LISTEN[d]||[];
  document.getElementById('lp-day').textContent=WD[d];
@@ -489,7 +804,7 @@ var CUED=null;
 function cueListen(d,i){var it=LISTEN[d][i];CUED=it;document.getElementById('lp-now').innerHTML='<div class="lp-play">▶</div><div class="lp-now-t">'+it.t+'</div><div class="lp-now-d">'+it.dur+' · tap to play on YouTube</div>';document.getElementById('lp-cap').textContent='Cued: '+it.t;}
 function playCued(){if(CUED)window.open('https://www.youtube.com/results?search_query='+encodeURIComponent(CUED.q),'_blank');}
 function drawStrat(){document.getElementById('stratText').textContent=STRATS[Math.floor(Math.random()*STRATS.length)];}
-function drawQuote(){var q=QUOTES[Math.floor(Math.random()*QUOTES.length)];document.getElementById('quoteText').textContent='“'+q.q+'”';document.getElementById('quoteBy').textContent='— '+q.by;}
+function drawQuote(){var q=QUOTES[Math.floor(Math.random()*QUOTES.length)];document.getElementById('quoteText').textContent='"'+q.q+'"';document.getElementById('quoteBy').textContent='— '+q.by;}
 
 /* ════════ MODAL CONTENT ════════ */
 function modalBody(id){
@@ -532,7 +847,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){if(document
 function openSchedule(){
  document.getElementById('m-no').textContent='No. 02';document.getElementById('m-title').textContent='Schedule';document.getElementById('m-dept').textContent='Today + Month';
  var ci=curIndex();
- var html='<h3>Today — '+WD[new Date().getDay()]+'</h3><ul class="day-tt">'+TT.map(function(it,i){return '<li class="'+(i===ci?'is-now':'')+'"><span class="k">'+it.s+'–'+it.e+'</span><span>'+it.t+(it.d?' · <em style="color:var(--ink3)">'+it.d+'</em>':'')+'</span></li>';}).join('')+'</ul><h3>This Month</h3>'+monthGrid()+'<p style="margin-top:8px"><em>Synced from your Google Calendar (lonningb10@gmail.com → iPhone). Hit “Connect live” on the dashboard to pull real-time.</em></p>';
+ var html='<h3>Today — '+WD[new Date().getDay()]+'</h3><ul class="day-tt">'+TT.map(function(it,i){return '<li class="'+(i===ci?'is-now':'')+'"><span class="k">'+it.s+'–'+it.e+'</span><span>'+it.t+(it.d?' · <em style="color:var(--ink3)">'+it.d+'</em>':'')+'</span></li>';}).join('')+'</ul><h3>This Month</h3>'+monthGrid()+'<p style="margin-top:8px"><em>Synced from your Google Calendar (lonningb10@gmail.com → iPhone). Hit "Connect live" on the dashboard to pull real-time.</em></p>';
  document.getElementById('m-body').innerHTML=html;document.getElementById('m-advisor').innerHTML='';document.getElementById('m-body').scrollTop=0;openScrim();
 }
 function monthGrid(){
@@ -544,7 +859,7 @@ function monthGrid(){
  return h+'</tr></tbody></table>';
 }
 
-/* LIBRARY (collapsible wiki) */
+/* LIBRARY */
 function openLibrary(){
  document.getElementById('m-no').textContent='No. 10';document.getElementById('m-title').textContent='Library';document.getElementById('m-dept').textContent='Reference · full lists';
  document.getElementById('m-body').innerHTML=libraryHTML();document.getElementById('m-advisor').innerHTML='';document.getElementById('m-body').scrollTop=0;openScrim();
@@ -560,7 +875,7 @@ function libraryHTML(){
   +bk('var(--gold)','Daily Forever','Chekhov · Wodehouse · Dhammapada','One Dhammapada chapter every day.')
   +'</div></details>';
  var music='<details class="lib"><summary>Music — Listening Schedule <span class="cnt">— by weekday</span></summary><div class="lib-body">'
-  +[0,1,2,3,4,5,6].map(function(d){return '<ul style="margin-bottom:6px"><li style="border:none;padding-bottom:0"><span class="k">'+WD[d]+'</span><span class="vv">'+ (LISTEN[d]||[]).map(function(it){return it.t+' <em>('+it.dur+')</em>';}).join(' · ')+'</span></li></ul>';}).join('')
+  +[0,1,2,3,4,5,6].map(function(d){return '<ul style="margin-bottom:6px"><li style="border:none;padding-bottom:0"><span class="k">'+WD[d]+'</span><span class="vv">'+(LISTEN[d]||[]).map(function(it){return it.t+' <em>('+it.dur+')</em>';}).join(' · ')+'</span></li></ul>';}).join('')
   +'<p style="font-size:12px"><em>Practice: guitar + piano 30–45 min daily; blues → jazz → bluegrass → gypsy; long arc Schubert D.960.</em></p></div></details>';
  var hair='<details class="lib"><summary>Hair & Skin — Full Guide <span class="cnt">— protocol + routine</span></summary><div class="lib-body">'
   +'<h3>Core Principle</h3><p>Blow dry for volume, hat on damp to shape, remove for a natural result — the hat molds the hair as it finishes drying underneath.</p>'
@@ -642,10 +957,7 @@ function sendAdvisor(id){
  .catch(function(){tk.remove();box.insertAdjacentHTML('beforeend',bubHTML(id,'assistant','Connection issue. On the live site, point CLAUDE_ENDPOINT at your Render backend so the key stays server-side.'));box.scrollTop=box.scrollHeight;if(btn)btn.disabled=false;});
 }
 
-/* ════════ LIVE GOOGLE CALENDAR (scaffold) ════════
-   To enable: 1) create an OAuth Client ID at console.cloud.google.com (Web app),
-   add your Netlify origin to Authorized JavaScript origins; 2) paste it into
-   GCAL_CLIENT_ID above. Then this pulls today's real events into the schedule. */
+/* ════════ CALENDAR SCAFFOLD ════════ */
 function connectCalendar(e){
  if(e)e.stopPropagation();
  if(!GCAL_CLIENT_ID){alert("Live calendar isn't configured yet.\n\nTo turn it on:\n1. console.cloud.google.com → create an OAuth Client ID (Web).\n2. Add your Netlify URL to Authorized JavaScript origins.\n3. Paste the Client ID into GCAL_CLIENT_ID at the top of the script.\n\nUntil then the schedule is seeded from your real calendar.");return;}
@@ -662,7 +974,7 @@ function fetchCal(token){
  }).catch(function(){document.getElementById('cal-status').textContent='Live fetch failed — using seed';});
 }
 
-/* ════════ LIVE FINANCE (Plaid via Render backend) ════════ */
+/* ════════ FINANCE ════════ */
 var PLAID_BACKEND='https://lifeos-backend-nf15.onrender.com';
 function resetFinBtn(b){if(b){b.textContent='🏦 Connect bank';b.disabled=false;}}
 function finShowLive(){var c=document.getElementById('fin-connect'),l=document.getElementById('fin-live');if(c)c.style.display='none';if(l)l.style.display='block';}
@@ -671,24 +983,19 @@ function lsGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
 function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
 function lsDel(k){try{localStorage.removeItem(k);}catch(e){}}
 function loToast(msg){var t=document.getElementById('lo-toast');if(!t){t=document.createElement('div');t.id='lo-toast';t.style.cssText='position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--green);color:var(--paper);font-family:IBM Plex Mono,monospace;font-size:12px;letter-spacing:.04em;padding:10px 16px;border:1.5px solid var(--ink);z-index:400;box-shadow:3px 3px 0 var(--shadow);';document.body.appendChild(t);}t.textContent=msg;return t;}
-/* HOSTED LINK: send the user to Plaid's own page; catch them on return. */
 function connectBank(){
  var btn=document.getElementById('fin-connect-btn');
  if(btn){btn.textContent='Opening…';btn.disabled=true;}
  fetch(PLAID_BACKEND+'/create_link_token',{method:'POST',headers:{'Content-Type':'application/json'}})
   .then(function(r){return r.json();}).then(function(data){
    if(!data.hosted_link_url){alert('Backend error: '+JSON.stringify(data));resetFinBtn(btn);return;}
-   lsSet('plaid_link_token',data.link_token);
-   lsSet('plaid_hosted','1');
-   window.location.href=data.hosted_link_url;   // Plaid hosts the whole bank login
+   lsSet('plaid_link_token',data.link_token);lsSet('plaid_hosted','1');
+   window.location.href=data.hosted_link_url;
   }).catch(function(){alert('Could not reach the backend — it may be waking up. Wait ~30s and retry.');resetFinBtn(btn);});
 }
-/* On return from Plaid's hosted page, finish the connection automatically. */
 function checkHostedReturn(){
- if(lsGet('plaid_hosted')!=='1')return;
- lsDel('plaid_hosted');
- var lt=lsGet('plaid_link_token');
- if(!lt)return;
+ if(lsGet('plaid_hosted')!=='1')return;lsDel('plaid_hosted');
+ var lt=lsGet('plaid_link_token');if(!lt)return;
  var t=loToast('Finishing bank connection…');
  fetch(PLAID_BACKEND+'/finish_link',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({link_token:lt})})
   .then(function(r){return r.json();}).then(function(d){
@@ -719,7 +1026,7 @@ function finUpdateCap(txs){
  if(fill){fill.style.width=Math.min(100,spent/cap*100)+'%';fill.className='fin-cap-fill'+(spent>cap?' over':'');}
 }
 
-/* ════════ WORKOUT WEEK (from your training-week file) ════════ */
+/* ════════ WORKOUT ════════ */
 var WK_DAYMAP={SUN:0,MON:1,TUE:2,WED:3,THU:4,FRI:5,SAT:6};
 var WORKOUT_WEEK=[
  {d:"MON",ttl:"Rest",focus:"Recovery + creatine. Stay loose.",rest:true,blocks:[{name:"Rest",ex:[{nm:"Walk / mobility",rx:"optional",tip:"Light movement only. Eat well, hit protein, sleep."}]}]},
@@ -770,9 +1077,8 @@ function openSimpleModal(no,title,dept,bodyHTML){
  document.getElementById('m-advisor').innerHTML='';
  document.getElementById('m-body').scrollTop=0;openScrim();
 }
-/* Fridge — running food + grocery list */
 var FRIDGE_KEY='lifeos_fridge_v1';
-function loadFridge(){try{return JSON.parse(lsGet(FRIDGE_KEY)||'[]');}catch(e){return [];}}
+function loadFridge(){try{return JSON.parse(lsGet(FRIDGE_KEY)||'[]');}catch(e){return[];}}
 function saveFridge(d){lsSet(FRIDGE_KEY,JSON.stringify(d));}
 function fridgeItemHTML(it,i){return '<li class="ck'+(it.done?' done':'')+'"><span onclick="toggleFridge('+i+')" style="cursor:pointer;flex:1">'+(it.done?'✓ ':'○ ')+esc(it.t)+'</span><button class="del-x" onclick="delFridge('+i+')">✕</button></li>';}
 function refreshFridge(){var ul=document.getElementById('fridge-list');if(ul)ul.innerHTML=loadFridge().map(fridgeItemHTML).join('');}
@@ -783,9 +1089,8 @@ function openFridge(){
  openSimpleModal('No. 11','Fridge','Provisions','<p style="margin-bottom:4px"><em>Running food + grocery list. Tap to check off; adds save automatically.</em></p><div class="add-row"><input id="fridge-input" placeholder="Add — eggs, oats, olive oil…" onkeydown="if(event.key===\'Enter\')addFridge()"><button onclick="addFridge()">Add</button></div><ul id="fridge-list">'+loadFridge().map(fridgeItemHTML).join('')+'</ul>');
  var i=document.getElementById('fridge-input');if(i)setTimeout(function(){i.focus();},50);
 }
-/* Closet — shop links + wishlist */
 var CLOSET_KEY='lifeos_closet_v1';
-function loadCloset(){try{return JSON.parse(lsGet(CLOSET_KEY)||'[]');}catch(e){return [];}}
+function loadCloset(){try{return JSON.parse(lsGet(CLOSET_KEY)||'[]');}catch(e){return[];}}
 function saveCloset(d){lsSet(CLOSET_KEY,JSON.stringify(d));}
 function closetItemHTML(it,i){return '<li class="ck'+(it.done?' done':'')+'"><span onclick="toggleCloset('+i+')" style="cursor:pointer;flex:1">'+(it.done?'✓ ':'○ ')+esc(it.t)+'</span><button class="del-x" onclick="delCloset('+i+')">✕</button></li>';}
 function refreshCloset(){var ul=document.getElementById('closet-list');if(ul)ul.innerHTML=loadCloset().map(closetItemHTML).join('');}

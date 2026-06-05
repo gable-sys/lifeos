@@ -348,8 +348,8 @@ body.night .sc-lbl{background:rgba(22,19,14,0.9);}
     <div class="timetable-row">
       <div class="tt-cell"><div class="label">Date</div><div class="v" id="td-date">—</div></div>
       <div class="tt-cell"><div class="label">Time</div><div class="v mono" id="td-time">—</div></div>
-      <div class="tt-cell"><div class="label">Current Block</div><div class="v terra" id="td-task">—</div></div>
-      <div class="tt-cell"><div class="label">Budget Remaining</div><div class="v" id="td-budget">—<small id="td-budget-sub"></small></div></div>
+      <div class="tt-cell" onclick="openFinance()" style="cursor:pointer" title="Open Finance"><div class="label">Balance ↗</div><div class="v terra" id="td-balance">$—<small id="td-balance-sub">tap for Finance</small></div></div>
+      <div class="tt-cell" onclick="openFinance()" style="cursor:pointer" title="Open Finance"><div class="label">Budget Remaining ↗</div><div class="v" id="td-budget">—<small id="td-budget-sub"></small></div></div>
     </div>
   </div>
 
@@ -455,7 +455,7 @@ function toggleNight(){
 
 /* ════════ ADVISORS ════════ */
 var ADV={
- finance:{name:'Constance',role:'Director of Treasury',avatar:'C',sys:"You are Constance, Director of Treasury for Gable's Life OS. Precise, warm, like a trusted private financial advisor. Balance $163; debts — Connor $2,573 (clears Jun 1), Kealy $300 ASAP, Gus $1,100 slow via PayPal; Connor sends $500 Apr 14; Brooklyn rent paid through April; NYC trip Apr 16-17 grab ~$1,000 cash on arrival. Daily cap $15 Wisconsin / $20 NYC. Income ~$65-70k/yr (Health Benefits 360). Goal $10-15k buffer by year end BEFORE investing; Phase 2 is $500/mo Roth IRA + $500/mo S&P. Bank: Bank of America via Plaid. 2-4 sentences."},
+ finance:{name:'Mort Silber',role:'Senior Financial Advisor',avatar:'💰',sys:"You are Mort Silber, Senior Financial Advisor for Gable's Life OS. Semi-retired, sharp, warm but direct — like a sharp Jewish uncle who's seen everything and genuinely wants you to win. You are not a yes-man. You will call out bad spending. Current balance: $200. Location: La Crosse WI (daily cap $15), moving back to Brooklyn mid-June (cap $20). Income: ~$65-70k/yr from Health Benefits 360, paid by brother Connor roughly on the 11th and 27th. Upcoming: Connor check ~$1,800 Jun 13, Leo rent share ~$1,200 Jun 15, Brooklyn rent to Nikolaj $2,200 Jun 15, La Crosse lease ends Jun 30. Denmark trip Jun 12-16 (costs split with Giri). Brooklyn rent split: Leo+Gus pay ~$1,200, Gable covers ~$1,000. Money goals in order: 1) $1,000 emergency buffer ASAP, 2) Discover it Secured card to rebuild credit — apply when buffer hits $500, use for gas/groceries and pay in full monthly, 3) $10-15k buffer by year end BEFORE investing, 4) Then $500/mo Roth IRA at Fidelity in FXAIX + $500/mo S&P. Be specific, use actual numbers, call out when he's being financially sloppy. 3-5 sentences max."},
  workout:{name:'Viktor',role:'Director of Athletic Performance',avatar:'V',sys:"You are Viktor, Director of Athletic Performance for Gable. Direct, motivating. Week 2 — wider shoulders/chest/abs, dumbbells + pull-up bar. Split: Sun Shoulders+Chest+Light Legs, Mon Sprints+Leg Finisher, Tue Rest, Wed Shoulders+Chest+Light Legs (hardest), Thu Pull-ups+Abs, Fri Pull-ups+Chest+Light Legs, Sat Shoulders Heavy+Abs. Keys: elevated pike push-ups (feet on chair, hips high) anterior delt; lateral raises lead pinky slow negative drop sets; wide-grip pull-ups V-taper. Protein within 45min. 8hr sleep. 2-4 sentences."},
  music:{name:'Marguerite',role:'Director of Music',avatar:'M',sys:"You are Marguerite, Director of Music for Gable. Warm, exacting listening companion and practice coach. He studies guitar + piano (long arc Schubert D.960), practices 30-45min daily, deep-listens by weekday: Bach Goldberg (Gould '81), Delta blues (Robert Johnson, Muddy Waters), Norwegian Hardanger folk, Indian classical morning ragas (Ravi Shankar), jazz (Miles, Evans, Monk, Coltrane), Great American Songbook (Ella, Billie, Sinatra), Beethoven late quartets, Shostakovich No.8, Brahms Op.118. Sunday = free listening, no analysis, no guitar. Guide active listening. 2-4 sentences."},
  reading:{name:'Professor Aldous',role:'Director of Letters',avatar:'A',sys:"You are Professor Aldous, Director of Letters for Gable. Erudite, encouraging, never preachy. He reads ~2hrs daily: KJV Bible (Job->Psalms->Gospels), Shelby Foote The Civil War Vol I, Homer (Iliad/the Oresteia), Robert Caro The Path to Power, Thucydides (Melian Dialogue), one Dhammapada chapter daily, plus Chekhov and Wodehouse. Discuss passages, give context, connect works, suggest what's next. 2-4 sentences."},
@@ -535,7 +535,7 @@ function curIndex(){var n=new Date(),m=n.getHours()*60+n.getMinutes(),idx=0;for(
 
 function paintNow(){
  var i=curIndex(),c=TT[i],p=TT[i-1],nx=TT[i+1];
- document.getElementById('td-task').textContent=c.t;
+ // td-task removed
  document.getElementById('prevTask').innerHTML=p?'<span class="t mono">'+p.s+'</span><span class="n">'+p.t+'</span>':'<span class="t mono">—:—</span><span class="n">— before waking —</span>';
  document.getElementById('curTask').innerHTML='<div class="clock">'+c.s+'</div><div class="meat"><h3>'+c.t+'</h3>'+(c.d?'<p>'+c.d+'</p>':'')+'<span class="dept">'+c.dept+'</span></div>';
  document.getElementById('nextTask').innerHTML=nx?'<span class="t mono">'+nx.s+'</span><span class="n">'+nx.t+'</span>':'<span class="t mono">—:—</span><span class="n">— rest —</span>';
@@ -547,8 +547,17 @@ function paintHeader(){
  document.getElementById('foot-stamp').textContent='Rendered '+n.toLocaleString();
  (function clk(){document.getElementById('td-time').textContent=pad(new Date().getHours())+':'+pad(new Date().getMinutes())+':'+pad(new Date().getSeconds());})();
  setInterval(function(){document.getElementById('td-time').textContent=pad(new Date().getHours())+':'+pad(new Date().getMinutes())+':'+pad(new Date().getSeconds());},1000);
- var cap=15;document.getElementById('td-budget').firstChild.textContent='$'+cap+' ';
- document.getElementById('td-budget-sub').textContent='of $'+cap+' daily cap · Onalaska, WI';
+ var cap=15;
+ var finData=loadFin();
+ var bal=finData?finData.balance:0;
+ var balEl=document.getElementById('td-balance');
+ if(balEl){balEl.firstChild.textContent='$'+Math.abs(bal).toFixed(0)+' ';balEl.style.color=bal>=0?'var(--green)':'var(--terra)';}
+ var balSub=document.getElementById('td-balance-sub');
+ // Find next upcoming item
+ var nextUp=UPCOMING.filter(function(u){return u.amount!==0;})[0];
+ if(balSub)balSub.textContent=nextUp?(nextUp.amount>0?'Next: +$':' Next: -$')+Math.abs(nextUp.amount)+' '+nextUp.date:'tap for Finance';
+ var bdg=document.getElementById('td-budget');if(bdg&&bdg.firstChild)bdg.firstChild.textContent='$'+cap+' ';
+ var bdgSub=document.getElementById('td-budget-sub');if(bdgSub)bdgSub.textContent='of $'+cap+' daily cap WI';
 }
 function paintSky(){
  var n=new Date(),hr=n.getHours()+n.getMinutes()/60,day=hr>=6&&hr<19;
@@ -778,8 +787,8 @@ function renderPortals(){
   if(p.id==='fridge')extraClass=' portal-fridge';
   if(p.id==='closet')extraClass=' portal-closet';
   if(p.id==='map')extraClass=' portal-map';
-  var click=p.id==='calendar'?'openSchedule()':(p.id==='library'?"openLibrary()":(p.id==='creative'?"openCreative()":(p.id==='fridge'?"openFridge()":(p.id==='closet'?"openCloset()":(p.id==='map'?"openMap()":"openModal('"+p.id+"')")))));
-  var sub=ADV[p.id]?'Advisor: '+ADV[p.id].name:(p.id==='library'?'Full lists':(p.id==='calendar'?'Today + month':(p.id==='fridge'?'Food + grocery':(p.id==='closet'?'Depop + wishlist':(p.id==='map'?'Gestation places':'Open')))));
+  var click=p.id==='calendar'?'openSchedule()':(p.id==='library'?"openLibrary()":(p.id==='creative'?"openCreative()":(p.id==='fridge'?"openFridge()":(p.id==='closet'?"openCloset()":(p.id==='map'?"openMap()":(p.id==='finance'?"openFinance()":"openModal('"+p.id+"')"))))));
+  var sub=ADV[p.id]?'Advisor: '+ADV[p.id].name:(p.id==='library'?'Full lists':(p.id==='calendar'?'Today + month':(p.id==='fridge'?'Food + grocery':(p.id==='closet'?'Depop + wishlist':(p.id==='map'?'Gestation places':(p.id==='finance'?'Mort Silber - Ledger':'Open'))))));
   var midContent=p.id==='map'
    ?mapMiniSVG()
    :'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">'+glyphs[p.id]+'</svg>';
@@ -826,12 +835,7 @@ function drawQuote(){var q=QUOTES[Math.floor(Math.random()*QUOTES.length)];docum
 /* ════════ MODAL CONTENT ════════ */
 function modalBody(id){
  switch(id){
-  case 'finance':return '<div id="fin-connect"><h3>Live Balance <span class="tag t">Bank of America</span></h3><p>Pulls your real balance + transactions via Plaid (production).</p><button class="fin-btn" id="fin-connect-btn" onclick="connectBank()">🏦 Connect bank</button><p style="font-size:11px;color:var(--ink3)"><em>First call can take ~30s if the backend is asleep.</em></p></div>'
-   +'<div id="fin-live" style="display:none"><h3>Available <span class="tag" id="fin-status">live</span></h3><div class="fin-balance" id="fin-balance">—</div><div id="fin-accounts"></div>'
-   +'<h3>Today vs Daily Cap</h3><div id="fin-cap-label" class="mono" style="font-size:12px;color:var(--ink3)">—</div><div class="fin-cap-bar"><div class="fin-cap-fill" id="fin-cap-fill" style="width:0%"></div></div>'
-   +'<h3>Recent Transactions</h3><div id="fin-tx-list"><em style="color:var(--ink3)">—</em></div></div>'
-   +'<h3>Owed Out <span class="tag t">manual</span></h3><ul><li><span class="k">Kealy</span><span class="vv">$300 <em>— ASAP</em></span></li><li><span class="k">Gus</span><span class="vv">$1,100 <em>— slow, PayPal</em></span></li><li><span class="k">Rent</span><span class="vv">Brooklyn — <em>paid through April</em></span></li></ul>'
-   +'<h3>Goal</h3><ul><li><span class="k">Buffer</span><span class="vv">$10–15k by year end <b>before</b> investing</span></li><li><span class="k">Phase 2</span><span class="vv">$500/mo Roth IRA + $500/mo S&amp;P</span></li></ul>';
+  case 'finance':return finModalHTML();
   case 'workout':return workoutWeekHTML();
   case 'music':return '<h3>Today — '+WD[new Date().getDay()]+'</h3><ul>'+(LISTEN[new Date().getDay()]||[]).map(function(it){return '<li><span class="k">'+it.dur+'</span><span class="vv"><b>'+it.t+'</b> — <em>'+it.d+'</em></span></li>';}).join('')+'</ul><h3>Practice</h3><ul><li><span class="k">Daily</span><span class="vv">Guitar + piano 30–45 min · sight reading → Schubert</span></li><li><span class="k">Method</span><span class="vv">Hands separate → together at 60% · never rush the join</span></li></ul>';
   case 'reading':return '<h3>Currently</h3><ul><li><span class="k">KJV Bible</span><span class="vv">Job → Psalms → Gospels <em>· daily</em></span></li><li><span class="k">S. Foote</span><span class="vv">The Civil War Vol. I</span></li><li><span class="k">Homer</span><span class="vv">Iliad / the Oresteia</span></li><li><span class="k">Daily</span><span class="vv">One Dhammapada chapter</span></li></ul><p><em>Full reading list lives in the Library (No. 10).</em></p>';
@@ -1025,7 +1029,8 @@ function finRenderBalance(d){
  var a=document.getElementById('fin-accounts');
  if(a&&d.accounts){a.innerHTML=d.accounts.map(function(x){var v=(x.available!=null?x.available:x.current)||0;return '<div class="fin-acct"><span>'+x.name+' <span class="mono">···'+(x.mask||'')+'</span></span><span class="mono">$'+v.toFixed(2)+'</span></div>';}).join('');}
  var td=document.getElementById('td-budget');if(td&&td.firstChild)td.firstChild.textContent='$'+(d.total_available||0).toFixed(0)+' ';
- var sub=document.getElementById('td-budget-sub');if(sub)sub.textContent='live balance · BofA';
+ var sub=document.getElementById('td-budget-sub');if(sub)sub.textContent='live balance - BofA';
+ var tbal=document.getElementById('td-balance');if(tbal&&tbal.firstChild)tbal.firstChild.textContent='$'+(d.total_available||0).toFixed(0)+' ';
 }
 function finLoadTx(){
  var list=document.getElementById('fin-tx-list');if(list)list.innerHTML='<em style="color:var(--ink3)">Loading…</em>';
@@ -1120,6 +1125,142 @@ function openCloset(){
  openSimpleModal('No. 12','Closet','Wardrobe',links+wish);
 }
 
+/* ════════ FINANCE PORTAL ════════ */
+function openFinance(){
+ document.getElementById('m-no').textContent='No. 03';
+ document.getElementById('m-title').textContent='Finance — Mort Silber';
+ document.getElementById('m-dept').textContent='Treasury · Ledger · Advisor';
+ document.getElementById('m-body').innerHTML=finModalHTML();
+ document.getElementById('m-advisor').innerHTML=advisorHTML('finance');
+ if(HIST.finance){var b=document.getElementById('am-finance');if(b){b.innerHTML=HIST.finance.map(function(m){return bubHTML('finance',m.role,m.content);}).join('');b.scrollTop=b.scrollHeight;}}
+ document.getElementById('m-body').scrollTop=0;
+ openScrim();
+ setTimeout(function(){var inp=document.getElementById('ai-finance');if(inp)inp.focus();},100);
+}
+
+/* ════════ FINANCE LEDGER ════════ */
+var FIN_KEY='fin_v1';
+var UPCOMING=[
+ {date:'Jun 13',label:'Connor check',amount:1800,type:'in'},
+ {date:'Jun 15',label:'Leo rent share',amount:1200,type:'in'},
+ {date:'Jun 15',label:'Brooklyn rent → Nikolaj',amount:-2200,type:'out'},
+ {date:'Jun 27',label:'Connor check',amount:1800,type:'in'},
+ {date:'Jun 30',label:'La Crosse lease ends',amount:0,type:'note'},
+];
+function loadFin(){
+ try{var d=JSON.parse(lsGet(FIN_KEY)||'null');return d||{balance:200,txns:[]};}
+ catch(e){return{balance:200,txns:[]};}
+}
+function saveFin(d){
+ lsSet(FIN_KEY,JSON.stringify(d));
+ sbSave('finance_ledger',d);
+}
+function finModalHTML(){
+ var fin=loadFin();
+ var bal=fin.balance||0;
+ var today=new Date().toISOString().slice(0,10);
+ var todaySpent=0;
+ (fin.txns||[]).forEach(function(t){if(t.date===today&&t.amount<0)todaySpent+=Math.abs(t.amount);});
+ var cap=15;
+ var capPct=Math.min(100,todaySpent/cap*100);
+ var html='';
+ /* Balance block */
+ html+='<div style="background:var(--paper2);border:1.5px solid var(--ink);padding:16px;margin-bottom:14px">';
+ html+='<div style="font-family:IBM Plex Mono,monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink3);margin-bottom:4px">Current Balance</div>';
+ html+='<div style="display:flex;align-items:baseline;gap:12px">';
+ html+='<div id="fin-bal-display" style="font-family:Fraunces,serif;font-weight:900;font-size:44px;line-height:1;color:'+(bal>=0?'var(--green)':'var(--terra)')+'">$'+Math.abs(bal).toFixed(2)+'</div>';
+ html+='<button onclick="editBalance()" style="font-family:IBM Plex Mono,monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line);background:none;color:var(--ink3);padding:4px 8px;cursor:pointer">Edit</button>';
+ html+='</div>';
+ html+='<div id="fin-bal-edit" style="display:none;margin-top:8px;display:none">';
+ html+='<div style="display:flex;gap:8px"><input id="fin-bal-input" type="number" placeholder="Enter current balance" style="flex:1;font-family:Spectral,serif;font-size:14px;padding:7px 10px;border:1.5px solid var(--ink);background:var(--paper);color:var(--ink)" value="'+bal+'">';
+ html+='<button onclick="setBalance()" style="font-family:IBM Plex Mono,monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;border:1.5px solid var(--ink);background:var(--green);color:var(--paper);padding:0 14px;cursor:pointer">Set</button></div></div>';
+ /* Daily cap */
+ html+='<div style="margin-top:12px">';
+ html+='<div style="display:flex;justify-content:space-between;font-family:IBM Plex Mono,monospace;font-size:10px;color:var(--ink3);margin-bottom:4px"><span>Today — $'+todaySpent.toFixed(2)+' spent</span><span>Cap: $'+cap+' WI / $20 NYC</span></div>';
+ html+='<div style="height:8px;background:var(--paper3);border:1px solid var(--ink)"><div style="height:100%;width:'+capPct+'%;background:'+(todaySpent>cap?'var(--terra)':'var(--green)')+'"></div></div>';
+ html+='</div></div>';
+ /* Add transaction */
+ html+='<h3>Add Transaction</h3>';
+ html+='<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">';
+ html+='<div style="display:flex;gap:8px">';
+ html+='<select id="fin-type" style="font-family:IBM Plex Mono,monospace;font-size:11px;border:1.5px solid var(--ink);background:var(--paper);color:var(--ink);padding:7px"><option value="out">— Spend</option><option value="in">+ Income</option></select>';
+ html+='<input id="fin-amt" type="number" placeholder="Amount" step="0.01" style="width:100px;font-family:Spectral,serif;font-size:14px;padding:7px 10px;border:1.5px solid var(--ink);background:var(--paper);color:var(--ink)">';
+ html+='<input id="fin-desc" type="text" placeholder="Description — Connor check, groceries…" style="flex:1;font-family:Spectral,serif;font-size:14px;padding:7px 10px;border:1.5px solid var(--ink);background:var(--paper);color:var(--ink)" onkeydown="if(event.key===\'Enter\')addFinTx()">';
+ html+='</div>';
+ html+='<button onclick="addFinTx()" style="font-family:IBM Plex Mono,monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;border:1.5px solid var(--ink);background:var(--terra);color:var(--paper);padding:9px;cursor:pointer">+ Add Transaction</button>';
+ html+='</div>';
+ /* Upcoming */
+ html+='<h3>Upcoming</h3>';
+ html+='<div style="display:flex;flex-direction:column;gap:4px;margin-bottom:14px">';
+ UPCOMING.forEach(function(u){
+  var color=u.type==='in'?'var(--green)':(u.type==='out'?'var(--terra)':'var(--ink3)');
+  html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:var(--paper2);border-left:2px solid '+color+'">';
+  html+='<div><span style="font-family:IBM Plex Mono,monospace;font-size:10px;color:var(--ink3);margin-right:10px">'+u.date+'</span><span style="font-size:13.5px">'+u.label+'</span></div>';
+  html+=(u.amount!==0?'<span style="font-family:IBM Plex Mono,monospace;font-size:11px;font-weight:600;color:'+color+'">'+(u.amount>0?'+$':'-$')+Math.abs(u.amount).toFixed(0)+'</span>':'<span style="font-family:IBM Plex Mono,monospace;font-size:9px;color:var(--ink3)">NOTE</span>');
+  html+='</div>';
+ });
+ html+='</div>';
+ /* Transaction log */
+ html+='<h3>Log <span style="font-family:IBM Plex Mono,monospace;font-size:9px;color:var(--ink3);font-weight:400;letter-spacing:.1em">'+(fin.txns||[]).length+' entries</span></h3>';
+ html+='<div id="fin-log" style="display:flex;flex-direction:column;gap:3px">';
+ var txns=(fin.txns||[]).slice().reverse().slice(0,30);
+ if(!txns.length)html+='<em style="color:var(--ink3);font-size:13px">No transactions yet — add one above.</em>';
+ txns.forEach(function(t,i){
+  var out=t.amount<0;
+  html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:var(--paper2);border-left:2px solid '+(out?'var(--terra)':'var(--green)')+'">';
+  html+='<div><span style="font-family:IBM Plex Mono,monospace;font-size:9px;color:var(--ink3);margin-right:8px">'+t.date+'</span><span style="font-size:13px">'+esc(t.desc)+'</span></div>';
+  html+='<div style="display:flex;align-items:center;gap:8px">';
+  html+='<span style="font-family:IBM Plex Mono,monospace;font-size:11px;font-weight:600;color:'+(out?'var(--terra)':'var(--green)')+'">'+(out?'-$':'+$')+Math.abs(t.amount).toFixed(2)+'</span>';
+  html+='<button onclick="delFinTx('+((fin.txns||[]).length-1-i)+')" style="background:none;border:none;color:var(--ink3);cursor:pointer;font-size:12px" title="Delete">✕</button>';
+  html+='</div></div>';
+ });
+ html+='</div>';
+ /* Goals */
+ html+='<h3 style="margin-top:14px">Goals</h3>';
+ html+='<ul><li><span class="k">Buffer</span><span class="vv">$10–15k by year end <b>before</b> investing</span></li><li><span class="k">Phase 2</span><span class="vv">$500/mo Roth IRA + $500/mo FXAIX</span></li><li><span class="k">Credit</span><span class="vv">Discover it® Secured — use + pay monthly</span></li></ul>';
+ return html;
+}
+function editBalance(){
+ var ed=document.getElementById('fin-bal-edit');
+ if(ed)ed.style.display=ed.style.display==='none'?'block':'none';
+}
+function setBalance(){
+ var inp=document.getElementById('fin-bal-input');
+ if(!inp)return;
+ var val=parseFloat(inp.value);
+ if(isNaN(val))return;
+ var fin=loadFin();
+ fin.balance=val;
+ saveFin(fin);
+ closeModal();
+ setTimeout(function(){openModal('finance');},100);
+}
+function addFinTx(){
+ var type=document.getElementById('fin-type');
+ var amt=document.getElementById('fin-amt');
+ var desc=document.getElementById('fin-desc');
+ if(!type||!amt||!desc)return;
+ var amount=parseFloat(amt.value);
+ if(isNaN(amount)||amount<=0)return;
+ var signed=type.value==='out'?-amount:amount;
+ var fin=loadFin();
+ fin.txns=fin.txns||[];
+ fin.txns.push({date:new Date().toISOString().slice(0,10),desc:desc.value||'—',amount:signed});
+ fin.balance=(fin.balance||0)+signed;
+ saveFin(fin);
+ closeModal();
+ setTimeout(function(){openModal('finance');},100);
+}
+function delFinTx(i){
+ var fin=loadFin();
+ if(!fin.txns||i<0||i>=fin.txns.length)return;
+ fin.balance=(fin.balance||0)-fin.txns[i].amount;
+ fin.txns.splice(i,1);
+ saveFin(fin);
+ closeModal();
+ setTimeout(function(){openModal('finance');},100);
+}
+
 /* ════════ BOOT ════════ */
 paintHeader();paintSky();paintNow();renderPortals();renderListen();drawStrat();drawQuote();checkHostedReturn();
 /* Warm up Render backend on page load */
@@ -1132,6 +1273,7 @@ setInterval(function(){paintSky();paintNow();},60000);
   var sf=await sbLoad('fridge');if(sf&&sf.length){lsSet(FRIDGE_KEY,JSON.stringify(sf));}
   var sc=await sbLoad('closet');if(sc&&sc.length){lsSet(CLOSET_KEY,JSON.stringify(sc));}
   var ss=await sbLoad('stories');if(ss&&ss.length){try{localStorage.setItem(STORY_KEY,JSON.stringify(ss));}catch(e){}}
+  var sf2=await sbLoad('finance_ledger');if(sf2&&sf2.balance!==undefined){lsSet(FIN_KEY,JSON.stringify(sf2));}
   console.log('✓ Supabase sync complete');
 })();
 </script>

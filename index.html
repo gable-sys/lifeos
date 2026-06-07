@@ -52,8 +52,8 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:1;back
 .night-btn:hover{background:rgba(255,255,255,0.15);}
 
 /* CELESTIAL */
-.celestial{border:1.5px solid var(--ink);border-top:none;background:repeating-linear-gradient(180deg,transparent,transparent 27px,var(--line2) 27px,var(--line2) 28px),var(--paper2);padding:18px 16px 14px;position:relative;overflow:hidden;}
-.sky{position:relative;height:140px;margin-bottom:6px;}
+.celestial{border:1.5px solid var(--ink);border-top:none;background:repeating-linear-gradient(180deg,transparent,transparent 27px,var(--line2) 27px,var(--line2) 28px),var(--paper2);padding:14px 16px 10px;position:relative;overflow:hidden;}
+.sky{position:relative;height:130px;margin-bottom:6px;}
 .sky svg{display:block;width:100%;height:100%;}
 .timetable-row{display:flex;flex-wrap:wrap;border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);background:var(--paper);}
 .tt-cell{flex:1 1 0;min-width:120px;padding:8px 14px;border-right:1px solid var(--line);}
@@ -322,6 +322,23 @@ body.night .sc-lbl{background:rgba(22,19,14,0.9);}
 }
 
 .foot{margin-top:34px;border-top:1.5px solid var(--ink);padding-top:10px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--ink3);text-transform:uppercase;}
+
+/* ── THREE PORTAL ICONS ── */
+.portals-trio-mini{display:flex;gap:0;justify-content:center;align-items:stretch;border-top:1px solid var(--line);border-bottom:1.5px solid var(--ink);background:var(--paper2);}
+.mini-portal-btn{background:var(--paper2);border:none;border-right:1px solid var(--line);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px 0;flex:1;transition:background .15s;}
+.mini-portal-btn:last-child{border-right:none;}
+.mini-portal-btn:hover{background:var(--paper3);}
+.mini-portal-label{font-family:'IBM Plex Mono',monospace;font-size:7.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink3);}
+/* landscape backdrop */
+#landscape-backdrop{display:none;position:fixed;inset:0;z-index:199;pointer-events:none;}
+#landscape-backdrop svg{width:100%;height:100%;display:block;image-rendering:pixelated;}
+.modal.landscape-mode{background:transparent!important;border:1.5px solid rgba(255,255,255,0.15)!important;box-shadow:0 0 80px rgba(0,0,0,0.9)!important;}
+.modal.landscape-mode .m-head{background:rgba(0,0,0,0.8)!important;border-bottom:1px solid rgba(255,255,255,0.12)!important;}
+.modal.landscape-mode .m-head h2,.modal.landscape-mode .m-head .m-no,.modal.landscape-mode .m-head .m-dept{color:#e8e0cc!important;}
+.modal.landscape-mode .m-x{background:rgba(0,0,0,0.7)!important;border-color:rgba(255,255,255,0.3)!important;color:#e8e0cc!important;}
+.modal.landscape-mode .m-scroll{background:transparent!important;}
+.modal.landscape-mode .advisor{background:rgba(0,0,0,0.82)!important;border-top:1px solid rgba(255,255,255,0.1)!important;}
+.scrim.landscape-open{background:rgba(0,0,0,0.75)!important;backdrop-filter:none!important;}
 </style>
 </head>
 <body>
@@ -329,7 +346,7 @@ body.night .sc-lbl{background:rgba(22,19,14,0.9);}
 
   <div class="masthead">
     <div class="band t">
-      <span class="label">A Rebellion Against Attention-Economy Slop</span>
+      <span class="label">Optimizing Body, Soul &amp; Shoe</span>
       <span style="display:flex;gap:16px;align-items:center">
         <span class="cat-no" onclick="openLibrary()" style="cursor:pointer;text-decoration:underline;text-underline-offset:3px">☰ LIBRARY / WIKI</span>
         <button class="night-btn" id="night-btn" onclick="toggleNight()">☾ Night</button>
@@ -348,9 +365,80 @@ body.night .sc-lbl{background:rgba(22,19,14,0.9);}
     <div class="timetable-row">
       <div class="tt-cell"><div class="label">Date</div><div class="v" id="td-date">—</div></div>
       <div class="tt-cell"><div class="label">Time</div><div class="v mono" id="td-time">—</div></div>
-      <div class="tt-cell" onclick="openFinance()" style="cursor:pointer" title="Open Finance"><div class="label">Balance ↗</div><div class="v terra" id="td-balance">$—<small id="td-balance-sub">tap for Finance</small></div></div>
-      <div class="tt-cell" onclick="openFinance()" style="cursor:pointer" title="Open Finance"><div class="label">Budget Remaining ↗</div><div class="v" id="td-budget">—<small id="td-budget-sub"></small></div></div>
+      <div class="tt-cell" onclick="openFinance()" style="cursor:pointer"><div class="label">Balance ↗</div><div class="v" id="td-balance" style="color:var(--green)">$—<small id="td-balance-sub" style="display:block;font-size:10px;color:var(--ink3)">tap for Finance</small></div></div>
+      <div class="tt-cell" onclick="openFinance()" style="cursor:pointer"><div class="label">Budget Remaining ↗</div><div class="v" id="td-budget">—<small id="td-budget-sub"></small></div></div>
     </div>
+  </div>
+
+
+  <!-- THREE PORTAL ICONS -->
+  <div class="portals-trio-mini">
+    <button class="mini-portal-btn" onclick="openMoon()" title="The Celestial">
+      <svg viewBox="0 0 32 32" width="48" height="48" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated">
+        <!-- Saturn 8-bit -->
+        <rect x="12" y="7" width="8" height="2" fill="#c8a860"/>
+        <rect x="10" y="9" width="12" height="10" fill="#c8a860"/>
+        <rect x="12" y="19" width="8" height="2" fill="#c8a860"/>
+        <rect x="8" y="11" width="4" height="6" fill="#a08840"/>
+        <!-- rings -->
+        <rect x="2" y="13" width="28" height="2" fill="#e8c870"/>
+        <rect x="4" y="11" width="24" height="2" fill="#c8a840" opacity="0.7"/>
+        <rect x="4" y="19" width="24" height="2" fill="#c8a840" opacity="0.6"/>
+        <!-- ring behind planet -->
+        <rect x="10" y="13" width="12" height="6" fill="#c8a860"/>
+        <rect x="8" y="14" width="16" height="4" fill="#c8a860"/>
+        <!-- stars -->
+        <rect x="2" y="2" width="2" height="2" fill="#fff" opacity="0.8"/>
+        <rect x="28" y="3" width="2" height="2" fill="#fff" opacity="0.6"/>
+        <rect x="26" y="27" width="2" height="2" fill="#fff" opacity="0.7"/>
+        <rect x="3" y="28" width="2" height="2" fill="#fff" opacity="0.5"/>
+      </svg>
+      <div class="mini-portal-label">Celestial</div>
+    </button>
+    <button class="mini-portal-btn" onclick="openCompass()" title="The Compass">
+      <svg viewBox="0 0 32 32" width="48" height="48" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated">
+        <!-- compass rose 8-bit -->
+        <rect x="6" y="14" width="20" height="4" fill="#8a6820" opacity="0.4"/>
+        <rect x="14" y="6" width="4" height="20" fill="#8a6820" opacity="0.4"/>
+        <rect x="14" y="4" width="4" height="2" fill="#c8a830"/>
+        <rect x="13" y="6" width="6" height="2" fill="#c8a830"/>
+        <rect x="14" y="8" width="4" height="4" fill="#bd3010"/>
+        <rect x="14" y="20" width="4" height="4" fill="#8a6820"/>
+        <rect x="13" y="24" width="6" height="2" fill="#8a6820"/>
+        <rect x="14" y="26" width="4" height="2" fill="#6a4810"/>
+        <rect x="20" y="14" width="4" height="4" fill="#8a6820"/>
+        <rect x="24" y="13" width="2" height="6" fill="#6a4810"/>
+        <rect x="8" y="14" width="4" height="4" fill="#8a6820"/>
+        <rect x="6" y="13" width="2" height="6" fill="#6a4810"/>
+        <rect x="13" y="13" width="6" height="6" fill="#c8a830"/>
+        <rect x="14" y="14" width="4" height="4" fill="#f0d060"/>
+        <rect x="15" y="15" width="2" height="2" fill="#fff"/>
+      </svg>
+      <div class="mini-portal-label">Wander</div>
+    </button>
+    <button class="mini-portal-btn" onclick="openWatch()" title="The Watch">
+      <svg viewBox="0 0 32 32" width="48" height="48" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated">
+        <!-- pocket watch 8-bit -->
+        <rect x="14" y="2" width="4" height="2" fill="#8a6820"/>
+        <rect x="13" y="4" width="6" height="2" fill="#c8a830"/>
+        <rect x="8" y="6" width="16" height="2" fill="#c8a830"/>
+        <rect x="6" y="8" width="20" height="16" fill="#c8a830"/>
+        <rect x="8" y="24" width="16" height="2" fill="#c8a830"/>
+        <rect x="10" y="26" width="12" height="2" fill="#8a6820"/>
+        <rect x="8" y="8" width="16" height="16" fill="#f4ecd6"/>
+        <rect x="10" y="6" width="12" height="2" fill="#f4ecd6"/>
+        <rect x="6" y="10" width="2" height="12" fill="#f4ecd6"/>
+        <rect x="24" y="10" width="2" height="12" fill="#f4ecd6"/>
+        <rect x="15" y="9" width="2" height="2" fill="#574a37"/>
+        <rect x="15" y="21" width="2" height="2" fill="#574a37"/>
+        <rect x="9" y="15" width="2" height="2" fill="#574a37"/>
+        <rect x="21" y="15" width="2" height="2" fill="#574a37"/>
+        <rect x="15" y="11" width="2" height="5" fill="#191309"/>
+        <rect x="15" y="16" width="5" height="2" fill="#bd441f"/>
+        <rect x="15" y="15" width="2" height="2" fill="#191309"/>
+      </svg>
+      <div class="mini-portal-label">Time</div>
+    </button>
   </div>
 
   <div class="grid">
@@ -391,6 +479,9 @@ body.night .sc-lbl{background:rgba(22,19,14,0.9);}
 
   <div class="foot"><span>Life OS · v3</span><span id="foot-stamp">—</span></div>
 </div>
+
+<!-- LANDSCAPE BACKDROP -->
+<div id="landscape-backdrop"><svg id="landscape-svg" viewBox="0 0 700 500" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg"></svg></div>
 
 <!-- MODAL -->
 <div class="scrim" id="scrim" onclick="if(event.target===this)closeModal()">
@@ -461,6 +552,7 @@ var ADV={
  reading:{name:'Professor Aldous',role:'Director of Letters',avatar:'A',sys:"You are Professor Aldous, Director of Letters for Gable. Erudite, encouraging, never preachy. He reads ~2hrs daily: KJV Bible (Job->Psalms->Gospels), Shelby Foote The Civil War Vol I, Homer (Iliad/the Oresteia), Robert Caro The Path to Power, Thucydides (Melian Dialogue), one Dhammapada chapter daily, plus Chekhov and Wodehouse. Discuss passages, give context, connect works, suggest what's next. 2-4 sentences."},
  creative:{name:'Flora',role:'Director of Creative Affairs',avatar:'F',sys:"You are Flora, Director of Creative Affairs for Gable — a warm, atmospheric literary muse. Projects: Madison County Church Suicide Corner (story, gestating, Wisconsin); That Motel in Fennimore (story, roadside America); The Drinker (MiniDV film, Denmark, complete); Gestation Lab (scratch pad); Carnival of the Cannibal (poem, Vegas, apocalyptic); The Radiator Plan (story, NYC building, Fellini-esque); Adventures of Ronaldo di Monde (picaresque con man + The Great Jones); House of Wind (journal/poetry + industrial soundscapes); The Dromedary (fable, nothing yet). Help with openings, images, moods, story problems. Vivid, 2-4 sentences."},
  body:{name:'Dr. August',role:'Director of the Body',avatar:'D',sys:"You are Dr. August, Director of the Body for Gable — calm, precise, clinical. Protocol: finasteride 1mg daily same time; minoxidil 1ml scalp, no wash 4hrs; tretinoin Mon/Wed/Fri scalp+face, wait 20-30min THEN minox (never minox first); vit C serum mornings only; derma roller 70% isopropyl before+after, light pressure; castor oil on lash line + brows nightly. Hair for NW2: blow-dry volume, sea-salt spray damp, cold shot to seal, volume powder roots only, paperboy hat as shaping tool while damp 30-60min, fingers only when dry, then stop touching. Protocol guidance, not diagnosis — see a physician for clinical issues. 2-4 sentences."},
+ compass:{name:'The Wanderer',role:'Literary Companion',avatar:'☀',sys:"You are The Wanderer, literary companion in Gable's Life OS compass portal. You know the great writers — Hemingway, Henry Miller, Joyce, DH Lawrence, Lawrence Durrell, Whitman, Hart Crane, Mark Twain, Cormac McCarthy, Shakespeare, Shackleton. Gable splits time between Brooklyn/Dumbo NYC and La Crosse Wisconsin near the Mississippi. Warm, erudite. 2-4 sentences."},
  lab:{name:'Mr. Greg',role:'Director of Technical Affairs',avatar:'G',sys:"You are Mr. Greg, Director of Technical Affairs for Gable — a patient senior-developer mentor. Month 1 of 6: HTML/CSS/JS/Git via The Odin Project, CS50x, Eloquent JavaScript. GitHub gable-sys. Building Life OS (this dashboard) and an ACA-lead chat widget 'Mr. Greg' for HB360 (Python+Flask+Claude API on Render). Live stack: Netlify front end, Supabase, Plaid sandbox. Explain clearly, debug by asking for the exact error, favor ugly+working over pretty+broken. 2-4 sentences."}
 };
 
@@ -535,7 +627,7 @@ function curIndex(){var n=new Date(),m=n.getHours()*60+n.getMinutes(),idx=0;for(
 
 function paintNow(){
  var i=curIndex(),c=TT[i],p=TT[i-1],nx=TT[i+1];
- // td-task removed
+ var tsk=document.getElementById('td-task');if(tsk)tsk.textContent=c.t;
  document.getElementById('prevTask').innerHTML=p?'<span class="t mono">'+p.s+'</span><span class="n">'+p.t+'</span>':'<span class="t mono">—:—</span><span class="n">— before waking —</span>';
  document.getElementById('curTask').innerHTML='<div class="clock">'+c.s+'</div><div class="meat"><h3>'+c.t+'</h3>'+(c.d?'<p>'+c.d+'</p>':'')+'<span class="dept">'+c.dept+'</span></div>';
  document.getElementById('nextTask').innerHTML=nx?'<span class="t mono">'+nx.s+'</span><span class="n">'+nx.t+'</span>':'<span class="t mono">—:—</span><span class="n">— rest —</span>';
@@ -548,14 +640,13 @@ function paintHeader(){
  (function clk(){document.getElementById('td-time').textContent=pad(new Date().getHours())+':'+pad(new Date().getMinutes())+':'+pad(new Date().getSeconds());})();
  setInterval(function(){document.getElementById('td-time').textContent=pad(new Date().getHours())+':'+pad(new Date().getMinutes())+':'+pad(new Date().getSeconds());},1000);
  var cap=15;
- var finData=loadFin();
- var bal=finData?finData.balance:0;
+ var finD=loadFin();var bal=finD?finD.balance:200;
  var balEl=document.getElementById('td-balance');
- if(balEl){balEl.firstChild.textContent='$'+Math.abs(bal).toFixed(0)+' ';balEl.style.color=bal>=0?'var(--green)':'var(--terra)';}
+ if(balEl&&balEl.firstChild)balEl.firstChild.textContent='$'+Math.abs(bal).toFixed(0)+' ';
+ if(balEl)balEl.style.color=bal>=0?'var(--green)':'var(--terra)';
  var balSub=document.getElementById('td-balance-sub');
- // Find next upcoming item
  var nextUp=UPCOMING.filter(function(u){return u.amount!==0;})[0];
- if(balSub)balSub.textContent=nextUp?(nextUp.amount>0?'Next: +$':' Next: -$')+Math.abs(nextUp.amount)+' '+nextUp.date:'tap for Finance';
+ if(balSub)balSub.textContent=nextUp?(nextUp.amount>0?'Next +$':'Next -$')+Math.abs(nextUp.amount)+' '+nextUp.date:'tap for Finance';
  var bdg=document.getElementById('td-budget');if(bdg&&bdg.firstChild)bdg.firstChild.textContent='$'+cap+' ';
  var bdgSub=document.getElementById('td-budget-sub');if(bdgSub)bdgSub.textContent='of $'+cap+' daily cap WI';
 }
@@ -861,7 +952,7 @@ function openModal(id){
  var inp=document.getElementById('ai-'+id);if(inp)setTimeout(function(){inp.focus();},50);
 }
 function openScrim(){document.getElementById('scrim').classList.add('on');document.body.style.overflow='hidden';}
-function closeModal(){document.getElementById('scrim').classList.remove('on');document.body.style.overflow='';}
+function closeModal(){document.getElementById('scrim').classList.remove('on');document.body.style.overflow='';hideBackdrop();document.getElementById('m-body').style.padding='';document.getElementById('modal').classList.remove('landscape-mode');}
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){if(document.getElementById('desk').classList.contains('on'))closeDesk();else closeModal();}});
 
 /* SCHEDULE */
@@ -1029,8 +1120,7 @@ function finRenderBalance(d){
  var a=document.getElementById('fin-accounts');
  if(a&&d.accounts){a.innerHTML=d.accounts.map(function(x){var v=(x.available!=null?x.available:x.current)||0;return '<div class="fin-acct"><span>'+x.name+' <span class="mono">···'+(x.mask||'')+'</span></span><span class="mono">$'+v.toFixed(2)+'</span></div>';}).join('');}
  var td=document.getElementById('td-budget');if(td&&td.firstChild)td.firstChild.textContent='$'+(d.total_available||0).toFixed(0)+' ';
- var sub=document.getElementById('td-budget-sub');if(sub)sub.textContent='live balance - BofA';
- var tbal=document.getElementById('td-balance');if(tbal&&tbal.firstChild)tbal.firstChild.textContent='$'+(d.total_available||0).toFixed(0)+' ';
+ var sub=document.getElementById('td-budget-sub');if(sub)sub.textContent='live balance · BofA';
 }
 function finLoadTx(){
  var list=document.getElementById('fin-tx-list');if(list)list.innerHTML='<em style="color:var(--ink3)">Loading…</em>';
@@ -1262,6 +1352,294 @@ function delFinTx(i){
 }
 
 /* ════════ BOOT ════════ */
+
+/* ════════ BACKDROP FUNCTIONS ════════ */
+function showBackdrop(svgInner){
+ var bd=document.getElementById('landscape-backdrop');
+ var sv=document.getElementById('landscape-svg');
+ if(bd&&sv){sv.innerHTML=svgInner;bd.style.display='block';}
+ var sc=document.getElementById('scrim');
+ if(sc)sc.classList.add('landscape-open');
+}
+function hideBackdrop(){
+ var bd=document.getElementById('landscape-backdrop');
+ if(bd)bd.style.display='none';
+ var sc=document.getElementById('scrim');
+ if(sc)sc.classList.remove('landscape-open');
+}
+
+/* ════════ OPENFINANCE ════════ */
+function openFinance(){
+ var p=PORTALS.filter(function(x){return x.id==='finance';})[0]||{no:'No. 03',dept:'Treasury',title:'Finance'};
+ document.getElementById('m-no').textContent=p.no;
+ document.getElementById('m-title').textContent='Finance — Mort Silber';
+ document.getElementById('m-dept').textContent='Treasury · Ledger · Advisor';
+ document.getElementById('m-body').innerHTML=finModalHTML();
+ document.getElementById('m-advisor').innerHTML=advisorHTML('finance');
+ if(HIST.finance){var b=document.getElementById('am-finance');if(b){b.innerHTML=HIST.finance.map(function(m){return bubHTML('finance',m.role,m.content);}).join('');b.scrollTop=b.scrollHeight;}}
+ document.getElementById('m-body').scrollTop=0;
+ openScrim();
+ setTimeout(function(){var inp=document.getElementById('ai-finance');if(inp)inp.focus();},100);
+}
+
+/* ════════ THREE PORTALS ════════ */
+var MOON_PHASES=['\u{1f311}','\u{1f312}','\u{1f313}','\u{1f314}','\u{1f315}','\u{1f316}','\u{1f317}','\u{1f318}'];
+var MEMENTO_MORI=[
+ 'You have approximately 3,900 weeks in a life well-lived. How many have passed?',
+ 'The Stoics kept a skull on their desk. Not morbid — clarifying.',
+ 'Marcus Aurelius: You could leave life right now. Let that determine what you do.',
+ 'One day you will do everything for the last time.',
+ 'The question is not how long, but how fully.',
+ 'Seneca: Everything is borrowed. Only time is ours.',
+ 'The clock does not stop while you deliberate.',
+ 'You are not behind. You are exactly where your choices have put you.'
+];
+var WATCH_COUNTDOWNS=[
+ {label:'Back to Brooklyn',date:'2026-06-15',icon:'\u{1f3d9}'},
+ {label:'Connor check',date:'2026-06-11',icon:'\u{1f4b0}'},
+ {label:'La Crosse lease ends',date:'2026-06-30',icon:'\u{1f4e6}'}
+];
+function getMoonPhase(){var d=new Date(),ref=new Date('2000-01-06'),diff=(d-ref)/86400000,cycle=diff%29.53;return MOON_PHASES[Math.floor(cycle/29.53*8)];}
+function getMoonName(){var d=new Date(),ref=new Date('2000-01-06'),diff=(d-ref)/86400000,cycle=diff%29.53,p=cycle/29.53;if(p<0.03||p>0.97)return 'New Moon';if(p<0.25)return 'Waxing Crescent';if(p<0.27)return 'First Quarter';if(p<0.49)return 'Waxing Gibbous';if(p<0.52)return 'Full Moon';if(p<0.75)return 'Waning Gibbous';if(p<0.77)return 'Last Quarter';return 'Waning Crescent';}
+
+var CELESTIAL_LORE=[
+ {tradition:'Islamic',text:'The crescent moon marks the beginning of each month — the first sighting of the new moon is a sacred act watched for across rooftops of cities.',link:'https://quran.com/2/189',linkText:'Quran 2:189 — They ask you about the crescents'},
+ {tradition:'Greek',text:'The moon is Selene, driving her silver chariot across the night sky. Her brother Helios carries the sun. When she weeps, dew forms on the grass at dawn.',link:'https://www.theoi.com/Titan/Selene.html',linkText:'Read about Selene'},
+ {tradition:'Hindu',text:'Chandra, the moon god, rides a chariot pulled by ten white horses. His light is amrita — nectar of immortality — and the gods drink from him each month, making him wane.',link:'https://www.wisdomlib.org/definition/chandra',linkText:'Read about Chandra'},
+ {tradition:'Alchemical',text:'The moon is Silver — Luna — the feminine principle, the receptive, the unconscious. The Great Work begins in darkness, in lunar dissolution, before the solar gold can emerge.',link:'https://archive.org/search?query=alchemy+moon+silver',linkText:'Alchemical texts — Archive.org'},
+ {tradition:'Norse',text:'Mani guides the moon across the sky, forever chased by the wolf Hati. When Hati catches him at Ragnarok, the moon goes dark and the world ends.',link:'https://www.gutenberg.org/ebooks/2810',linkText:'The Prose Edda — Gutenberg'},
+ {tradition:'Egyptian',text:'Thoth, ibis-headed god of wisdom, carries the moon crescent as his crown. He invented writing by watching the moon wax and wane — the first calendar, the first alphabet.',link:'https://archive.org/search?query=thoth+egyptian+mythology',linkText:'Read about Thoth'},
+ {tradition:'Chinese',text:'Chang\'e drank the elixir of immortality and floated to the moon, where she lives with a jade rabbit who pounds the elixir in a mortar for eternity.',link:'https://archive.org/search?query=chinese+moon+mythology',linkText:'Read the legend'},
+ {tradition:'Babylonian',text:'Sin, the moon god, was lord of wisdom and keeper of time. The Babylonians built ziggurats to watch the moon — their observations gave us the 7-day week.',link:'https://archive.org/search?query=babylonian+astronomy+moon',linkText:'Babylonian astronomy'}
+];
+
+var ASTRO_FACTS=[
+ {fact:'The moon is slowly drifting away from Earth at about 3.8 cm per year — the same rate your fingernails grow.',link:'https://moon.nasa.gov/',linkText:'NASA Moon'},
+ {fact:'Tonight look south after dark: Jupiter and Saturn are visible to the naked eye — the two brightest non-moon objects in the sky right now.',link:'https://stellarium-web.org/',linkText:'See your sky at Stellarium'},
+ {fact:'The Milky Way core rises in the southeast after midnight in June. From La Crosse, you are at a perfect latitude to see it arch overhead.',link:'https://www.timeanddate.com/astronomy/usa/la-crosse',linkText:'La Crosse astronomy tonight'},
+ {fact:'A light-year is about 5.88 trillion miles. The nearest star to our sun, Proxima Centauri, is 4.24 light-years away — over 24 trillion miles.',link:'https://science.nasa.gov/universe/stars/',linkText:'NASA — Stars'},
+ {fact:'The International Space Station passes over Wisconsin roughly 6 times per day, visible to the naked eye as a bright moving star.',link:'https://spotthestation.nasa.gov/',linkText:'Spot the ISS tonight'},
+ {fact:'June nights show Scorpius rising in the south — follow the curve of its tail to find the galactic center, the heart of the Milky Way.',link:'https://stellarium-web.org/',linkText:'View on Stellarium'},
+ {fact:'The sun is currently in the constellation Taurus, though you cannot see it — you see the opposite sky at night, meaning Scorpius and Sagittarius are overhead.',link:'https://apod.nasa.gov/apod/astropix.html',linkText:'NASA Astronomy Picture of the Day'},
+ {fact:'Light from the moon you see tonight left the sun about 8 minutes ago, bounced off the lunar surface, and traveled 1.3 seconds to reach your eye.',link:'https://moon.nasa.gov/moon-in-motion/phases-eclipses-supermoons/overview/',linkText:'NASA Moon phases'}
+];
+
+var COMPASS_QUOTES=[
+ {q:'We shall not cease from exploration, and the end of all our exploring will be to arrive where we started.',by:'T.S. Eliot',url:'https://www.gutenberg.org/files/34394/34394-h/34394-h.htm',cat:'Explorer'},
+ {q:'I have not told half of what I saw.',by:'Marco Polo, on his deathbed',url:'https://www.gutenberg.org/ebooks/10636',cat:'Explorer'},
+ {q:'Difficulties are just things to overcome, after all.',by:'Ernest Shackleton',url:'https://www.gutenberg.org/ebooks/5765',cat:'Explorer'},
+ {q:'For my part, I travel not to go anywhere, but to go. The great affair is to move.',by:'Robert Louis Stevenson',url:'https://www.gutenberg.org/ebooks/423',cat:'Explorer'},
+ {q:'Give me such shows — give me the streets of Manhattan!',by:'Walt Whitman — Mannahatta',url:'https://www.poetryfoundation.org/poems/45473/mannahatta',cat:'New York'},
+ {q:'The city seen from the Queensboro Bridge is always the city seen for the first time.',by:'F. Scott Fitzgerald — The Great Gatsby',url:'https://www.gutenberg.org/ebooks/64317',cat:'New York'},
+ {q:'One belongs to New York instantly, one belongs to it as much in five minutes as in five years.',by:'Tom Wolfe',url:'https://archive.org/search?query=tom+wolfe+new+york',cat:'New York'},
+ {q:'One\'s destination is never a place but rather a new way of looking at things.',by:'Henry Miller',url:'https://archive.org/search?query=henry+miller',cat:'Miller'},
+ {q:'The moment one gives close attention to anything, even a blade of grass, it becomes a mysterious world in itself.',by:'Henry Miller',url:'https://archive.org/search?query=henry+miller',cat:'Miller'},
+ {q:'There is nothing to writing. All you do is sit down at a typewriter and bleed.',by:'Hemingway',url:'https://archive.org/search?query=hemingway',cat:'Hemingway'},
+ {q:'The world breaks everyone and afterward many are strong at the broken places.',by:'Hemingway — A Farewell to Arms',url:'https://archive.org/search?query=farewell+to+arms',cat:'Hemingway'},
+ {q:'All you have to do is write one true sentence. Write the truest sentence that you know.',by:'Hemingway — A Moveable Feast',url:'https://archive.org/search?query=moveable+feast',cat:'Hemingway'},
+ {q:'Think you\'re escaping and run into yourself. Longest way round is the shortest way home.',by:'James Joyce — Ulysses',url:'https://www.gutenberg.org/ebooks/4300',cat:'Joyce'},
+ {q:'I never saw a wild thing sorry for itself.',by:'D.H. Lawrence',url:'https://www.gutenberg.org/ebooks/search/?query=dh+lawrence',cat:'Lawrence'},
+ {q:'Journeys, like artists, are born and not made.',by:'Lawrence Durrell — Bitter Lemons',url:'https://archive.org/search?query=lawrence+durrell',cat:'Durrell'},
+ {q:'Twenty years from now you will be more disappointed by the things you didn\'t do.',by:'Mark Twain',url:'https://www.gutenberg.org/ebooks/74',cat:'Twain / Mississippi'},
+ {q:'You never know what worse luck your bad luck has saved you from.',by:'Cormac McCarthy',url:'https://archive.org/search?query=cormac+mccarthy',cat:'McCarthy'},
+ {q:'I am large, I contain multitudes.',by:'Walt Whitman — Song of Myself',url:'https://www.gutenberg.org/ebooks/1322',cat:'Whitman'},
+ {q:'Afoot and light-hearted I take to the open road, healthy, free, the world before me.',by:'Walt Whitman — Song of the Open Road',url:'https://www.poetryfoundation.org/poems/48859/song-of-the-open-road',cat:'Whitman'},
+ {q:'We know what we are, but know not what we may be.',by:'Shakespeare — Hamlet',url:'https://www.gutenberg.org/ebooks/1524',cat:'Shakespeare'},
+ {q:'Stories are a communal currency of humanity.',by:'after The Arabian Nights — Burton translation',url:'https://www.gutenberg.org/ebooks/128',cat:'Arabian Nights'}
+];
+
+var NYC_EVENTS=[
+ {title:'Anthology Film Archives',desc:'Underground and avant-garde cinema. Always something strange and beautiful.',url:'https://www.anthologyfilmarchives.org'},
+ {title:'The Moth StorySLAM',desc:'Real people telling true stories. No notes. Five minutes. Pure humanity.',url:'https://themoth.org/events'},
+ {title:'Nitehawk Cinema',desc:'Dinner-and-a-movie in Williamsburg. Order a negroni and watch something weird.',url:'https://nitehawkcinema.com'},
+ {title:'McNally Jackson Books',desc:'Best independent bookstore in the city. Go in with no plan.',url:'https://www.mcnallyjackson.com'},
+ {title:'Pete\'s Candy Store',desc:'Tiny bar in Williamsburg with live music every night. No cover.',url:'https://www.petescandystore.com'},
+ {title:'Jalopy Theatre',desc:'Old-time music, folk, country, blues in Red Hook. Real instruments.',url:'https://www.jalopy.biz'},
+ {title:'Russ & Daughters Cafe',desc:'A spiritual experience. Go for the lox plate and stay two hours.',url:'https://www.russanddaughterscafe.com'},
+ {title:'Spectacle Theater',desc:'Underground microcinema in Williamsburg. $5 films you\'ve never heard of.',url:'https://www.spectacletheater.com'},
+ {title:'Smalls Jazz Club',desc:'The best jazz in the city after midnight. Tiny room, world-class players.',url:'https://www.smallslive.com'},
+ {title:'Dia:Beacon',desc:'Take the train up the Hudson. Enormous minimalist art in an old factory.',url:'https://www.diaart.org/visit/visit-our-locations-sites/dia-beacon'}
+];
+
+function openMoon(){
+ var phase=getMoonPhase();
+ var phaseName=getMoonName();
+ var lore=CELESTIAL_LORE[new Date().getDate()%CELESTIAL_LORE.length];
+ var astro=ASTRO_FACTS[new Date().getDate()%ASTRO_FACTS.length];
+ var now=new Date();
+ var isDay=now.getHours()>=6&&now.getHours()<19;
+ var arcType=isDay?'Diurnal Arc \u2609':'Nocturnal Arc \u263d';
+ /* Arabian desert 8-bit sky */
+ var svg='<rect width="700" height="500" fill="#06030f"/>'
+  +'<rect x="0" y="0" width="700" height="200" fill="#08041a"/>'
+  +'<rect x="14" y="8" width="4" height="4" fill="#fff" opacity="0.8"/><rect x="56" y="4" width="4" height="4" fill="#ffd" opacity="0.7"/><rect x="98" y="16" width="4" height="4" fill="#fff" opacity="0.6"/><rect x="140" y="6" width="4" height="4" fill="#fff" opacity="0.9"/><rect x="196" y="12" width="4" height="4" fill="#ffd" opacity="0.7"/><rect x="252" y="4" width="4" height="4" fill="#fff" opacity="0.8"/><rect x="308" y="18" width="4" height="4" fill="#fff" opacity="0.6"/><rect x="364" y="8" width="4" height="4" fill="#fff" opacity="0.9"/><rect x="420" y="14" width="4" height="4" fill="#ffd" opacity="0.7"/><rect x="476" y="6" width="4" height="4" fill="#fff" opacity="0.8"/><rect x="532" y="10" width="4" height="4" fill="#fff" opacity="0.6"/><rect x="588" y="16" width="4" height="4" fill="#fff" opacity="0.9"/><rect x="644" y="8" width="4" height="4" fill="#fff" opacity="0.7"/>'
+  +'<rect x="500" y="30" width="8" height="4" fill="#f0d060"/><rect x="496" y="34" width="16" height="4" fill="#f0d060"/><rect x="492" y="38" width="24" height="4" fill="#f0d060"/><rect x="492" y="42" width="4" height="8" fill="#f0d060"/><rect x="508" y="42" width="4" height="4" fill="#f0d060"/><rect x="492" y="50" width="4" height="4" fill="#f0d060"/><rect x="496" y="54" width="16" height="4" fill="#f0d060"/><rect x="500" y="58" width="8" height="4" fill="#f0d060"/><rect x="496" y="38" width="16" height="20" fill="#c8a830"/>'
+  +'<rect x="0" y="360" width="700" height="140" fill="#1e0e06"/>'
+  +'<rect x="0" y="340" width="120" height="24" fill="#2a1208"/><rect x="80" y="320" width="140" height="44" fill="#321808"/><rect x="260" y="310" width="160" height="54" fill="#3a1e0a"/><rect x="460" y="320" width="140" height="44" fill="#321808"/><rect x="560" y="340" width="140" height="24" fill="#2a1208"/>'
+  +'<rect x="320" y="250" width="16" height="110" fill="#0e0604"/><rect x="312" y="242" width="32" height="12" fill="#0e0604"/><rect x="316" y="226" width="24" height="20" fill="#0e0604"/><rect x="320" y="210" width="16" height="20" fill="#0e0604"/><rect x="325" y="268" width="6" height="8" fill="#f0a020" opacity="0.8"/>'
+  +'<rect x="100" y="290" width="12" height="80" fill="#0a0604"/><rect x="68" y="270" width="48" height="12" fill="#0a0604"/><rect x="76" y="278" width="36" height="8" fill="#0a0604"/>'
+  +'<rect x="560" y="300" width="12" height="70" fill="#0a0604"/><rect x="532" y="280" width="48" height="12" fill="#0a0604"/>'
+  +'<rect x="180" y="340" width="72" height="24" fill="#0a0604"/><rect x="196" y="320" width="40" height="24" fill="#0a0604"/><rect x="200" y="308" width="16" height="16" fill="#0a0604"/><rect x="180" y="360" width="12" height="20" fill="#0a0604"/><rect x="196" y="362" width="12" height="18" fill="#0a0604"/><rect x="216" y="362" width="12" height="18" fill="#0a0604"/><rect x="232" y="360" width="12" height="20" fill="#0a0604"/>';
+ showBackdrop(svg);
+ document.getElementById('modal').classList.add('landscape-mode');
+ var p='background:rgba(8,4,26,0.80);border:1px solid rgba(200,168,96,0.25);padding:14px 18px;margin-bottom:10px;';
+ var html=''
+  /* Phase card */
+  +'<div style="'+p+'text-align:center">'
+  +'<div style="font-size:52px;line-height:1;margin-bottom:6px">'+phase+'</div>'
+  +'<div style="font-family:Fraunces,serif;font-weight:900;font-size:26px;color:#f0d060">'+phaseName+'</div>'
+  +'<div style="font-family:IBM Plex Mono,monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(200,168,80,0.7);margin-top:4px">'+now.toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric"})+' \xb7 '+arcType+'</div>'
+  +'<div style="display:flex;justify-content:center;gap:16px;margin-top:10px">'
+  +'<a href="https://stellarium-web.org/" target="_blank" rel="noopener" style="font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#c8a830;text-decoration:none">Your Sky Tonight \u2197</a>'
+  +'<a href="https://apod.nasa.gov/apod/astropix.html" target="_blank" rel="noopener" style="font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#c8a830;text-decoration:none">NASA APOD \u2197</a>'
+  +'<a href="https://www.timeanddate.com/astronomy/usa/la-crosse" target="_blank" rel="noopener" style="font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#c8a830;text-decoration:none">La Crosse Sky \u2197</a>'
+  +'</div>'
+  +'</div>'
+  /* Mythology card */
+  +'<div style="'+p+'">'
+  +'<div style="font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:#c8a830;margin-bottom:8px">'+lore.tradition+'</div>'
+  +'<div style="font-family:Spectral,serif;font-size:15px;line-height:1.7;font-style:italic;color:#f0e8d0">'+lore.text+'</div>'
+  +'<div style="margin-top:10px"><a href="'+lore.link+'" target="_blank" rel="noopener" style="font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#e8a030;text-decoration:none">'+lore.linkText+' \u2197</a></div>'
+  +'</div>'
+  /* Astronomy fact */
+  +'<div style="'+p+'">'
+  +'<div style="font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:rgba(160,200,255,0.7);margin-bottom:8px">Tonight \u2014 Astronomy</div>'
+  +'<div style="font-family:Spectral,serif;font-size:14px;line-height:1.65;color:#d0dcf0">'+astro.fact+'</div>'
+  +'<div style="margin-top:10px"><a href="'+astro.link+'" target="_blank" rel="noopener" style="font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#80b0e0;text-decoration:none">'+astro.linkText+' \u2197</a></div>'
+  +'</div>'
+  +'<div style="font-family:IBM Plex Mono,monospace;font-size:8px;color:rgba(200,168,96,0.35);text-align:center">Tradition and fact rotate nightly.</div>';
+ document.getElementById('m-no').textContent='\u2609';
+ document.getElementById('m-title').textContent='The Celestial';
+ document.getElementById('m-dept').textContent='Moon \xb7 Stars \xb7 Myth \xb7 Astronomy';
+ document.getElementById('m-body').innerHTML=html;
+ document.getElementById('m-body').style.padding='20px';
+ document.getElementById('m-advisor').innerHTML='';
+ openScrim();
+}
+
+function openCompass(){
+ var day=new Date().getDay();
+ var quote=COMPASS_QUOTES[new Date().getDate()%COMPASS_QUOTES.length];
+ var quote2=COMPASS_QUOTES[(new Date().getDate()+7)%COMPASS_QUOTES.length];
+ var event1=NYC_EVENTS[day%NYC_EVENTS.length];
+ var event2=NYC_EVENTS[(day+4)%NYC_EVENTS.length];
+ /* Starry Night 8-bit */
+ var svg='<rect width="700" height="500" fill="#0a1428"/>'
+  +'<rect x="0" y="0" width="700" height="30" fill="#0c1830"/><rect x="0" y="30" width="700" height="25" fill="#0e1e38"/><rect x="0" y="55" width="700" height="20" fill="#102240"/><rect x="0" y="75" width="700" height="25" fill="#0e1e38"/><rect x="0" y="100" width="700" height="20" fill="#0c1a30"/><rect x="0" y="120" width="700" height="25" fill="#0e2040"/><rect x="0" y="145" width="700" height="20" fill="#102448"/><rect x="0" y="165" width="700" height="25" fill="#0c1e3c"/>'
+  +'<rect x="100" y="10" width="200" height="8" fill="#183060" opacity="0.7"/><rect x="50" y="35" width="300" height="6" fill="#1a3868" opacity="0.6"/><rect x="200" y="60" width="250" height="8" fill="#183060" opacity="0.7"/><rect x="350" y="25" width="280" height="6" fill="#1c3870" opacity="0.5"/>'
+  /* moon */
+  +'<rect x="560" y="20" width="60" height="12" fill="#e8d860"/><rect x="556" y="32" width="68" height="12" fill="#e8d860"/><rect x="556" y="44" width="68" height="12" fill="#d8c850"/><rect x="560" y="56" width="60" height="12" fill="#c8b840"/><rect x="556" y="32" width="16" height="36" fill="#102240"/>'
+  /* stars */
+  +'<rect x="20" y="15" width="8" height="8" fill="#e8e8d0" opacity="0.9"/><rect x="80" y="8" width="6" height="6" fill="#d8e0c0" opacity="0.8"/><rect x="150" y="20" width="8" height="8" fill="#e0e8d0" opacity="0.9"/><rect x="230" y="12" width="6" height="6" fill="#d8d8c0" opacity="0.7"/><rect x="310" y="18" width="8" height="8" fill="#e0e8d0" opacity="0.8"/><rect x="390" y="8" width="6" height="6" fill="#d8e0c0" opacity="0.9"/><rect x="460" y="22" width="8" height="8" fill="#e8e8d0" opacity="0.7"/><rect x="270" y="60" width="8" height="8" fill="#e8e0d0" opacity="0.8"/><rect x="680" y="15" width="8" height="8" fill="#e8e8d0" opacity="0.9"/>'
+  /* hills */
+  +'<rect x="0" y="310" width="700" height="190" fill="#0a1008"/><rect x="0" y="295" width="200" height="30" fill="#0c1408"/><rect x="100" y="280" width="200" height="30" fill="#0e1808"/><rect x="360" y="275" width="200" height="40" fill="#0e1808"/><rect x="600" y="270" width="100" height="45" fill="#0e1808"/>'
+  /* village */
+  +'<rect x="300" y="282" width="12" height="16" fill="#180e06"/><rect x="318" y="278" width="10" height="20" fill="#1a1006"/><rect x="336" y="284" width="12" height="14" fill="#181008"/><rect x="302" y="288" width="4" height="4" fill="#f0c040" opacity="0.6"/><rect x="320" y="284" width="4" height="4" fill="#f0c040" opacity="0.5"/>'
+  /* church */
+  +'<rect x="370" y="258" width="14" height="28" fill="#140c06"/><rect x="372" y="250" width="10" height="12" fill="#160e06"/><rect x="375" y="242" width="4" height="12" fill="#140c06"/>'
+  /* cypress */
+  +'<rect x="60" y="140" width="28" height="170" fill="#060c06"/><rect x="52" y="150" width="44" height="20" fill="#060c06"/><rect x="48" y="168" width="52" height="18" fill="#060c06"/><rect x="52" y="185" width="44" height="18" fill="#080e08"/><rect x="56" y="202" width="36" height="16" fill="#060c06"/><rect x="60" y="218" width="28" height="16" fill="#080e08"/><rect x="64" y="234" width="20" height="14" fill="#060c06"/><rect x="56" y="248" width="36" height="16" fill="#080e08"/>'
+  +'<rect x="610" y="180" width="22" height="130" fill="#060c06"/><rect x="604" y="192" width="34" height="16" fill="#060c06"/><rect x="606" y="208" width="30" height="14" fill="#080e08"/><rect x="608" y="222" width="26" height="14" fill="#060c06"/><rect x="606" y="236" width="30" height="14" fill="#080e08"/>';
+ showBackdrop(svg);
+ document.getElementById('modal').classList.add('landscape-mode');
+ var p='background:rgba(8,14,30,0.80);border:1px solid rgba(100,140,220,0.2);padding:14px 18px;margin-bottom:10px;';
+ var html='<div style="'+p+'">'
+  +'<div style="font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:rgba(180,200,255,0.55);margin-bottom:8px">'+quote.cat+'</div>'
+  +'<div style="font-family:Spectral,serif;font-size:16px;line-height:1.65;font-style:italic;color:#e8e0cc">"'+quote.q+'"</div>'
+  +'<div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:10px">'
+  +'<div style="font-family:IBM Plex Mono,monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#c8b870">\u2014 '+quote.by+'</div>'
+  +'<a href="'+quote.url+'" target="_blank" rel="noopener" style="font-family:IBM Plex Mono,monospace;font-size:8px;color:#c86030;text-decoration:none">Read \u2197</a>'
+  +'</div></div>'
+  +'<div style="'+p+'opacity:0.88">'
+  +'<div style="font-family:Spectral,serif;font-size:14px;line-height:1.6;font-style:italic;color:#c8c0a8">"'+quote2.q+'"</div>'
+  +'<div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:8px">'
+  +'<div style="font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#a09860">\u2014 '+quote2.by+'</div>'
+  +'<a href="'+quote2.url+'" target="_blank" rel="noopener" style="font-family:IBM Plex Mono,monospace;font-size:8px;color:#c86030;text-decoration:none">Read \u2197</a>'
+  +'</div></div>'
+  +'<div style="'+p+'">'
+  +'<div style="font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:rgba(180,200,255,0.55);margin-bottom:10px">Go Tonight \u2014 NYC</div>';
+ [event1,event2].forEach(function(e){
+  html+='<div style="border-top:1px solid rgba(100,140,220,0.12);padding:9px 0">'
+   +'<div style="font-family:Fraunces,serif;font-weight:600;font-size:15px;color:#e8e0cc;margin-bottom:3px">'+e.title+'</div>'
+   +'<div style="font-family:Spectral,serif;font-size:12px;font-style:italic;color:#a0a890;margin-bottom:5px">'+e.desc+'</div>'
+   +'<a href="'+e.url+'" target="_blank" rel="noopener" style="font-family:IBM Plex Mono,monospace;font-size:8px;color:#c86030;text-decoration:none">Visit \u2197</a>'
+   +'</div>';
+ });
+ html+='</div>';
+ document.getElementById('m-no').textContent='\u2600';
+ document.getElementById('m-title').textContent='The Compass';
+ document.getElementById('m-dept').textContent='Wandering \xb7 Writers \xb7 Tonight';
+ document.getElementById('m-body').innerHTML=html;
+ document.getElementById('m-body').style.padding='20px';
+ document.getElementById('m-advisor').innerHTML=advisorHTML('compass');
+ if(HIST['compass']){var b=document.getElementById('am-compass');if(b){b.innerHTML=HIST['compass'].map(function(m){return bubHTML('compass',m.role,m.content);}).join('');b.scrollTop=b.scrollHeight;}}
+ openScrim();
+}
+
+function openWatch(){
+ var now=new Date();
+ var memo=MEMENTO_MORI[now.getDate()%MEMENTO_MORI.length];
+ /* Isle of the Dead 8-bit */
+ var svg='<rect width="700" height="500" fill="#0a0e14"/>'
+  +'<rect x="0" y="0" width="700" height="200" fill="#0c1018"/>'
+  /* still water */
+  +'<rect x="0" y="240" width="700" height="260" fill="#0a1010"/>'
+  +'<rect x="0" y="260" width="700" height="2" fill="#141e1a" opacity="0.8"/><rect x="0" y="290" width="700" height="2" fill="#141e1a" opacity="0.6"/><rect x="0" y="320" width="700" height="2" fill="#141e1a" opacity="0.5"/>'
+  /* island rock */
+  +'<rect x="210" y="180" width="280" height="70" fill="#1a1410"/><rect x="190" y="200" width="320" height="50" fill="#1e1812"/><rect x="170" y="220" width="360" height="30" fill="#221c14"/><rect x="160" y="235" width="380" height="15" fill="#261e14"/>'
+  /* gate */
+  +'<rect x="330" y="205" width="40" height="45" fill="#0a0806"/><rect x="334" y="200" width="32" height="10" fill="#0a0806"/><rect x="338" y="196" width="24" height="8" fill="#0a0806"/>'
+  /* cypress trees */
+  +'<rect x="240" y="100" width="16" height="140" fill="#080c08"/><rect x="236" y="110" width="24" height="20" fill="#080c08"/><rect x="234" y="128" width="28" height="16" fill="#080c08"/><rect x="236" y="144" width="24" height="12" fill="#0a100a"/>'
+  +'<rect x="280" y="80" width="20" height="160" fill="#060a06"/><rect x="276" y="90" width="28" height="22" fill="#060a06"/><rect x="274" y="112" width="32" height="18" fill="#060a06"/>'
+  +'<rect x="400" y="88" width="20" height="152" fill="#060a06"/><rect x="396" y="98" width="28" height="22" fill="#060a06"/><rect x="394" y="120" width="32" height="18" fill="#060a06"/>'
+  +'<rect x="444" y="102" width="16" height="138" fill="#080c08"/><rect x="440" y="112" width="24" height="20" fill="#080c08"/>'
+  /* mausoleum */
+  +'<rect x="318" y="160" width="64" height="50" fill="#1a1612"/><rect x="314" y="156" width="72" height="8" fill="#1e1a14"/><rect x="322" y="148" width="56" height="12" fill="#1a1612"/>'
+  +'<rect x="322" y="160" width="8" height="46" fill="#141008"/><rect x="370" y="160" width="8" height="46" fill="#141008"/>'
+  /* boat */
+  +'<rect x="60" y="255" width="60" height="8" fill="#0e0c0a"/><rect x="64" y="250" width="52" height="8" fill="#0e0c0a"/><rect x="68" y="244" width="8" height="10" fill="#0a0806"/><rect x="72" y="238" width="4" height="8" fill="#0a0806"/><rect x="66" y="240" width="12" height="4" fill="#0a0806"/><rect x="116" y="252" width="24" height="4" fill="#0e0c0a"/>'
+  /* pale moon */
+  +'<rect x="580" y="20" width="40" height="8" fill="#b0a888" opacity="0.5"/><rect x="576" y="28" width="48" height="8" fill="#b0a888" opacity="0.4"/><rect x="576" y="36" width="48" height="8" fill="#a09878" opacity="0.3"/>'
+  /* stars */
+  +'<rect x="40" y="16" width="4" height="4" fill="#fff" opacity="0.4"/><rect x="100" y="8" width="4" height="4" fill="#ffd" opacity="0.3"/><rect x="200" y="20" width="4" height="4" fill="#fff" opacity="0.4"/><rect x="500" y="10" width="4" height="4" fill="#fff" opacity="0.4"/><rect x="620" y="6" width="4" height="4" fill="#ffd" opacity="0.5"/>';
+ showBackdrop(svg);
+ document.getElementById('modal').classList.add('landscape-mode');
+ var p='background:rgba(8,6,4,0.82);border:1px solid rgba(160,140,100,0.2);padding:14px 18px;margin-bottom:10px;';
+ var html='<div style="'+p+'">'
+  +'<div style="font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:#907850;margin-bottom:8px">Memento Mori</div>'
+  +'<div style="font-family:Spectral,serif;font-size:15px;line-height:1.65;font-style:italic;color:#d0c8a8">'+memo+'</div>'
+  +'</div>';
+ var countdowns=[{label:'Back to Brooklyn',date:'2026-06-15'},{label:'Connor check',date:'2026-06-11'},{label:'La Crosse lease ends',date:'2026-06-30'}];
+ html+='<div style="'+p+'">'
+  +'<div style="font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:#907850;margin-bottom:10px">Countdowns</div>';
+ countdowns.forEach(function(c){
+  var target=new Date(c.date+'T00:00:00'),diff=Math.ceil((target-now)/86400000);
+  var col=diff<=3?'#e06040':diff<=7?'#c09030':'#708050';
+  html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-top:1px solid rgba(160,140,100,0.12)">'
+   +'<span style="font-family:Spectral,serif;font-size:13px;color:#c8c0a0">'+c.label+'</span>'
+   +'<span style="font-family:Fraunces,serif;font-weight:900;font-size:26px;color:'+col+'">'+Math.max(0,diff)+'<span style="font-family:IBM Plex Mono,monospace;font-size:8px;color:#706040;font-weight:400"> days</span></span>'
+   +'</div>';
+ });
+ html+='</div>';
+ var soy=new Date(now.getFullYear(),0,1);
+ var wk=Math.ceil(((now-soy)/86400000+soy.getDay()+1)/7);
+ var dy=Math.floor((now-soy)/86400000)+1;
+ html+='<div style="display:flex;gap:10px">'
+  +'<div style="flex:1;'+p+'margin-bottom:0;text-align:center"><div style="font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:rgba(160,140,80,0.7);margin-bottom:4px">Week of Year</div><div style="font-family:Fraunces,serif;font-weight:900;font-size:36px;color:#c8b880">'+wk+'</div><div style="font-family:IBM Plex Mono,monospace;font-size:8px;color:#706040">of 52</div></div>'
+  +'<div style="flex:1;'+p+'margin-bottom:0;text-align:center"><div style="font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:rgba(160,140,80,0.7);margin-bottom:4px">Day of Year</div><div style="font-family:Fraunces,serif;font-weight:900;font-size:36px;color:#c8b880">'+dy+'</div><div style="font-family:IBM Plex Mono,monospace;font-size:8px;color:#706040">of 365</div></div>'
+  +'</div>';
+ document.getElementById('m-no').textContent='\u231a';
+ document.getElementById('m-title').textContent='The Watch';
+ document.getElementById('m-dept').textContent='Time \xb7 Deadlines \xb7 Memento Mori';
+ document.getElementById('m-body').innerHTML=html;
+ document.getElementById('m-body').style.padding='20px';
+ document.getElementById('m-advisor').innerHTML='';
+ openScrim();
+}
+
+/* compass advisor */
+
 paintHeader();paintSky();paintNow();renderPortals();renderListen();drawStrat();drawQuote();checkHostedReturn();
 /* Warm up Render backend on page load */
 fetch('https://lifeos-backend-nf15.onrender.com/').catch(function(){});

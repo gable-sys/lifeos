@@ -181,6 +181,10 @@ details.lib .lib-body{padding:4px 14px 12px;border-top:1px solid var(--line);}
 
 /* advisor */
 .advisor{border-top:2px solid var(--ink);background:var(--paper2);padding:13px 16px 15px;}
+.advisor.collapsed .adv-msgs,.advisor.collapsed .adv-input{display:none;}
+.advisor.collapsed{padding:8px 16px;}
+.adv-toggle{background:none;border:none;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);padding:0;margin-left:auto;}
+.adv-toggle:hover{color:var(--terra);}
 .adv-id{display:flex;align-items:center;gap:9px;margin-bottom:9px;}
 .adv-avatar{width:30px;height:30px;border:1.5px solid var(--ink);border-radius:50%;background:var(--green);color:var(--paper);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:900;font-size:14px;flex-shrink:0;}
 .adv-name{font-family:'Fraunces',serif;font-weight:600;font-size:15px;line-height:1;}
@@ -342,6 +346,24 @@ body.night .sc-lbl{background:rgba(22,19,14,0.9);}
 .modal.landscape-mode .m-scroll{background:transparent!important;}
 .modal.landscape-mode .advisor{background:rgba(0,0,0,0.82)!important;border-top:1px solid rgba(255,255,255,0.1)!important;}
 .scrim.landscape-open{background:rgba(0,0,0,0.75)!important;backdrop-filter:none!important;}
+
+/* ── VISITING SCHOLAR ── */
+.scholar-panel{border:1.5px solid var(--ink);background:var(--paper2);box-shadow:3px 3px 0 var(--shadow);}
+.scholar-head{display:flex;align-items:center;justify-content:space-between;padding:6px 12px;border-bottom:1.5px solid var(--ink);background:var(--ink);color:var(--paper);}
+.scholar-head .label{color:rgba(255,255,255,0.85);}
+.scholar-body{padding:10px 12px;}
+.scholar-scene{display:flex;gap:10px;align-items:flex-end;margin-bottom:8px;}
+.scholar-figure{flex-shrink:0;}
+.scholar-bubble{background:var(--paper);border:1.5px solid var(--ink);padding:8px 10px;font-family:'Spectral',serif;font-size:12px;font-style:italic;line-height:1.45;flex:1;position:relative;}
+.scholar-bubble::before{content:'';position:absolute;left:-8px;top:12px;width:0;height:0;border-top:6px solid transparent;border-bottom:6px solid transparent;border-right:8px solid var(--ink);}
+.scholar-bubble::after{content:'';position:absolute;left:-6px;top:13px;width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;border-right:7px solid var(--paper);}
+.scholar-name{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--terra);margin-top:5px;}
+.scholar-chat{display:flex;gap:6px;margin-top:8px;}
+.scholar-chat input{flex:1;font-family:'Spectral',serif;font-size:12px;padding:5px 8px;border:1.5px solid var(--ink);background:var(--paper);color:var(--ink);}
+.scholar-chat input:focus{outline:none;border-color:var(--terra);}
+.scholar-chat button{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.08em;text-transform:uppercase;border:1.5px solid var(--ink);background:var(--terra);color:var(--paper);padding:0 10px;cursor:pointer;}
+.scholar-btn{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;background:none;border:1px solid var(--line);color:var(--ink3);padding:3px 8px;cursor:pointer;margin-top:6px;}
+.scholar-btn:hover{border-color:var(--terra);color:var(--terra);}
 </style>
 </head>
 <body>
@@ -351,6 +373,8 @@ body.night .sc-lbl{background:rgba(22,19,14,0.9);}
     <div class="band t">
       <span class="label">Optimizing Body, Soul &amp; Shoe</span>
       <span style="display:flex;gap:16px;align-items:center">
+        <span class="cat-no" onclick="openSchedule()" style="cursor:pointer;margin-right:12px" title="Calendar">
+          <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="1.2" style="display:inline-block;vertical-align:middle;margin-right:4px;image-rendering:pixelated"><rect x="1" y="2" width="14" height="13" rx="0"/><line x1="1" y1="6" x2="15" y2="6"/><line x1="5" y1="1" x2="5" y2="4"/><line x1="11" y1="1" x2="11" y2="4"/><rect x="3" y="8" width="2" height="2" fill="rgba(255,255,255,0.85)" stroke="none"/><rect x="7" y="8" width="2" height="2" fill="rgba(255,255,255,0.85)" stroke="none"/><rect x="11" y="8" width="2" height="2" fill="rgba(255,255,255,0.85)" stroke="none"/><rect x="3" y="11" width="2" height="2" fill="rgba(255,255,255,0.85)" stroke="none"/><rect x="7" y="11" width="2" height="2" fill="rgba(255,255,255,0.85)" stroke="none"/></svg><span style="font-family:IBM Plex Mono,monospace;font-size:9px;letter-spacing:.12em">CAL</span></span>
         <span class="cat-no" onclick="openLibrary()" style="cursor:pointer;text-decoration:underline;text-underline-offset:3px">☰ LIBRARY / WIKI</span>
         <button class="night-btn" id="night-btn" onclick="toggleNight()">☾ Night</button>
         <span class="cat-no">No. 001 · MMXXVI</span>
@@ -398,24 +422,37 @@ body.night .sc-lbl{background:rgba(22,19,14,0.9);}
       </svg>
       <div class="mini-portal-label">Celestial</div>
     </button>
-    <button class="mini-portal-btn" onclick="openCompass()" title="The Compass">
-      <svg viewBox="0 0 32 32" width="48" height="48" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated">
-        <!-- compass rose 8-bit -->
-        <rect x="6" y="14" width="20" height="4" fill="#8a6820" opacity="0.4"/>
-        <rect x="14" y="6" width="4" height="20" fill="#8a6820" opacity="0.4"/>
-        <rect x="14" y="4" width="4" height="2" fill="#c8a830"/>
-        <rect x="13" y="6" width="6" height="2" fill="#c8a830"/>
-        <rect x="14" y="8" width="4" height="4" fill="#bd3010"/>
-        <rect x="14" y="20" width="4" height="4" fill="#8a6820"/>
-        <rect x="13" y="24" width="6" height="2" fill="#8a6820"/>
-        <rect x="14" y="26" width="4" height="2" fill="#6a4810"/>
-        <rect x="20" y="14" width="4" height="4" fill="#8a6820"/>
-        <rect x="24" y="13" width="2" height="6" fill="#6a4810"/>
-        <rect x="8" y="14" width="4" height="4" fill="#8a6820"/>
-        <rect x="6" y="13" width="2" height="6" fill="#6a4810"/>
-        <rect x="13" y="13" width="6" height="6" fill="#c8a830"/>
-        <rect x="14" y="14" width="4" height="4" fill="#f0d060"/>
-        <rect x="15" y="15" width="2" height="2" fill="#fff"/>
+    <button class="mini-portal-btn" onclick="openCompass()">
+      <svg viewBox="0 0 32 32" width="48" height="48" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated;display:block">
+        <!-- 8-bit spyglass / telescope -->
+        <!-- lens cap - large end left -->
+        <rect x="0" y="12" width="4" height="8" fill="#8a6820"/>
+        <rect x="2" y="10" width="2" height="12" fill="#a07828"/>
+        <!-- main barrel -->
+        <rect x="4" y="13" width="14" height="6" fill="#c8a030"/>
+        <rect x="4" y="12" width="14" height="2" fill="#a07828"/>
+        <rect x="4" y="18" width="14" height="2" fill="#a07828"/>
+        <!-- barrel detail rings -->
+        <rect x="8" y="12" width="2" height="8" fill="#a07828"/>
+        <rect x="14" y="12" width="2" height="8" fill="#a07828"/>
+        <!-- mid section narrower -->
+        <rect x="18" y="14" width="6" height="4" fill="#c8a030"/>
+        <rect x="18" y="13" width="6" height="2" fill="#a07828"/>
+        <rect x="18" y="17" width="6" height="2" fill="#a07828"/>
+        <!-- eyepiece - small end right -->
+        <rect x="24" y="14" width="6" height="4" fill="#8a6820"/>
+        <rect x="26" y="13" width="4" height="6" fill="#a07828"/>
+        <!-- lens glass -->
+        <rect x="0" y="13" width="2" height="6" fill="#6090c0" opacity="0.8"/>
+        <rect x="1" y="14" width="1" height="2" fill="#90c0f0" opacity="0.6"/>
+        <!-- eye lens -->
+        <rect x="30" y="14" width="2" height="4" fill="#6090c0" opacity="0.7"/>
+        <!-- stand / grip bottom -->
+        <rect x="10" y="20" width="4" height="6" fill="#8a6820"/>
+        <rect x="8" y="24" width="8" height="2" fill="#6a4810"/>
+        <rect x="6" y="26" width="12" height="2" fill="#4a3010"/>
+        <!-- shine on barrel -->
+        <rect x="5" y="13" width="6" height="1" fill="#f0d060" opacity="0.5"/>
       </svg>
       <div class="mini-portal-label">Wander</div>
     </button>
@@ -476,6 +513,22 @@ body.night .sc-lbl{background:rgba(22,19,14,0.9);}
       <div class="panel">
         <div class="panel-head"><span class="label">Wisdom</span><span class="label">daily</span></div>
         <div class="panel-body"><div class="wcard-q" id="quoteText">—</div><div class="wcard-by" id="quoteBy">—</div><button class="draw" onclick="drawQuote()">Another</button></div>
+      </div>
+      <div class="scholar-panel">
+        <div class="scholar-head"><span class="label">Visiting Scholar</span><button class="scholar-btn" onclick="nextScholar()" style="border-color:rgba(255,255,255,0.3);color:rgba(255,255,255,0.7);margin:0">Next visitor ▸</button></div>
+        <div class="scholar-body">
+          <div class="scholar-scene">
+            <div class="scholar-figure"><svg id="scholar-svg" viewBox="0 0 32 42" width="64" height="84" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated"></svg></div>
+            <div>
+              <div class="scholar-bubble" id="scholar-bubble">Loading...</div>
+              <div class="scholar-name" id="scholar-name">—</div>
+            </div>
+          </div>
+          <div class="scholar-chat">
+            <input id="scholar-input" placeholder="Ask your visitor..." onkeydown="if(event.key==='Enter')askScholar()">
+            <button onclick="askScholar()">Ask</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -938,7 +991,10 @@ function modalBody(id){
  }
  return '<p>—</p>';
 }
-function advisorHTML(id){if(!ADV[id])return '';var a=ADV[id];return '<div class="adv-id"><div class="adv-avatar">'+a.avatar+'</div><div><div class="adv-name">'+a.name+'</div><div class="adv-role">'+a.role+'</div></div></div><div class="adv-msgs" id="am-'+id+'"></div><div class="adv-input"><input id="ai-'+id+'" placeholder="Ask '+a.name+'…" onkeydown="if(event.key===\'Enter\')sendAdvisor(\''+id+'\')"><button id="ab-'+id+'" onclick="sendAdvisor(\''+id+'\')">Send</button></div>';}
+function advisorHTML(id){if(!ADV[id])return '';var a=ADV[id];
+return '<div class="adv-id"><div class="adv-avatar">'+a.avatar+'</div><div><div class="adv-name">'+a.name+'</div><div class="adv-role">'+a.role+'</div></div><button onclick="this.closest(\'.advisor\').classList.toggle(\'collapsed\');this.textContent=this.closest(\'.advisor\').classList.contains(\'collapsed\')?\'▸ Show\':\'▾ Hide\';" style="margin-left:auto;background:none;border:1px solid var(--line);font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);padding:2px 8px;cursor:pointer">▾ Hide</button></div>'
++'<div class="adv-msgs" id="am-'+id+'"></div>'
++'<div class="adv-input"><input id="ai-'+id+'" placeholder="Ask '+a.name+'..." onkeydown="if(event.key===\'Enter\')sendAdvisor(\''+id+'\')"><button id="ab-'+id+'" onclick="sendAdvisor(\''+id+'\')">Send</button></div>';}
 
 var HIST={};
 function openModal(id){
@@ -1069,7 +1125,7 @@ function sendAdvisor(id){
  var tk=document.createElement('div');tk.className='thinking';tk.textContent=ADV[id].name+' is thinking…';box.appendChild(tk);box.scrollTop=box.scrollHeight;
  fetch(CLAUDE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:CLAUDE_MODEL,max_tokens:1000,system:ADV[id].sys,messages:HIST[id]})})
  .then(function(r){return r.json();}).then(function(data){tk.remove();var reply=(data.content&&data.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('\n'))||'…';HIST[id].push({role:'assistant',content:reply});box.insertAdjacentHTML('beforeend',bubHTML(id,'assistant',reply));box.scrollTop=box.scrollHeight;if(btn)btn.disabled=false;sbSaveAdv(id,HIST[id]);})
- .catch(function(){tk.remove();box.insertAdjacentHTML('beforeend',bubHTML(id,'assistant','Connection issue. On the live site, point CLAUDE_ENDPOINT at your Render backend so the key stays server-side.'));box.scrollTop=box.scrollHeight;if(btn)btn.disabled=false;});
+ .catch(function(){tk.remove();box.insertAdjacentHTML('beforeend',bubHTML(id,'assistant','Backend is waking up (free tier takes ~30s). Wait a moment and send again.'));box.scrollTop=box.scrollHeight;if(btn)btn.disabled=false;});
 }
 
 /* ════════ CALENDAR SCAFFOLD ════════ */
@@ -1310,7 +1366,12 @@ function finModalHTML(){
  html+='</div>';
  /* Goals */
  html+='<h3 style="margin-top:14px">Goals</h3>';
- html+='<ul><li><span class="k">Buffer</span><span class="vv">$10–15k by year end <b>before</b> investing</span></li><li><span class="k">Phase 2</span><span class="vv">$500/mo Roth IRA + $500/mo FXAIX</span></li><li><span class="k">Credit</span><span class="vv">Discover it® Secured — use + pay monthly</span></li></ul>';
+ html+='<ul><li><span class="k">Buffer</span><span class="vv">$10–15k by year end <b>before</b> investing</span></li><li><span class="k">Phase 2</span><span class="vv">$500/mo Roth IRA + $500/mo FXAIX</span></li><li><span class="k">Credit</span><span class="vv">Discover it Secured — use + pay monthly</span></li></ul>';
+ /* SYNC BUTTON */
+ html+='<div style="margin-top:16px;border-top:1px solid var(--line);padding-top:14px">';
+ html+='<button id="gmail-sync-btn" onclick="gmailSync()" style="width:100%;font-family:IBM Plex Mono,monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;border:1.5px solid var(--green);background:var(--green);color:var(--paper);padding:11px;cursor:pointer;display:block">⟳ Sync BofA Transactions from Gmail</button>';
+ html+='<div id="gmail-sync-status" style="font-family:IBM Plex Mono,monospace;font-size:9px;color:var(--ink3);text-align:center;padding:6px 0"></div>';
+ html+='</div>';
  return html;
 }
 function editBalance(){
@@ -1354,6 +1415,225 @@ function delFinTx(i){
  setTimeout(function(){openModal('finance');},100);
 }
 
+
+/* ════════ VISITING SCHOLAR ════════ */
+var SCHOLARS=[
+ {name:'Ernest Hemingway',era:'Paris, 1926',sys:"You are Ernest Hemingway. You write and speak exactly as Hemingway did — short declarative sentences, no adverbs, no sentiment without earning it. You are sitting at a zinc bar in Paris, 1926. You have strong opinions about: writing (only one true sentence at a time), courage (the willingness to be afraid and act anyway), fishing (a metaphor for everything), drinking (necessary but not an excuse), and the expatriate life. Reference your actual works naturally — The Sun Also Rises, A Farewell to Arms, the Nick Adams stories. You are talking to Gable, a writer in Brooklyn who is building something. Be genuinely interested. Push back if he says something weak. One paragraph max, no em-dashes.",
+  color:'#8a3010',
+  sprite:function(){
+   /* Hemingway - broad shoulders, dark hair, beard, khaki */
+   return '<rect x="10" y="2" width="12" height="10" fill="#c09060"/>'  /* head */
+   +'<rect x="8" y="4" width="16" height="8" fill="#c09060"/>'
+   +'<rect x="8" y="10" width="16" height="4" fill="#3a2010"/>'  /* dark hair top */
+   +'<rect x="6" y="12" width="20" height="3" fill="#3a2010"/>'  /* brow */
+   +'<rect x="9" y="8" width="3" height="3" fill="#6a3a18"/>'  /* eye shadow L */
+   +'<rect x="20" y="8" width="3" height="3" fill="#6a3a18"/>'  /* eye shadow R */
+   +'<rect x="10" y="9" width="2" height="2" fill="#1a0a00"/>'  /* eye L */
+   +'<rect x="21" y="9" width="2" height="2" fill="#1a0a00"/>'  /* eye R */
+   +'<rect x="8" y="15" width="16" height="5" fill="#8a6040"/>'  /* beard */
+   +'<rect x="12" y="13" width="8" height="4" fill="#c09060"/>'  /* face lower */
+   +'<rect x="13" y="16" width="6" height="3" fill="#c09060"/>'  /* chin */
+   +'<rect x="6" y="20" width="20" height="14" fill="#c8a030"/>'  /* khaki shirt */
+   +'<rect x="4" y="20" width="4" height="12" fill="#c8a030"/>'  /* L arm */
+   +'<rect x="24" y="20" width="4" height="12" fill="#c8a030"/>'  /* R arm */
+   +'<rect x="2" y="30" width="4" height="4" fill="#c09060"/>'  /* L hand */
+   +'<rect x="26" y="30" width="4" height="4" fill="#c09060"/>'  /* R hand */
+   +'<rect x="8" y="34" width="6" height="8" fill="#5a3a18"/>'  /* L leg */
+   +'<rect x="18" y="34" width="6" height="8" fill="#5a3a18"/>'  /* R leg */
+   +'<rect x="10" y="20" width="12" height="2" fill="#8a7020"/>'  /* shirt collar */
+   +'<rect x="14" y="18" width="4" height="4" fill="#c09060"/>'  /* neck */;}
+ },
+ {name:'Marcus Aurelius',era:'Rome, 170 AD',sys:"You are Marcus Aurelius, Emperor of Rome and Stoic philosopher. You speak in the personal, searching tone of the Meditations — as if writing notes to yourself rather than performing wisdom. You are not performing. You genuinely struggle with anger, distraction, the desire for approval, the fear of death. Reference actual passages from Meditations naturally. You believe: that we only control our responses, not events; that every morning we must recommit; that the obstacle is the way; that our time is short and mostly wasted. You are speaking to Gable, a young man trying to build something meaningful. Take him seriously. One paragraph max.",
+  color:'#6a2010',
+  sprite:function(){
+   /* Marcus - Roman toga, laurel wreath, strong face */
+   return '<rect x="10" y="2" width="12" height="10" fill="#d4a870"/>'  /* head */
+   +'<rect x="8" y="4" width="16" height="8" fill="#d4a870"/>'
+   +'<rect x="8" y="2" width="16" height="4" fill="#5a8020"/>'  /* laurel wreath */
+   +'<rect x="6" y="2" width="4" height="3" fill="#5a8020"/>'
+   +'<rect x="22" y="2" width="4" height="3" fill="#5a8020"/>'
+   +'<rect x="10" y="1" width="12" height="2" fill="#6a9030"/>'
+   +'<rect x="10" y="8" width="2" height="2" fill="#1a0800"/>'  /* eyes */
+   +'<rect x="20" y="8" width="2" height="2" fill="#1a0800"/>'
+   +'<rect x="9" y="7" width="4" height="2" fill="#9a7840"/>'  /* eyebrows */
+   +'<rect x="19" y="7" width="4" height="2" fill="#9a7840"/>'
+   +'<rect x="13" y="12" width="6" height="2" fill="#c09060"/>'  /* mouth area */
+   +'<rect x="14" y="18" width="4" height="3" fill="#d4a870"/>'  /* neck */
+   +'<rect x="4" y="21" width="24" height="16" fill="#f0f0e0"/>'  /* toga white */
+   +'<rect x="2" y="21" width="4" height="14" fill="#f0f0e0"/>'  /* L arm toga */
+   +'<rect x="26" y="21" width="4" height="14" fill="#e0e0d0"/>'  /* R arm toga */
+   +'<rect x="4" y="21" width="6" height="2" fill="#d0c8a0"/>'  /* toga fold */
+   +'<rect x="6" y="23" width="4" height="2" fill="#d0c8a0"/>'
+   +'<rect x="8" y="34" width="6" height="8" fill="#f0f0e0"/>'  /* legs toga */
+   +'<rect x="18" y="34" width="6" height="8" fill="#f0f0e0"/>'
+   +'<rect x="6" y="35" width="4" height="2" fill="#c8b870"/>'  /* sandal strap */
+   +'<rect x="22" y="35" width="4" height="2" fill="#c8b870"/>';}
+ },
+ {name:'Mark Twain',era:'Hartford, 1885',sys:"You are Mark Twain — Samuel Clemens — sitting in your Hartford study with a cigar, in 1885. You speak with wit that has teeth, warmth that has limits, and a low tolerance for pretension or cruelty. You have strong opinions about: the Mississippi (the greatest teacher), American civilization (mostly a confidence scheme), human nature (absurd and lovable), writing (never use a five-dollar word when a fifty-cent word will do), and money (you understand it too late). Reference Huck Finn, Life on the Mississippi, your notebooks. You are genuinely funny — not performing humor, just seeing the world clearly enough that it comes out funny. One paragraph max.",
+  color:'#3a3050',
+  sprite:function(){
+   /* Twain - white suit, white hair, mustache, distinctive */
+   return '<rect x="10" y="2" width="12" height="10" fill="#e8c898"/>'  /* head */
+   +'<rect x="8" y="4" width="16" height="8" fill="#e8c898"/>'
+   +'<rect x="8" y="2" width="16" height="4" fill="#f0f0f0"/>'  /* white hair */
+   +'<rect x="6" y="3" width="4" height="6" fill="#f0f0f0"/>'
+   +'<rect x="22" y="3" width="4" height="6" fill="#f0f0f0"/>'
+   +'<rect x="10" y="8" width="2" height="2" fill="#1a0800"/>'  /* eyes */
+   +'<rect x="20" y="8" width="2" height="2" fill="#1a0800"/>'
+   +'<rect x="9" y="7" width="4" height="2" fill="#d0c0a0"/>'  /* eyebrows bushy */
+   +'<rect x="19" y="7" width="4" height="2" fill="#d0c0a0"/>'
+   +'<rect x="11" y="12" width="10" height="3" fill="#f0f0f0"/>'  /* mustache */
+   +'<rect x="13" y="14" width="6" height="2" fill="#e8c898"/>'  /* chin */
+   +'<rect x="14" y="17" width="4" height="4" fill="#e8c898"/>'  /* neck */
+   +'<rect x="5" y="21" width="22" height="15" fill="#f8f8f8"/>'  /* white suit */
+   +'<rect x="3" y="21" width="4" height="12" fill="#f8f8f8"/>'  /* L arm */
+   +'<rect x="25" y="21" width="4" height="12" fill="#f8f8f8"/>'  /* R arm */
+   +'<rect x="10" y="20" width="4" height="6" fill="#2a2838"/>'  /* vest/tie dark */
+   +'<rect x="18" y="20" width="4" height="6" fill="#2a2838"/>'
+   +'<rect x="13" y="21" width="6" height="8" fill="#e8e8e8"/>'  /* shirt front */
+   +'<rect x="8" y="36" width="6" height="6" fill="#2a2838"/>'  /* pants */
+   +'<rect x="18" y="36" width="6" height="6" fill="#2a2838"/>'
+   +'<rect x="25" y="30" width="6" height="2" fill="#e8c898"/>'  /* hand with cigar */
+   +'<rect x="30" y="29" width="2" height="4" fill="#d4a030"/>'  /* cigar */;}
+ },
+ {name:'Napoleon Bonaparte',era:'Paris, 1804',sys:"You are Napoleon Bonaparte, Emperor of France, speaking from his study in 1810 at the height of his power. You are brilliant, impatient, and completely focused. You believe: that imagination rules the world; that a leader must be an actor but never forget he is acting; that an army marches on its stomach; that glory is fleeting but obscurity is forever. You read voraciously — Caesar, Alexander, Plutarch — and you quote them. You are interested in systems, in how things are organized, in the gap between what men say they will do and what they actually do. You have no patience for excuses. You are speaking to Gable, who is building something. Ask him sharp questions. One paragraph max.",
+  color:'#1a2060',
+  sprite:function(){
+   /* Napoleon - blue uniform, bicorne hat, medals */
+   return '<rect x="6" y="0" width="20" height="5" fill="#1a1a2a"/>'  /* bicorne hat */
+   +'<rect x="4" y="2" width="24" height="4" fill="#2a2a3a"/>'  /* hat brim */
+   +'<rect x="10" y="4" width="12" height="10" fill="#d4a870"/>'  /* face */
+   +'<rect x="8" y="6" width="16" height="8" fill="#d4a870"/>'
+   +'<rect x="10" y="8" width="2" height="2" fill="#1a0800"/>'  /* eyes */
+   +'<rect x="20" y="8" width="2" height="2" fill="#1a0800"/>'
+   +'<rect x="9" y="7" width="4" height="1" fill="#7a5030"/>'  /* eyebrows */
+   +'<rect x="19" y="7" width="4" height="1" fill="#7a5030"/>'
+   +'<rect x="13" y="12" width="6" height="2" fill="#c09060"/>'  /* mouth */
+   +'<rect x="14" y="14" width="4" height="6" fill="#d4a870"/>'  /* neck */
+   +'<rect x="4" y="20" width="24" height="16" fill="#1a2878"/>'  /* blue coat */
+   +'<rect x="2" y="20" width="4" height="14" fill="#1a2878"/>'  /* L arm */
+   +'<rect x="26" y="20" width="4" height="14" fill="#1a2878"/>'  /* R arm */
+   +'<rect x="10" y="20" width="12" height="2" fill="#f0d060"/>'  /* epaulette */
+   +'<rect x="8" y="22" width="4" height="4" fill="#f0d060"/>'  /* medal L */
+   +'<rect x="20" y="22" width="4" height="4" fill="#f0d060"/>'  /* medal R */
+   +'<rect x="9" y="23" width="2" height="2" fill="#e03020"/>'  /* medal red */
+   +'<rect x="21" y="23" width="2" height="2" fill="#e03020"/>'
+   +'<rect x="8" y="36" width="6" height="6" fill="#f0f0e0"/>'  /* white pants */
+   +'<rect x="18" y="36" width="6" height="6" fill="#f0f0e0"/>'
+   +'<rect x="8" y="40" width="6" height="2" fill="#1a1a2a"/>'  /* boots */
+   +'<rect x="18" y="40" width="6" height="2" fill="#1a1a2a"/>';}
+ },
+ {name:'Simone de Beauvoir',era:'Paris, 1949',sys:"You are Simone de Beauvoir, at the Cafe de Flore in Paris, 1949. You have just finished The Second Sex. You are sharp, warm, intellectually relentless, and you do not suffer vague thinking. You believe: that existence precedes essence — we are not born with a fixed nature but must choose ourselves daily; that bad faith (lying to yourself about your freedom) is the great modern disease; that relationships must be between free people or they corrupt both. Reference your actual work and your conversations with Sartre, Camus, and others naturally. You are speaking to Gable, a young American man trying to live deliberately. You are genuinely curious about him. Challenge him gently. One paragraph max.",
+  color:'#4a2060',
+  sprite:function(){
+   /* Beauvoir - iconic turban/headwrap, dark clothing, cigarette */
+   return '<rect x="8" y="1" width="16" height="8" fill="#2a1860"/>'  /* turban */
+   +'<rect x="6" y="3" width="20" height="6" fill="#3a2870"/>'
+   +'<rect x="8" y="7" width="16" height="2" fill="#4a38a0"/>'  /* turban detail */
+   +'<rect x="10" y="8" width="12" height="10" fill="#c88868"/>'  /* face */
+   +'<rect x="8" y="10" width="16" height="8" fill="#c88868"/>'
+   +'<rect x="10" y="11" width="2" height="2" fill="#1a0808"/>'  /* eyes */
+   +'<rect x="20" y="11" width="2" height="2" fill="#1a0808"/>'
+   +'<rect x="9" y="10" width="4" height="2" fill="#7a3828"/>'  /* eyebrows arched */
+   +'<rect x="19" y="10" width="4" height="2" fill="#7a3828"/>'
+   +'<rect x="13" y="15" width="6" height="2" fill="#a05040"/>'  /* lips red */
+   +'<rect x="14" y="18" width="4" height="4" fill="#c88868"/>'  /* neck */
+   +'<rect x="6" y="22" width="20" height="14" fill="#1a1820"/>'  /* dark jacket */
+   +'<rect x="4" y="22" width="4" height="12" fill="#1a1820"/>'  /* arms */
+   +'<rect x="24" y="22" width="4" height="12" fill="#1a1820"/>'
+   +'<rect x="12" y="22" width="8" height="3" fill="#f0f0f0"/>'  /* white collar */
+   +'<rect x="26" y="30" width="6" height="2" fill="#c88868"/>'  /* hand */
+   +'<rect x="31" y="28" width="2" height="5" fill="#f0f0e0"/>'  /* cigarette */
+   +'<rect x="31" y="28" width="2" height="1" fill="#e04000"/>'  /* ember */
+   +'<rect x="8" y="36" width="6" height="6" fill="#1a1820"/>'  /* skirt */
+   +'<rect x="18" y="36" width="6" height="6" fill="#1a1820"/>';}
+ }
+];
+
+var scholarIdx=Math.floor(Math.random()*SCHOLARS.length);
+var scholarHist=[];
+
+function renderScholar(){
+ var s=SCHOLARS[scholarIdx];
+ var svg=document.getElementById('scholar-svg');
+ if(svg)svg.innerHTML=s.sprite();
+ var bubble=document.getElementById('scholar-bubble');
+ var name=document.getElementById('scholar-name');
+ if(name)name.textContent=s.name+' \xb7 '+s.era;
+ if(bubble&&scholarHist.length===0){
+  /* Opening greeting */
+  bubble.textContent='...';
+  var greet='Greet Gable briefly, in character, as if you just arrived at his desk and noticed his Life OS dashboard. Be curious and a little opinionated. One sentence.';
+  fetch(CLAUDE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:CLAUDE_MODEL,max_tokens:200,system:s.sys,messages:[{role:'user',content:greet}]})})
+  .then(function(r){return r.json();}).then(function(d){
+   var reply=(d.content&&d.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join(''))||'...';
+   if(bubble){bubble.textContent=reply;bubble.style.opacity='1';clearTimeout(window._scholarFade);window._scholarFade=setTimeout(function(){if(bubble){bubble.style.transition='opacity 2s';bubble.style.opacity='0.3';}},18000);}
+   scholarHist=[{role:'assistant',content:reply}];
+  }).catch(function(){if(bubble)bubble.textContent='(Waking up — ask me something in 30s)';});
+ } else if(bubble&&scholarHist.length>0){
+  bubble.textContent=scholarHist[scholarHist.length-1].content;
+ }
+}
+
+function nextScholar(){
+ scholarIdx=(scholarIdx+1)%SCHOLARS.length;
+ scholarHist=[];
+ renderScholar();
+}
+
+function askScholar(){
+ var inp=document.getElementById('scholar-input');
+ var bubble=document.getElementById('scholar-bubble');
+ if(!inp||!inp.value.trim())return;
+ var q=inp.value.trim();inp.value='';
+ var s=SCHOLARS[scholarIdx];
+ if(bubble)bubble.textContent='...';
+ scholarHist.push({role:'user',content:q});
+ fetch(CLAUDE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:CLAUDE_MODEL,max_tokens:250,system:s.sys,messages:scholarHist})})
+ .then(function(r){return r.json();}).then(function(d){
+  var reply=(d.content&&d.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join(''))||'...';
+  if(bubble){bubble.style.opacity='1';bubble.style.transition='none';bubble.textContent=reply;clearTimeout(window._scholarFade);window._scholarFade=setTimeout(function(){if(bubble){bubble.style.transition='opacity 2s';bubble.style.opacity='0.3';}},18000);}
+  scholarHist.push({role:'assistant',content:reply});
+ }).catch(function(){if(bubble)bubble.textContent='I seem to have lost my train of thought.';});
+}
+
+
+/* ════════ GMAIL SYNC ════════ */
+function gmailSync(){
+ var btn=document.getElementById('gmail-sync-btn');
+ var status=document.getElementById('gmail-sync-status');
+ if(btn){btn.disabled=true;btn.textContent='Syncing...';}
+ if(status)status.textContent='Reading BofA emails...';
+ fetch('https://lifeos-backend-nf15.onrender.com/gmail-sync')
+  .then(function(r){return r.json();})
+  .then(function(data){
+   if(!data.authorized){
+    if(status)status.textContent='Not authorized.';
+    if(btn){btn.disabled=false;btn.textContent='\u27f3 Sync BofA from Gmail';}
+    return;
+   }
+   var txns=data.transactions||[];
+   if(!txns.length){
+    if(status)status.textContent='No new transactions found.';
+    if(btn){btn.disabled=false;btn.textContent='\u27f3 Sync BofA from Gmail';}
+    return;
+   }
+   var fin=loadFin();fin.txns=fin.txns||[];
+   var existingIds=new Set(fin.txns.map(function(t){return t.id;}));
+   var added=0;
+   txns.forEach(function(t){
+    if(!existingIds.has(t.id)){fin.txns.push(t);fin.balance=(fin.balance||0)+t.amount;added++;}
+   });
+   saveFin(fin);
+   if(status)status.textContent=added+' new transactions added.';
+   if(btn){btn.disabled=false;btn.textContent='\u27f3 Sync BofA from Gmail';}
+   setTimeout(function(){closeModal();setTimeout(function(){openFinance();},100);},1200);
+  })
+  .catch(function(){
+   if(status)status.textContent='Backend waking up — try again in 30s.';
+   if(btn){btn.disabled=false;btn.textContent='\u27f3 Sync BofA from Gmail';}
+  });
+}
 /* ════════ BOOT ════════ */
 
 /* ════════ BACKDROP FUNCTIONS ════════ */
@@ -1643,7 +1923,7 @@ function openWatch(){
 
 /* compass advisor */
 
-paintHeader();paintSky();paintNow();renderPortals();renderListen();drawStrat();drawQuote();checkHostedReturn();
+paintHeader();paintSky();paintNow();renderPortals();renderListen();drawStrat();drawQuote();checkHostedReturn();setTimeout(renderScholar,2000);
 /* Warm up Render backend on page load */
 fetch('https://lifeos-backend-nf15.onrender.com/').catch(function(){});
 setInterval(function(){paintSky();paintNow();},60000);

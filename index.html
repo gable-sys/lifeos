@@ -521,7 +521,10 @@ body.night .sc-lbl{background:rgba(22,19,14,0.9);}
             <div class="scholar-figure"><svg id="scholar-svg" viewBox="0 0 32 42" width="64" height="84" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated"></svg></div>
             <div>
               <div class="scholar-bubble" id="scholar-bubble">Loading...</div>
-              <div class="scholar-name" id="scholar-name">—</div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">
+                <div class="scholar-name" id="scholar-name">—</div>
+                <button id="scholar-speak-btn" onclick="speakScholar()" style="background:none;border:1px solid var(--line);font-family:IBM Plex Mono,monospace;font-size:7px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);padding:2px 7px;cursor:pointer">&#9654; Hear</button>
+              </div>
             </div>
           </div>
           <div class="scholar-chat">
@@ -1120,12 +1123,45 @@ function bubHTML(id,role,text){if(role==='user')return '<div class="bub u"><div 
 function sendAdvisor(id){
  var inp=document.getElementById('ai-'+id),btn=document.getElementById('ab-'+id),box=document.getElementById('am-'+id);
  if(!inp||!box)return;var text=inp.value.trim();if(!text)return;inp.value='';if(btn)btn.disabled=true;
- HIST[id]=HIST[id]||[];HIST[id].push({role:'user',content:text});
+ /* Build live context prepend for finance */
+ var livePrefix='';
+ if(id==='finance'){
+  var fin=loadFin();
+  var today=new Date().toISOString().slice(0,10);
+  var todaySpent=0;
+  (fin.txns||[]).forEach(function(t){if(t.date===today&&t.amount<0)todaySpent+=Math.abs(t.amount);});
+  var recent=(fin.txns||[]).slice(-5).reverse().map(function(t){return (t.amount>0?'+':'')+t.amount.toFixed(2)+' '+t.desc;}).join(', ');
+  var nextUp=UPCOMING.filter(function(u){return u.amount!==0;}).slice(0,3).map(function(u){return (u.amount>0?'+$':'-$')+Math.abs(u.amount)+' '+u.label+' '+u.date;}).join(', ');
+  livePrefix='[LIVE '+today+'] Balance: $'+(fin.balance||0).toFixed(2)+'. Spent today: $'+todaySpent.toFixed(2)+'. Recent: '+(recent||'none')+'. Upcoming: '+(nextUp||'none')+'. USER SAYS: ';
+ }
+ var msgContent=livePrefix+text;
+ HIST[id]=HIST[id]||[];
+ HIST[id].push({role:'user',content:msgContent});
  box.insertAdjacentHTML('beforeend',bubHTML(id,'user',text));
  var tk=document.createElement('div');tk.className='thinking';tk.textContent=ADV[id].name+' is thinking…';box.appendChild(tk);box.scrollTop=box.scrollHeight;
- fetch(CLAUDE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:CLAUDE_MODEL,max_tokens:1000,system:ADV[id].sys,messages:HIST[id]})})
+ fetch(CLAUDE_ENDPOINT,{method:'POST',mode:'cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:CLAUDE_MODEL,max_tokens:1000,system:ADV[id].sys,messages:HIST[id]})})
  .then(function(r){return r.json();}).then(function(data){tk.remove();var reply=(data.content&&data.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('\n'))||'…';HIST[id].push({role:'assistant',content:reply});box.insertAdjacentHTML('beforeend',bubHTML(id,'assistant',reply));box.scrollTop=box.scrollHeight;if(btn)btn.disabled=false;sbSaveAdv(id,HIST[id]);})
- .catch(function(){tk.remove();box.insertAdjacentHTML('beforeend',bubHTML(id,'assistant','Backend is waking up (free tier takes ~30s). Wait a moment and send again.'));box.scrollTop=box.scrollHeight;if(btn)btn.disabled=false;});
+ .catch(function(){
+  /* Auto-retry once after 35 seconds */
+  tk.textContent=ADV[id].name+' is waking up... retrying in 30s';
+  setTimeout(function(){
+   fetch(CLAUDE_ENDPOINT,{method:'POST',mode:'cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:CLAUDE_MODEL,max_tokens:1000,system:ADV[id].sys,messages:HIST[id]})})
+   .then(function(r){return r.json();})
+   .then(function(data){
+    tk.remove();
+    var reply=(data.content&&data.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('\n'))||'...';
+    HIST[id].push({role:'assistant',content:reply});
+    box.insertAdjacentHTML('beforeend',bubHTML(id,'assistant',reply));
+    box.scrollTop=box.scrollHeight;if(btn)btn.disabled=false;
+    sbSaveAdv(id,HIST[id]);
+   })
+   .catch(function(){
+    tk.remove();
+    box.insertAdjacentHTML('beforeend',bubHTML(id,'assistant','Still waking up. Try once more in a moment.'));
+    box.scrollTop=box.scrollHeight;if(btn)btn.disabled=false;
+   });
+  },35000);
+ });
 }
 
 /* ════════ CALENDAR SCAFFOLD ════════ */
@@ -1386,8 +1422,12 @@ function setBalance(){
  var fin=loadFin();
  fin.balance=val;
  saveFin(fin);
+ /* update masthead balance cell immediately */
+ var balEl=document.getElementById('td-balance');
+ if(balEl&&balEl.firstChild)balEl.firstChild.textContent='$'+Math.abs(val).toFixed(0)+' ';
+ if(balEl)balEl.style.color=val>=0?'var(--green)':'var(--terra)';
  closeModal();
- setTimeout(function(){openModal('finance');},100);
+ setTimeout(function(){openFinance();},100);
 }
 function addFinTx(){
  var type=document.getElementById('fin-type');
@@ -1402,8 +1442,13 @@ function addFinTx(){
  fin.txns.push({date:new Date().toISOString().slice(0,10),desc:desc.value||'—',amount:signed});
  fin.balance=(fin.balance||0)+signed;
  saveFin(fin);
+ /* update masthead immediately */
+ var newBal=fin.balance;
+ var balEl=document.getElementById('td-balance');
+ if(balEl&&balEl.firstChild)balEl.firstChild.textContent='$'+Math.abs(newBal).toFixed(0)+' ';
+ if(balEl)balEl.style.color=newBal>=0?'var(--green)':'var(--terra)';
  closeModal();
- setTimeout(function(){openModal('finance');},100);
+ setTimeout(function(){openFinance();},100);
 }
 function delFinTx(i){
  var fin=loadFin();
@@ -1634,6 +1679,35 @@ function gmailSync(){
    if(btn){btn.disabled=false;btn.textContent='\u27f3 Sync BofA from Gmail';}
   });
 }
+
+/* ════════ ELEVENLABS SCHOLAR VOICE ════════ */
+function speakScholar(){
+ var bubble=document.getElementById('scholar-bubble');
+ var btn=document.getElementById('scholar-speak-btn');
+ if(!bubble||!bubble.textContent||bubble.textContent==='...'||bubble.textContent==='Loading...')return;
+ var text=bubble.textContent.slice(0,500);
+ var s=SCHOLARS[scholarIdx];
+ if(btn){btn.textContent='...';btn.disabled=true;}
+ fetch('https://lifeos-backend-nf15.onrender.com/speak',{
+  method:'POST',
+  mode:'cors',
+  headers:{'Content-Type':'application/json'},
+  body:JSON.stringify({text:text,scholar:s.name})
+ })
+ .then(function(r){return r.json();})
+ .then(function(data){
+  if(data.error){console.error('ElevenLabs:',data.error);if(btn){btn.textContent='\u25b6 Hear';btn.disabled=false;}return;}
+  /* Play base64 audio */
+  var audio=new Audio('data:audio/mpeg;base64,'+data.audio);
+  audio.play();
+  audio.onended=function(){if(btn){btn.textContent='\u25b6 Hear';btn.disabled=false;}};
+ })
+ .catch(function(e){
+  console.error('Speak error:',e);
+  if(btn){btn.textContent='\u25b6 Hear';btn.disabled=false;}
+ });
+}
+
 /* ════════ BOOT ════════ */
 
 /* ════════ BACKDROP FUNCTIONS ════════ */
@@ -1924,8 +1998,10 @@ function openWatch(){
 /* compass advisor */
 
 paintHeader();paintSky();paintNow();renderPortals();renderListen();drawStrat();drawQuote();checkHostedReturn();setTimeout(renderScholar,2000);
-/* Warm up Render backend on page load */
-fetch('https://lifeos-backend-nf15.onrender.com/').catch(function(){});
+/* Keep Render warm - ping every 8 minutes */
+function keepWarm(){fetch('https://lifeos-backend-nf15.onrender.com/').catch(function(){});}
+keepWarm();
+setInterval(keepWarm, 8*60*1000);
 setInterval(function(){paintSky();paintNow();},60000);
 /* Load Supabase data async on boot */
 (async function(){

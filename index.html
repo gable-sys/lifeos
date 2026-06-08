@@ -1865,6 +1865,8 @@ function stopScholar(){
  if(window._scholarAudio){window._scholarAudio.pause();window._scholarAudio.currentTime=0;window._scholarAudio=null;}
  var btn=document.getElementById('scholar-speak-btn');
  if(btn){btn.textContent='▶ Hear';btn.disabled=false;}
+ var fbtn=document.getElementById('scholar-float-speak');
+ if(fbtn){fbtn.textContent='▶ Hear';}
 }
 function speakScholar(){
  var bubble=document.getElementById('scholar-bubble');
@@ -1880,15 +1882,17 @@ function speakScholar(){
   method:'POST',
   mode:'cors',
   headers:{'Content-Type':'application/json'},
-  body:JSON.stringify({text:text,scholar:s.name})
+  body:JSON.stringify({text:text,scholar:s.name.split(' · ')[0].trim()})
  })
  .then(function(r){return r.json();})
  .then(function(data){
   if(data.error){console.error('ElevenLabs:',data.error);if(btn){btn.textContent='\u25b6 Hear';btn.disabled=false;}return;}
   /* Play base64 audio */
   var audio=new Audio('data:audio/mpeg;base64,'+data.audio);
+  window._scholarAudio=audio;
   audio.play();
-  audio.onended=function(){if(btn){btn.textContent='\u25b6 Hear';btn.disabled=false;}};
+  audio.onended=function(){window._scholarAudio=null;if(btn){btn.textContent='\u25b6 Hear';btn.disabled=false;}};
+  audio.onerror=function(){window._scholarAudio=null;if(btn){btn.textContent='\u25b6 Hear';btn.disabled=false;}};
  })
  .catch(function(e){
   console.error('Speak error:',e);
@@ -2292,7 +2296,7 @@ setInterval(function(){paintSky();paintNow();},60000);
     </div>
     <div class="scholar-float-actions">
       <button class="scholar-float-btn" onclick="nextScholar();renderFloatScholar()">Next ▸</button>
-      <button class="scholar-float-btn" id="scholar-float-speak" onclick="speakScholar()">▶ Hear</button>
+      <button class="scholar-float-btn" id="scholar-float-speak" onclick="speakScholar()">&#9654; Hear</button>
       <button class="scholar-float-btn" onclick="toggleFloatBubble()">Close</button>
     </div>
   </div>

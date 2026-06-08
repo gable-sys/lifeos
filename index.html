@@ -1612,7 +1612,15 @@ function renderScholar(){
   fetch(CLAUDE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:CLAUDE_MODEL,max_tokens:200,system:s.sys,messages:[{role:'user',content:greet}]})})
   .then(function(r){return r.json();}).then(function(d){
    var reply=(d.content&&d.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join(''))||'...';
-   if(bubble){bubble.textContent=reply;bubble.style.opacity='1';clearTimeout(window._scholarFade);window._scholarFade=setTimeout(function(){if(bubble){bubble.style.transition='opacity 2s';bubble.style.opacity='0.3';}},18000);}
+   if(bubble){
+    bubble.textContent=reply;bubble.style.opacity='1';bubble.style.transition='none';
+    clearTimeout(window._scholarFade);clearTimeout(window._scholarDisappear);
+    var displayMs=Math.max(20000,reply.length*80); /* ~80ms per char, min 20s */
+    /* Fade to 40% after displayMs */
+    window._scholarFade=setTimeout(function(){if(bubble){bubble.style.transition='opacity 3s';bubble.style.opacity='0.4';}},displayMs);
+    /* Disappear completely after displayMs + 8s */
+    window._scholarDisappear=setTimeout(function(){if(bubble){bubble.style.transition='opacity 4s';bubble.style.opacity='0';}},displayMs+8000);
+   }
    scholarHist=[{role:'assistant',content:reply}];
   }).catch(function(){if(bubble)bubble.textContent='(Waking up — ask me something in 30s)';});
  } else if(bubble&&scholarHist.length>0){
@@ -1637,7 +1645,13 @@ function askScholar(){
  fetch(CLAUDE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:CLAUDE_MODEL,max_tokens:250,system:s.sys,messages:scholarHist})})
  .then(function(r){return r.json();}).then(function(d){
   var reply=(d.content&&d.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join(''))||'...';
-  if(bubble){bubble.style.opacity='1';bubble.style.transition='none';bubble.textContent=reply;clearTimeout(window._scholarFade);window._scholarFade=setTimeout(function(){if(bubble){bubble.style.transition='opacity 2s';bubble.style.opacity='0.3';}},18000);}
+  if(bubble){
+   bubble.textContent=reply;bubble.style.opacity='1';bubble.style.transition='none';
+   clearTimeout(window._scholarFade);clearTimeout(window._scholarDisappear);
+   var displayMs=Math.max(20000,reply.length*80);
+   window._scholarFade=setTimeout(function(){if(bubble){bubble.style.transition='opacity 3s';bubble.style.opacity='0.4';}},displayMs);
+   window._scholarDisappear=setTimeout(function(){if(bubble){bubble.style.transition='opacity 4s';bubble.style.opacity='0';}},displayMs+8000);
+  }
   scholarHist.push({role:'assistant',content:reply});
  }).catch(function(){if(bubble)bubble.textContent='I seem to have lost my train of thought.';});
 }
@@ -1682,6 +1696,9 @@ function gmailSync(){
 
 /* ════════ ELEVENLABS SCHOLAR VOICE ════════ */
 function speakScholar(){
+ /* Restore bubble visibility when user clicks hear */
+ var bubble=document.getElementById('scholar-bubble');
+ if(bubble){bubble.style.transition='none';bubble.style.opacity='1';clearTimeout(window._scholarFade);clearTimeout(window._scholarDisappear);}
  var bubble=document.getElementById('scholar-bubble');
  var btn=document.getElementById('scholar-speak-btn');
  if(!bubble||!bubble.textContent||bubble.textContent==='...'||bubble.textContent==='Loading...')return;
@@ -1707,6 +1724,42 @@ function speakScholar(){
   if(btn){btn.textContent='\u25b6 Hear';btn.disabled=false;}
  });
 }
+
+
+/* ════════ SCHOLAR UNPROMPTED THOUGHTS ════════ */
+function scholarRandomThought(){
+ var bubble=document.getElementById('scholar-bubble');
+ /* Only if bubble is invisible/faded and user hasn't asked anything recently */
+ if(!bubble)return;
+ var opacity=parseFloat(bubble.style.opacity||'1');
+ if(opacity>0.1)return; /* still showing something */
+ var s=SCHOLARS[scholarIdx];
+ var prompts=[
+  'Share a single brief unprompted observation — something you noticed, remembered, or want to say. Stay in character. One sentence only.',
+  'You have a sudden thought. Say it briefly, in character. One sentence.',
+  'Something just occurred to you. Share it in character. Very brief.',
+ ];
+ var prompt=prompts[Math.floor(Math.random()*prompts.length)];
+ fetch(CLAUDE_ENDPOINT,{method:'POST',mode:'cors',headers:{'Content-Type':'application/json'},
+  body:JSON.stringify({model:CLAUDE_MODEL,max_tokens:80,system:s.sys,
+   messages:[{role:'user',content:prompt}]})})
+ .then(function(r){return r.json();})
+ .then(function(d){
+  var reply=(d.content&&d.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join(''))||'';
+  if(reply&&bubble){
+   bubble.style.transition='opacity 2s';bubble.style.opacity='1';
+   bubble.textContent=reply;
+   scholarHist.push({role:'assistant',content:reply});
+   var displayMs=Math.max(15000,reply.length*80);
+   window._scholarFade=setTimeout(function(){if(bubble){bubble.style.transition='opacity 3s';bubble.style.opacity='0.4';}},displayMs);
+   window._scholarDisappear=setTimeout(function(){if(bubble){bubble.style.transition='opacity 4s';bubble.style.opacity='0';}},displayMs+8000);
+  }
+ }).catch(function(){});
+}
+/* Check every 3-5 minutes for an unprompted thought */
+setInterval(function(){
+ if(Math.random()<0.4)scholarRandomThought(); /* 40% chance each check */
+},3*60*1000+Math.random()*2*60*1000);
 
 /* ════════ BOOT ════════ */
 

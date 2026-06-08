@@ -1251,33 +1251,43 @@ function finUpdateCap(txs){
 
 /* ════════ WORKOUT ════════ */
 var WK_DAYMAP={SUN:0,MON:1,TUE:2,WED:3,THU:4,FRI:5,SAT:6};
-var WORKOUT_WEEK=[
- {d:"MON",ttl:"Rest",focus:"Recovery + creatine. Stay loose.",rest:true,blocks:[{name:"Rest",ex:[{nm:"Walk / mobility",rx:"optional",tip:"Light movement only. Eat well, hit protein, sleep."}]}]},
- {d:"TUE",ttl:"Chest · Shoulders · Legs",focus:"Ease back in — full but not brutal.",blocks:[
-   {name:"Chest",ex:[{nm:"Push-ups",rx:"3 × 12–15",tip:"Controlled down, full lockout."},{nm:"DB floor press",rx:"3 × 12–15",tip:"Pause 1s when elbows touch floor."},{nm:"DB floor flye",rx:"2 × 12–15",tip:"Slow stretch, slight elbow bend."}]},
-   {name:"Shoulders / Delts",ex:[{nm:"Elevated pike push-ups",rx:"3 × 8–12",tip:"Feet up. Main delt overload — heavier than any 15 lb move."},{nm:"DB lateral raises",rx:"3 × 15–20",tip:"Width driver. Slow, no swing."},{nm:"DB overhead press",rx:"3 × 12",tip:"Pack shoulders down — delts not traps."}]},
-   {name:"Legs (light)",ex:[{nm:"Bodyweight squats",rx:"2 × 20",tip:"Just priming."},{nm:"Calf raises",rx:"2 × 25",tip:"Full stretch at bottom."}]},
-   {name:"Neck",ex:[{nm:"Isometric holds",rx:"2 rounds",tip:"Fwd/back/each side 10–15s, hand resistance, traps relaxed."}]}]},
- {d:"WED",ttl:"Pull-ups · Abs · Legs",focus:"Back, grip and core.",blocks:[
-   {name:"Pull",ex:[{nm:"Pull-ups",rx:"4 × max",tip:"Negatives if fried — full control down."},{nm:"Chin-ups",rx:"2 × max",tip:"Palms toward you, more biceps."},{nm:"DB rows",rx:"3 × 12/arm",tip:"Squeeze the shoulder blade."}]},
-   {name:"Abs",ex:[{nm:"Hanging knee raises",rx:"3 × 10–15",tip:"No swinging."},{nm:"Hollow body hold",rx:"3 × 20–30s",tip:"Low back glued to floor."},{nm:"Bicycle crunches",rx:"3 × 20",tip:"Slow, full twist."}]},
-   {name:"Legs (light)",ex:[{nm:"Walking lunges",rx:"2 × 12/leg",tip:"Hold the 15s for extra."},{nm:"Glute bridges",rx:"2 × 20",tip:"2s squeeze at top."}]}]},
- {d:"THU",ttl:"Shoulders (Heavy) · Chest · Abs",focus:"Your big delt day — the width session.",blocks:[
-   {name:"Shoulders / Delts",ex:[{nm:"Elevated pike push-ups",rx:"4 × 8–12",tip:"Primary mover. Higher feet = more delt."},{nm:"DB overhead press",rx:"4 × 12–15",tip:"Pack down, slow negatives."},{nm:"DB lateral raises",rx:"3 × 20 + partials",tip:"Burn out the medial delt — that is width."},{nm:"DB rear delt flye",rx:"3 × 15",tip:"Bent over. 3D delts + posture."}]},
-   {name:"Chest",ex:[{nm:"DB floor press",rx:"3 × 12",tip:"Steady tempo."},{nm:"Push-ups",rx:"2 × max",tip:"Finish the chest off."}]},
-   {name:"Abs",ex:[{nm:"Lying leg raises",rx:"3 × 15",tip:"Lower slow, no drop."},{nm:"Plank",rx:"3 × 45s",tip:"Squeeze glutes + abs."}]},
-   {name:"Neck",ex:[{nm:"Isometric holds",rx:"2 rounds",tip:"Fwd/back/sides 10–15s each."}]}]},
- {d:"FRI",ttl:"Steady Run · Abs",focus:"Easy aerobic base + core.",blocks:[
-   {name:"Run",ex:[{nm:"Steady run",rx:"20–30 min",tip:"Conversational — should be able to talk."}]},
-   {name:"Abs",ex:[{nm:"Hanging leg raises",rx:"3 × 12",tip:"Control the lower."},{nm:"Russian twists",rx:"3 × 20",tip:"Hold a 15 for resistance."},{nm:"Plank",rx:"3 × 45s",tip:"No sagging hips."}]}]},
- {d:"SAT",ttl:"Rest",focus:"Your preferred day off. Earned it.",rest:true,blocks:[{name:"Rest",ex:[{nm:"Full rest",rx:"—",tip:"Creatine, protein, sleep. Let the delts grow."}]}]},
- {d:"SUN",ttl:"Sprints · Leg Finisher",focus:"Conditioning + legs in one shot.",blocks:[
-   {name:"Run",ex:[{nm:"Warm-up jog + drills",rx:"6–8 min",tip:"Get fully warm before going hard."},{nm:"Sprints",rx:"6–7 reps",tip:"~20–40m all-out, walk back to recover fully."}]},
-   {name:"Leg Finisher",ex:[{nm:"Jump squats",rx:"3 × 15",tip:"Explode up."},{nm:"Walking lunges",rx:"3 × 12/leg",tip:"Hold the 15s."},{nm:"Calf raises",rx:"3 × 25",tip:"Full range."},{nm:"Wall sit",rx:"2 × 45s",tip:"Burn it out."}]}]}
+ var WORKOUT_WEEK=[
+ {d:"MON",ttl:"Shoulders · Chest · Triceps",focus:"Push day — V-taper width. Depressed shoulders, slow laterals. GtG warm-up first.",blocks:[
+   {name:"GtG Warm-Up",ex:[{nm:"Lateral raises (light)",rx:"2 × 15",tip:"Warm the medial delt. Shoulders DOWN."},{nm:"Face pulls",rx:"2 × 20",tip:"Opens rear delt, preps rotator cuff."}]},
+   {name:"Delts — the width",ex:[{nm:"Elevated pike push-ups",rx:"4 × 10–12",tip:"Feet high. Full ROM. Width overload."},{nm:"DB lateral raises",rx:"4 × 15–20",tip:"Lead with elbow. No swing. Slow negative."},{nm:"DB overhead press",rx:"3 × 12",tip:"Pack shoulders DOWN — delts fire, traps quiet."},{nm:"DB rear delt flye",rx:"3 × 15",tip:"3D shoulders + posture. Hinge 45°."}]},
+   {name:"Chest",ex:[{nm:"Push-ups",rx:"3 × 15",tip:"Full lockout, controlled descent."},{nm:"DB floor press",rx:"3 × 12",tip:"Pause at the bottom."}]},
+   {name:"Triceps + Arms",ex:[{nm:"Close-grip push-ups",rx:"3 × max",tip:"Triceps = 2/3 of arm size."},{nm:"DB overhead extension",rx:"2 × 12",tip:"Full stretch behind head."}]},
+   {name:"Neck",ex:[{nm:"Isometric holds",rx:"2 rounds × 4 directions",tip:"10–15s each. Fwd, back, both sides."}]}
+ ]},
+ {d:"TUE",ttl:"Sprints · Legs · Calves",focus:"Cardio first on fresh legs. Best day to sprint.",blocks:[
+   {name:"Sprints",ex:[{nm:"Warm-up jog + leg swings",rx:"8 min",tip:"Non-negotiable. Cold hamstrings tear."},{nm:"All-out sprints",rx:"6–8 × 20–40m",tip:"Full recovery between. Walk back. 85–95% effort."}]},
+   {name:"Legs",ex:[{nm:"Bulgarian split squats",rx:"3 × 12/leg",tip:"Rear foot elevated. Hold 15s DB."},{nm:"Goblet squats",rx:"3 × 15",tip:"DB at chest. Sit deep, drive knees out."},{nm:"Walking lunges",rx:"3 × 12/leg",tip:"Finisher. Hold the 15s."}]},
+   {name:"Calves",ex:[{nm:"Standing calf raises",rx:"4 × 20–25",tip:"Full stretch at bottom. Pause at top."},{nm:"Single-leg calf raises",rx:"2 × 15/leg",tip:"Chase the burn."}]}
+ ]},
+ {d:"WED",ttl:"Back · Biceps · Abs",focus:"V-taper width from the back. Pull-ups are king.",blocks:[
+   {name:"Pull — V-taper",ex:[{nm:"Wide-grip pull-ups",rx:"4 × max",tip:"Wide lats = the flare of the V."},{nm:"Chin-ups",rx:"3 × max",tip:"Supinated grip — extra biceps."},{nm:"DB rows",rx:"3 × 12/arm",tip:"Row to hip, squeeze the blade."},{nm:"Face pulls",rx:"3 × 15",tip:"Posture. Upper back. Do these."}]},
+   {name:"Biceps",ex:[{nm:"DB curls",rx:"3 × 12–15",tip:"Full ROM, no swing, squeeze at top."},{nm:"Hammer curls",rx:"2 × 12",tip:"Brachialis + forearm thickness."}]},
+   {name:"Abs",ex:[{nm:"Hanging leg raises",rx:"3 × 12",tip:"No swinging."},{nm:"Hollow hold",rx:"3 × 30s",tip:"Low back pressed down."}]},
+   {name:"Neck",ex:[{nm:"Isometric holds",rx:"2 rounds",tip:"All 4 directions, 10–15s each."}]}
+ ]},
+ {d:"THU",ttl:"Shoulders (Peak) · Chest · Abs",focus:"Highest volume shoulder day. Burn the medial delt.",blocks:[
+   {name:"Delts — full send",ex:[{nm:"Elevated pike push-ups",rx:"4 × 10–12",tip:"Feet as high as possible."},{nm:"DB overhead press",rx:"4 × 12–15",tip:"Pack down, 3s slow negatives."},{nm:"DB lateral raises",rx:"4 × 20 + partials",tip:"Full set then 10 partials. Burns."},{nm:"DB rear delt flye",rx:"3 × 15",tip:"Don't skip."},{nm:"Upright rows (wide grip)",rx:"3 × 12",tip:"Wide grip hits medial delt. Elbows no higher than shoulders."}]},
+   {name:"Chest",ex:[{nm:"Decline push-ups",rx:"3 × max",tip:"Feet elevated = upper chest."},{nm:"DB floor press",rx:"3 × 12",tip:"Pause at bottom."}]},
+   {name:"Abs",ex:[{nm:"Lying leg raises",rx:"3 × 15",tip:"Slow descent."},{nm:"Plank",rx:"3 × 45s",tip:"No sag."}]}
+ ]},
+ {d:"FRI",ttl:"Travel · Optional Light Session",focus:"Back to Brooklyn. Light or rest — listen to your body.",blocks:[
+   {name:"Optional",ex:[{nm:"Pull-ups",rx:"3 × max",tip:"Maintain the stimulus."},{nm:"DB lateral raises",rx:"3 × 20",tip:"Never skip laterals."},{nm:"Neck isometrics",rx:"2 rounds",tip:"Easy, on the road."}]},
+   {name:"Posture",ex:[{nm:"Chin tucks",rx:"2 × 15",tip:"Corrects forward head posture."},{nm:"Doorway pec stretch",rx:"2 × 30s/side",tip:"Chest opens, posture resets."},{nm:"Wall angels",rx:"2 × 10",tip:"Shoulder blade control."}]}
+ ]},
+ {d:"SAT",ttl:"Rest",focus:"Standing day off. Eat 2600 cal, sleep.",rest:true,blocks:[{name:"Recovery",ex:[{nm:"Full rest",rx:"—",tip:"Creatine, protein, sleep."}]}]},
+ {d:"SUN",ttl:"Steady Run · Abs · Posture",focus:"Easy aerobic + core. Week 2 starts Monday.",blocks:[
+   {name:"Run",ex:[{nm:"Steady-state run",rx:"25–35 min",tip:"Conversational pace. Nasal breathing."}]},
+   {name:"Core + Posture",ex:[{nm:"Hanging leg raises",rx:"3 × 12",tip:"Control it."},{nm:"Russian twists",rx:"3 × 20",tip:"Hold the 15."},{nm:"Plank",rx:"3 × 45s",tip:"Full brace."},{nm:"Posture block",rx:"10 min",tip:"Chin tucks, wall angels, APT correction, doorway stretch."}]}
+ ]}
 ];
 function workoutWeekHTML(){
  var dow=new Date().getDay();
- var h='<p style="margin-bottom:8px"><em>Week 1 · back on · La Crosse. A week off is nothing — start Tuesday. Tap a day.</em></p>';
+ var h='<p style="margin-bottom:8px"><em>Week of June 8 · 13 days to June 21. Creatine saturating. Every session compounds. Tap a day.</em></p>';
  h+='<div style="font-family:IBM Plex Mono,monospace;font-size:10px;letter-spacing:.05em;color:var(--ink3);margin-bottom:12px">15 lb dumbbells · pull-up bar · run shoes · creatine daily</div>';
  h+=WORKOUT_WEEK.map(function(day){
   var isToday=WK_DAYMAP[day.d]===dow;
@@ -1878,14 +1888,16 @@ function speakScholar(){
  var text=bubble.textContent.slice(0,500);
  var s=SCHOLARS[scholarIdx];
  if(btn){btn.textContent='⏸ Stop';btn.disabled=false;}
+ console.log('SPEAK: scholar='+s.name+' text_len='+text.length);
  fetch('https://lifeos-backend-nf15.onrender.com/speak',{
   method:'POST',
   mode:'cors',
   headers:{'Content-Type':'application/json'},
   body:JSON.stringify({text:text,scholar:s.name.split(' · ')[0].trim()})
  })
- .then(function(r){return r.json();})
+ .then(function(r){console.log('SPEAK response:',r.status);return r.json();})
  .then(function(data){
+  console.log('SPEAK data:',data.error||('audio_len='+(data.audio||'').length));
   if(data.error){console.error('ElevenLabs:',data.error);if(btn){btn.textContent='\u25b6 Hear';btn.disabled=false;}return;}
   /* Play base64 audio */
   var audio=new Audio('data:audio/mpeg;base64,'+data.audio);

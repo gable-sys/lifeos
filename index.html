@@ -364,6 +364,22 @@ body.night .sc-lbl{background:rgba(22,19,14,0.9);}
 .scholar-chat button{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.08em;text-transform:uppercase;border:1.5px solid var(--ink);background:var(--terra);color:var(--paper);padding:0 10px;cursor:pointer;}
 .scholar-btn{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;background:none;border:1px solid var(--line);color:var(--ink3);padding:3px 8px;cursor:pointer;margin-top:6px;}
 .scholar-btn:hover{border-color:var(--terra);color:var(--terra);}
+
+/* ── FLOATING SCHOLAR HEAD ── */
+#scholar-float{position:fixed;bottom:22px;right:22px;z-index:300;cursor:pointer;user-select:none;}
+#scholar-float-head{width:52px;height:52px;border:2px solid var(--ink);background:var(--paper2);box-shadow:3px 3px 0 var(--shadow);display:flex;align-items:center;justify-content:center;transition:transform .15s;}
+#scholar-float-head:hover{transform:translate(-2px,-2px);}
+#scholar-float-bubble{position:absolute;bottom:60px;right:0;width:260px;background:var(--paper);border:1.5px solid var(--ink);box-shadow:4px 4px 0 var(--shadow);padding:10px 12px;display:none;font-family:'Spectral',serif;font-size:12px;line-height:1.5;}
+#scholar-float-bubble.open{display:block;}
+#scholar-float-bubble::after{content:'';position:absolute;bottom:-8px;right:18px;width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:8px solid var(--ink);}
+#scholar-float-name{font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:.12em;text-transform:uppercase;color:var(--terra);margin-bottom:5px;}
+#scholar-float-text{font-style:italic;color:var(--ink);margin-bottom:8px;min-height:30px;}
+#scholar-float-input{display:flex;gap:6px;margin-top:6px;}
+#scholar-float-input input{flex:1;font-family:'Spectral',serif;font-size:11px;padding:4px 7px;border:1.5px solid var(--ink);background:var(--paper);}
+#scholar-float-input button{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.06em;text-transform:uppercase;border:1.5px solid var(--terra);background:var(--terra);color:var(--paper);padding:0 8px;cursor:pointer;}
+.scholar-float-actions{display:flex;justify-content:space-between;align-items:center;margin-top:4px;}
+.scholar-float-btn{background:none;border:1px solid var(--line);font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);padding:2px 6px;cursor:pointer;}
+.scholar-float-btn:hover{color:var(--terra);border-color:var(--terra);}
 </style>
 </head>
 <body>
@@ -1463,7 +1479,7 @@ function delFinTx(i){
 
 /* ════════ VISITING SCHOLAR ════════ */
 var SCHOLARS=[
- {name:'Ernest Hemingway',era:'Paris, 1926',sys:"You are Ernest Hemingway. You write and speak exactly as Hemingway did — short declarative sentences, no adverbs, no sentiment without earning it. You are sitting at a zinc bar in Paris, 1926. You have strong opinions about: writing (only one true sentence at a time), courage (the willingness to be afraid and act anyway), fishing (a metaphor for everything), drinking (necessary but not an excuse), and the expatriate life. Reference your actual works naturally — The Sun Also Rises, A Farewell to Arms, the Nick Adams stories. You are talking to Gable, a writer in Brooklyn who is building something. Be genuinely interested. Push back if he says something weak. One paragraph max, no em-dashes.",
+ {name:'Ernest Hemingway',era:'Paris, 1926',sys:"You are Ernest Hemingway. Short. Direct. No wasted breath. You speak like you write — every sentence earns its place. Gruff. Physical. The world is hard and beautiful and you say so plainly. You are sitting at a zinc bar in Paris, 1926. You have strong opinions about: writing (only one true sentence at a time), courage (the willingness to be afraid and act anyway), fishing (a metaphor for everything), drinking (necessary but not an excuse), and the expatriate life. Reference your actual works naturally — The Sun Also Rises, A Farewell to Arms, the Nick Adams stories. You are talking to Gable, a writer in Brooklyn who is building something. Be genuinely interested. Push back if he says something weak. One paragraph max, no em-dashes.",
   color:'#8a3010',
   sprite:function(){
    /* Hemingway - broad shoulders, dark hair, beard, khaki */
@@ -1740,13 +1756,16 @@ function renderScholar(){
  if(svg)svg.innerHTML=s.sprite();
  var bubble=document.getElementById('scholar-bubble');
  var name=document.getElementById('scholar-name');
- if(name)name.textContent=s.name+' \xb7 '+s.era;
+ if(name)name.textContent=s.name+' '+s.era;
+ renderScholarDots();
  if(bubble&&scholarHist.length===0){
-  /* Opening greeting */
+  /* Opening greeting - timeout guard */
   bubble.textContent='...';
+  var _greetTimeout=setTimeout(function(){if(bubble&&bubble.textContent==='...')bubble.textContent='(Ask me something.)';},12000);
   var greet='Greet Gable briefly, in character, as if you just arrived at his desk and noticed his Life OS dashboard. Be curious and a little opinionated. One sentence.';
   fetch(CLAUDE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:CLAUDE_MODEL,max_tokens:200,system:s.sys,messages:[{role:'user',content:greet}]})})
   .then(function(r){return r.json();}).then(function(d){
+   clearTimeout(_greetTimeout);
    var reply=(d.content&&d.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join(''))||'...';
    if(bubble){
     bubble.textContent=reply;bubble.style.opacity='1';bubble.style.transition='none';
@@ -1758,7 +1777,7 @@ function renderScholar(){
     window._scholarDisappear=setTimeout(function(){if(bubble){bubble.style.transition='opacity 4s';bubble.style.opacity='0';}},displayMs+8000);
    }
    scholarHist=[{role:'assistant',content:reply}];
-  }).catch(function(){if(bubble)bubble.textContent='(Waking up — ask me something in 30s)';});
+  }).catch(function(){clearTimeout(_greetTimeout);if(bubble)bubble.textContent='(Ask me something — backend waking up)';});
  } else if(bubble&&scholarHist.length>0){
   bubble.textContent=scholarHist[scholarHist.length-1].content;
  }
@@ -1769,6 +1788,17 @@ function nextScholar(){
  scholarHist=[];
  renderScholar();
 }
+function renderScholarDots(){
+ var el=document.getElementById('scholar-dots');
+ if(!el)return;
+ el.innerHTML=SCHOLARS.map(function(s,i){
+  var active=i===scholarIdx;
+  return '<button onclick="jumpScholar('+i+')" title="'+s.name+'" style="width:'+(active?'20':'8')+'px;height:8px;background:'+(active?'var(--terra)':'var(--line)')+';border:none;cursor:pointer;transition:width .2s;padding:0"></button>';
+ }).join('');
+}
+function jumpScholar(idx){
+ scholarIdx=idx;scholarHist=[];renderScholar();
+}
 
 function askScholar(){
  var inp=document.getElementById('scholar-input');
@@ -1778,7 +1808,7 @@ function askScholar(){
  var s=SCHOLARS[scholarIdx];
  if(bubble)bubble.textContent='...';
  scholarHist.push({role:'user',content:q});
- fetch(CLAUDE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:CLAUDE_MODEL,max_tokens:250,system:s.sys,messages:scholarHist})})
+ fetch(CLAUDE_ENDPOINT,{method:'POST',mode:'cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:CLAUDE_MODEL,max_tokens:250,system:s.sys,messages:scholarHist})})
  .then(function(r){return r.json();}).then(function(d){
   var reply=(d.content&&d.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join(''))||'...';
   if(bubble){
@@ -1831,16 +1861,21 @@ function gmailSync(){
 }
 
 /* ════════ ELEVENLABS SCHOLAR VOICE ════════ */
+function stopScholar(){
+ if(window._scholarAudio){window._scholarAudio.pause();window._scholarAudio.currentTime=0;window._scholarAudio=null;}
+ var btn=document.getElementById('scholar-speak-btn');
+ if(btn){btn.textContent='▶ Hear';btn.disabled=false;}
+}
 function speakScholar(){
- /* Restore bubble visibility when user clicks hear */
- var bubble=document.getElementById('scholar-bubble');
- if(bubble){bubble.style.transition='none';bubble.style.opacity='1';clearTimeout(window._scholarFade);clearTimeout(window._scholarDisappear);}
  var bubble=document.getElementById('scholar-bubble');
  var btn=document.getElementById('scholar-speak-btn');
+ /* If already playing, stop it */
+ if(window._scholarAudio&&!window._scholarAudio.paused){stopScholar();return;}
+ if(bubble){bubble.style.transition='none';bubble.style.opacity='1';clearTimeout(window._scholarFade);clearTimeout(window._scholarDisappear);}
  if(!bubble||!bubble.textContent||bubble.textContent==='...'||bubble.textContent==='Loading...')return;
  var text=bubble.textContent.slice(0,500);
  var s=SCHOLARS[scholarIdx];
- if(btn){btn.textContent='...';btn.disabled=true;}
+ if(btn){btn.textContent='⏸ Stop';btn.disabled=false;}
  fetch('https://lifeos-backend-nf15.onrender.com/speak',{
   method:'POST',
   mode:'cors',
@@ -1896,6 +1931,48 @@ function scholarRandomThought(){
 setInterval(function(){
  if(Math.random()<0.4)scholarRandomThought(); /* 40% chance each check */
 },3*60*1000+Math.random()*2*60*1000);
+
+
+/* ════════ FLOATING SCHOLAR ════════ */
+function toggleFloatBubble(){
+ var b=document.getElementById('scholar-float-bubble');
+ if(!b)return;
+ b.classList.toggle('open');
+ if(b.classList.contains('open'))renderFloatScholar();
+}
+function renderFloatScholar(){
+ var s=SCHOLARS[scholarIdx];
+ var svg=document.getElementById('scholar-float-svg');
+ var name=document.getElementById('scholar-float-name');
+ var txt=document.getElementById('scholar-float-text');
+ if(svg)svg.innerHTML=s.sprite();
+ if(name)name.textContent=s.name+' · '+s.era;
+ /* Sync text with main bubble */
+ var mainBubble=document.getElementById('scholar-bubble');
+ if(txt&&mainBubble&&mainBubble.textContent&&mainBubble.textContent!=='...'&&mainBubble.textContent!=='Loading...')
+  txt.textContent=mainBubble.textContent;
+ else if(txt)txt.textContent='Ask me something...';
+}
+function askFloatScholar(){
+ var inp=document.getElementById('scholar-float-inp');
+ var txt=document.getElementById('scholar-float-text');
+ if(!inp||!inp.value.trim())return;
+ var q=inp.value.trim();inp.value='';
+ var s=SCHOLARS[scholarIdx];
+ if(txt)txt.textContent='...';
+ scholarHist.push({role:'user',content:q});
+ fetch(CLAUDE_ENDPOINT,{method:'POST',mode:'cors',headers:{'Content-Type':'application/json'},
+  body:JSON.stringify({model:CLAUDE_MODEL,max_tokens:150,system:s.sys,messages:scholarHist})})
+ .then(function(r){return r.json();})
+ .then(function(d){
+  var reply=(d.content&&d.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join(''))||'...';
+  if(txt)txt.textContent=reply;
+  /* Sync to main bubble too */
+  var mainBubble=document.getElementById('scholar-bubble');
+  if(mainBubble){mainBubble.textContent=reply;mainBubble.style.opacity='1';}
+  scholarHist.push({role:'assistant',content:reply});
+ }).catch(function(){if(txt)txt.textContent='(Waking up — try again)';});
+}
 
 /* ════════ BOOT ════════ */
 
@@ -2186,7 +2263,7 @@ function openWatch(){
 
 /* compass advisor */
 
-paintHeader();paintSky();paintNow();renderPortals();renderListen();drawStrat();drawQuote();checkHostedReturn();setTimeout(renderScholar,2000);
+paintHeader();paintSky();paintNow();renderPortals();renderListen();drawStrat();drawQuote();checkHostedReturn();setTimeout(function(){renderScholar();renderFloatScholar();},2000);
 /* Keep Render warm - ping every 8 minutes */
 function keepWarm(){fetch('https://lifeos-backend-nf15.onrender.com/').catch(function(){});}
 keepWarm();
@@ -2203,5 +2280,25 @@ setInterval(function(){paintSky();paintNow();},60000);
   console.log('✓ Supabase sync complete');
 })();
 </script>
+
+<!-- FLOATING SCHOLAR HEAD -->
+<div id="scholar-float">
+  <div id="scholar-float-bubble">
+    <div id="scholar-float-name">—</div>
+    <div id="scholar-float-text">...</div>
+    <div id="scholar-float-input">
+      <input id="scholar-float-inp" placeholder="Ask..." onkeydown="if(event.key==='Enter')askFloatScholar()">
+      <button onclick="askFloatScholar()">Ask</button>
+    </div>
+    <div class="scholar-float-actions">
+      <button class="scholar-float-btn" onclick="nextScholar();renderFloatScholar()">Next ▸</button>
+      <button class="scholar-float-btn" id="scholar-float-speak" onclick="speakScholar()">▶ Hear</button>
+      <button class="scholar-float-btn" onclick="toggleFloatBubble()">Close</button>
+    </div>
+  </div>
+  <div id="scholar-float-head" onclick="toggleFloatBubble()" title="Talk to your visiting scholar">
+    <svg id="scholar-float-svg" viewBox="0 0 32 32" width="36" height="36" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated"></svg>
+  </div>
+</div>
 </body>
 </html>

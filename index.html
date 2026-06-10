@@ -380,6 +380,88 @@ body.night .sc-lbl{background:rgba(22,19,14,0.9);}
 .scholar-float-actions{display:flex;justify-content:space-between;align-items:center;margin-top:4px;}
 .scholar-float-btn{background:none;border:1px solid var(--line);font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);padding:2px 6px;cursor:pointer;}
 .scholar-float-btn:hover{color:var(--terra);border-color:var(--terra);}
+
+/* ── ZIPPER TICKER ── */
+.zipper{background:#000;border-top:3px solid #1a1000;border-bottom:3px solid #1a1000;height:38px;position:relative;overflow:hidden;display:flex;align-items:center;}
+.zipper::before{content:'';position:absolute;left:0;top:0;width:40px;height:100%;background:linear-gradient(90deg,#000 60%,transparent);z-index:4;pointer-events:none;}
+.zipper::after{content:'';position:absolute;right:0;top:0;width:40px;height:100%;background:linear-gradient(270deg,#000 60%,transparent);z-index:4;pointer-events:none;}
+.zipper-track{display:inline-flex;align-items:center;white-space:nowrap;height:38px;will-change:transform;}
+.zipper-track:hover{animation-play-state:paused!important;}
+.zcat{display:inline-flex;align-items:center;height:38px;padding:0 8px;flex-shrink:0;}
+.zcat span{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:900;letter-spacing:.14em;padding:3px 7px;}
+.zcat.wl span{background:#c8a010;color:#000;}
+.zcat.cu span{background:#1a50b0;color:#dde8ff;}
+.zcat.fi span{background:#903010;color:#ffe0c0;}
+.zcat.bd span{background:#581058;color:#f0d0f0;}
+.zcat.lf span{background:#0a5810;color:#c8f0c8;}
+.zgap{display:inline-block;width:18px;flex-shrink:0;}
+.zdot{display:inline-block;vertical-align:middle;image-rendering:pixelated;flex-shrink:0;}
+.zsp{display:inline-block;width:7px;flex-shrink:0;}
+
+/* ── CORK BOARD ── */
+.cork{border:4px solid #1e0c04;margin:8px 0;box-shadow:4px 4px 0 rgba(0,0,0,0.4);}
+.cork-top,.cork-bot{height:10px;background:linear-gradient(180deg,#0e0602,#3a1e0a);}
+.cork-bot{background:linear-gradient(0deg,#0e0602,#3a1e0a);}
+.cork-mid{background:#b07030;height:280px;position:relative;overflow:hidden;
+  background-image:radial-gradient(circle at 1px 2px,rgba(60,25,5,0.45) 1px,transparent 0),radial-gradient(circle at 7px 6px,rgba(160,90,20,0.2) 1px,transparent 0);
+  background-size:9px 9px;}
+.cork-mid::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse at 20% 50%,rgba(255,200,80,0.08) 0%,transparent 50%),
+    linear-gradient(180deg,transparent 50%,rgba(10,20,40,0.18) 100%);
+  background-repeat:no-repeat;}
+.cork-scroll{position:absolute;inset:0;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;z-index:1;}
+.cork-inner{position:relative;width:1320px;height:280px;}
+.cork-hint{position:absolute;bottom:5px;right:10px;font-family:'IBM Plex Mono',monospace;font-size:6px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,0.22);pointer-events:none;}
+/* cards */
+.ck{position:absolute;cursor:pointer;transition:transform .15s;}
+.ck:hover{z-index:20!important;transform:translateY(-4px) scale(1.04) rotate(0deg)!important;box-shadow:4px 8px 20px rgba(0,0,0,0.5);}
+.ck-pin{position:absolute;top:-7px;left:50%;transform:translateX(-50%);width:12px;height:12px;border-radius:50%;border:2px solid rgba(0,0,0,0.4);box-shadow:0 2px 4px rgba(0,0,0,0.5);}
+.ck-tape{position:absolute;top:-5px;left:10px;width:34px;height:9px;background:rgba(255,248,180,0.55);border:1px solid rgba(200,180,60,0.3);transform:rotate(-2deg);}
+.ck-note{width:118px;min-height:76px;padding:16px 10px 10px;font-family:'IBM Plex Mono',monospace;font-size:10px;line-height:1.55;color:#1a0a04;box-shadow:2px 2px 0 rgba(0,0,0,0.2);position:relative;overflow:hidden;}
+.ck-note.cream{background:#f5edd4;border:1px solid #c8a870;}
+.ck-note.blue{background:#e8eef8;border:1px solid #a0b8d0;}
+.ck-note.yellow{background:#fdf5d0;border:1px solid #d0b840;}
+.ck-note.green{background:#eaf2e4;border:1px solid #90b880;}
+.ck-note.purple{background:#f2eaf7;border:1px solid #a870c8;}
+.ck-note.ledger{background:repeating-linear-gradient(180deg,transparent,transparent 16px,rgba(100,140,200,0.18) 16px,rgba(100,140,200,0.18) 17px) #f8f4e8!important;border-color:#b8c8d8!important;}
+.ck-note.torn::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:5px;background:inherit;clip-path:polygon(0 0,4% 100%,8% 10%,13% 90%,18% 5%,23% 85%,28% 0%,33% 95%,38% 15%,43% 80%,48% 0%,53% 90%,58% 10%,63% 85%,68% 5%,73% 90%,78% 0%,83% 88%,88% 12%,93% 80%,98% 5%,100% 70%);}
+.ck-note.stained::before{content:'';position:absolute;top:6px;right:6px;width:22px;height:16px;border-radius:50%;border:1.5px solid rgba(110,60,15,0.15);background:radial-gradient(ellipse,rgba(110,60,15,0.04) 60%,transparent 100%);pointer-events:none;}
+.ck-note.typer{font-family:'Courier New',monospace!important;font-size:9px!important;}
+.ck-note.pencil{color:#484858!important;border-color:#b8b8c8!important;background:#f8f8f6!important;}
+.ck-note.redink{color:#7a1010!important;border-color:#c08080!important;background:#fff5f5!important;}
+.ck-lbl{font-size:6.5px;letter-spacing:.15em;text-transform:uppercase;opacity:0.45;display:block;margin-bottom:3px;}
+.ck-tarot{width:70px;height:116px;background:#1a0a04;border:2px solid #c8a030;display:flex;flex-direction:column;align-items:center;padding:3px;box-shadow:2px 2px 6px rgba(0,0,0,0.5);}
+.ck-tarot svg{display:block;image-rendering:pixelated;flex:1;}
+.ck-tarot-nm{font-family:'IBM Plex Mono',monospace;font-size:5.5px;letter-spacing:.07em;color:#c8a030;text-align:center;padding:2px 0;text-transform:uppercase;}
+.ck-art{border:2px solid #2a1608;background:#1a0a04;box-shadow:2px 2px 6px rgba(0,0,0,0.4);}
+.ck-art svg{display:block;image-rendering:pixelated;}
+.ck-art-lbl{font-family:'IBM Plex Mono',monospace;font-size:5.5px;letter-spacing:.07em;text-transform:uppercase;color:rgba(200,160,80,0.85);background:#1a0a04;padding:2px 4px;text-align:center;}
+.ck-strip{width:160px;padding:10px 12px 8px;font-family:'Spectral',serif;font-size:11.5px;font-style:italic;line-height:1.55;color:#1a0a04;background:#f0e8d0;box-shadow:2px 2px 4px rgba(0,0,0,0.15);clip-path:polygon(0 0,100% 1%,99% 97%,100% 100%,0 99%);}
+.ck-strip-by{font-family:'IBM Plex Mono',monospace;font-size:7.5px;color:#8a6030;margin-top:4px;font-style:normal;}
+.ck-setlist{width:100px;background:#e8e0c8;border:1px solid #b8a880;padding:8px 10px;font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:#1a0a04;}
+.ck-setlist-hd{font-size:6.5px;letter-spacing:.14em;text-transform:uppercase;opacity:0.5;margin-bottom:3px;border-bottom:1px solid rgba(0,0,0,0.1);padding-bottom:2px;}
+.ck-setlist ul{margin:0;padding:0;list-style:none;}
+.ck-setlist li{padding:1.5px 0;border-bottom:1px dotted rgba(0,0,0,0.1);font-size:8px;}
+.ck-rad{width:96px;background:#2a1608;border:2px solid #c8a030;padding:8px;cursor:pointer;}
+.ck-rad-lbl{font-family:'IBM Plex Mono',monospace;font-size:6px;letter-spacing:.1em;text-transform:uppercase;color:#c8a030;margin-top:4px;text-align:center;}
+/* card modal */
+.ck-modal{display:none;position:fixed;inset:0;background:rgba(10,6,2,0.9);z-index:500;align-items:center;justify-content:center;}
+.ck-modal.on{display:flex;}
+.ck-modal-box{background:var(--paper);border:3px solid var(--ink);max-width:820px;width:96%;max-height:92vh;padding:22px;position:relative;box-shadow:8px 8px 0 rgba(0,0,0,0.5);overflow:auto;}
+.ck-modal-x{position:absolute;top:10px;right:12px;background:none;border:none;font-size:18px;cursor:pointer;}
+.ck-modal-ttl{font-family:'Fraunces',serif;font-weight:900;font-size:20px;margin:0 0 10px;}
+.ck-modal-body{font-size:13px;line-height:1.65;color:var(--ink2);white-space:pre-wrap;}
+.ck-modal-lnk{margin-top:10px;}
+.ck-modal-lnk a{color:var(--terra);font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;}
+/* poem modal */
+.poem-modal{display:none;position:fixed;inset:0;background:rgba(8,4,2,0.94);z-index:600;align-items:center;justify-content:center;}
+.poem-modal.on{display:flex;}
+.poem-box{background:#0c0808;border:2px solid #c8a030;max-width:460px;width:92%;padding:26px;position:relative;}
+.poem-box h3{font-family:'Fraunces',serif;font-weight:900;font-size:22px;color:#c8a030;margin:0 0 14px;}
+.poem-box p{font-family:'Spectral',serif;font-size:14px;line-height:1.9;color:#d0c0a0;font-style:italic;white-space:pre-wrap;margin:0;}
+.poem-x{position:absolute;top:10px;right:14px;background:none;border:none;color:#c8a030;font-size:18px;cursor:pointer;}
+
 </style>
 </head>
 <body>
@@ -413,6 +495,41 @@ body.night .sc-lbl{background:rgba(22,19,14,0.9);}
     </div>
   </div>
 
+
+
+  <!-- ZIPPER TICKER -->
+  <div class="zipper"><div class="zipper-track" id="zipper-track"></div></div>
+
+  <!-- CORK BOARD -->
+  <div class="cork">
+    <div class="cork-top"></div>
+    <div class="cork-mid" id="cork-mid">
+      <div class="cork-scroll" id="cork-scroll">
+        <div class="cork-inner" id="cork-inner"></div>
+      </div>
+      <div class="cork-hint">scroll → explore · click to open · dbl-tap to dismiss</div>
+    </div>
+    <div class="cork-bot"></div>
+  </div>
+
+  <!-- CARD MODAL -->
+  <div class="ck-modal" id="ck-modal" onclick="if(event.target===this)closeCkModal()">
+    <div class="ck-modal-box">
+      <button class="ck-modal-x" onclick="closeCkModal()">✕</button>
+      <div class="ck-modal-ttl" id="ck-modal-ttl"></div>
+      <div class="ck-modal-body" id="ck-modal-body"></div>
+      <div class="ck-modal-lnk" id="ck-modal-lnk"></div>
+    </div>
+  </div>
+
+  <!-- POEM MODAL -->
+  <div class="poem-modal" id="poem-modal" onclick="if(event.target===this)this.classList.remove('on')">
+    <div class="poem-box">
+      <button class="poem-x" onclick="document.getElementById('poem-modal').classList.remove('on')">✕</button>
+      <h3>The Radiator Plan</h3>
+      <p>a work in progress —</p>
+    </div>
+  </div>
 
   <!-- THREE PORTAL ICONS -->
   <div class="portals-trio-mini">
@@ -1990,6 +2107,765 @@ function askFloatScholar(){
  }).catch(function(){if(txt)txt.textContent='(Waking up — try again)';});
 }
 
+/* ═══════════════════════════════════════════
+   ZIPPER TICKER  — global, no IIFE wrapper
+   ═══════════════════════════════════════════ */
+var _FONT = {
+  A:[[0,1,1,0],[1,0,0,1],[1,1,1,1],[1,0,0,1],[1,0,0,1]],
+  B:[[1,1,1,0],[1,0,0,1],[1,1,1,0],[1,0,0,1],[1,1,1,0]],
+  C:[[0,1,1,1],[1,0,0,0],[1,0,0,0],[1,0,0,0],[0,1,1,1]],
+  D:[[1,1,1,0],[1,0,0,1],[1,0,0,1],[1,0,0,1],[1,1,1,0]],
+  E:[[1,1,1,1],[1,0,0,0],[1,1,1,0],[1,0,0,0],[1,1,1,1]],
+  F:[[1,1,1,1],[1,0,0,0],[1,1,1,0],[1,0,0,0],[1,0,0,0]],
+  G:[[0,1,1,1],[1,0,0,0],[1,0,1,1],[1,0,0,1],[0,1,1,1]],
+  H:[[1,0,0,1],[1,0,0,1],[1,1,1,1],[1,0,0,1],[1,0,0,1]],
+  I:[[1,1,1],[0,1,0],[0,1,0],[0,1,0],[1,1,1]],
+  J:[[0,0,1],[0,0,1],[0,0,1],[1,0,1],[0,1,1]],
+  K:[[1,0,0,1],[1,0,1,0],[1,1,0,0],[1,0,1,0],[1,0,0,1]],
+  L:[[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,1,1,1]],
+  M:[[1,0,0,0,1],[1,1,0,1,1],[1,0,1,0,1],[1,0,0,0,1],[1,0,0,0,1]],
+  N:[[1,0,0,0,1],[1,1,0,0,1],[1,0,1,0,1],[1,0,0,1,1],[1,0,0,0,1]],
+  O:[[0,1,1,0],[1,0,0,1],[1,0,0,1],[1,0,0,1],[0,1,1,0]],
+  P:[[1,1,1,0],[1,0,0,1],[1,1,1,0],[1,0,0,0],[1,0,0,0]],
+  R:[[1,1,1,0],[1,0,0,1],[1,1,1,0],[1,0,1,0],[1,0,0,1]],
+  S:[[0,1,1,1],[1,0,0,0],[0,1,1,0],[0,0,0,1],[1,1,1,0]],
+  T:[[1,1,1,1,1],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0]],
+  U:[[1,0,0,1],[1,0,0,1],[1,0,0,1],[1,0,0,1],[0,1,1,0]],
+  V:[[1,0,0,0,1],[1,0,0,0,1],[0,1,0,1,0],[0,1,0,1,0],[0,0,1,0,0]],
+  W:[[1,0,0,0,1],[1,0,0,0,1],[1,0,1,0,1],[1,1,0,1,1],[1,0,0,0,1]],
+  Y:[[1,0,0,0,1],[0,1,0,1,0],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0]],
+  '0':[[0,1,1,0],[1,0,1,1],[1,1,0,1],[1,1,0,1],[0,1,1,0]],
+  '1':[[0,1,0],[1,1,0],[0,1,0],[0,1,0],[1,1,1]],
+  '2':[[0,1,1,0],[1,0,0,1],[0,0,1,0],[0,1,0,0],[1,1,1,1]],
+  '3':[[1,1,1,0],[0,0,0,1],[0,1,1,0],[0,0,0,1],[1,1,1,0]],
+  '5':[[1,1,1,1],[1,0,0,0],[1,1,1,0],[0,0,0,1],[1,1,1,0]],
+  '6':[[0,1,1,0],[1,0,0,0],[1,1,1,0],[1,0,0,1],[0,1,1,0]],
+  '7':[[1,1,1,1],[0,0,0,1],[0,0,1,0],[0,1,0,0],[0,1,0,0]],
+  '8':[[0,1,1,0],[1,0,0,1],[0,1,1,0],[1,0,0,1],[0,1,1,0]],
+  '9':[[0,1,1,0],[1,0,0,1],[0,1,1,1],[0,0,0,1],[0,1,1,0]],
+  '-':[[0,0,0,0],[0,0,0,0],[1,1,1,1],[0,0,0,0],[0,0,0,0]],
+  '+':[[0,1,0],[1,1,1],[0,1,0],[0,0,0],[0,0,0]],
+};
+var _SQ=4, _GAP=1, _AM='#f0c020', _DIM='rgba(255,180,0,0.06)';
+
+function _drawCh(ch, cv) {
+  var m = _FONT[ch.toUpperCase()] || _FONT[ch] || _FONT['-'];
+  var cols = m[0].length, rows = m.length;
+  cv.width  = cols*(_SQ+_GAP)+_GAP;
+  cv.height = rows*(_SQ+_GAP)+_GAP;
+  var ctx = cv.getContext('2d');
+  for (var r=0; r<rows; r++)
+    for (var c=0; c<cols; c++) {
+      ctx.fillStyle = m[r][c] ? _AM : _DIM;
+      ctx.fillRect(_GAP+c*(_SQ+_GAP), _GAP+r*(_SQ+_GAP), _SQ, _SQ);
+    }
+}
+function _addText(frag, str) {
+  for (var i=0; i<str.length; i++) {
+    if (str[i]===' ') {
+      var s=document.createElement('span'); s.className='zsp'; frag.appendChild(s);
+    } else {
+      var cv=document.createElement('canvas'); cv.className='zdot';
+      _drawCh(str[i], cv); frag.appendChild(cv);
+    }
+  }
+}
+function _addCat(frag, label, cls) {
+  var d=document.createElement('div'); d.className='zcat '+cls;
+  var s=document.createElement('span'); s.textContent=label;
+  d.appendChild(s); frag.appendChild(d);
+  var g=document.createElement('span'); g.className='zgap'; frag.appendChild(g);
+}
+function _addSep(frag) {
+  var g=document.createElement('span'); g.className='zgap'; frag.appendChild(g);
+  var cv=document.createElement('canvas'); cv.className='zdot';
+  var m=[[0,0,1,0,0],[0,1,0,1,0],[1,0,0,0,1],[0,1,0,1,0],[0,0,1,0,0]];
+  cv.width=m[0].length*(_SQ+_GAP)+_GAP; cv.height=m.length*(_SQ+_GAP)+_GAP;
+  var ctx=cv.getContext('2d');
+  for (var r=0;r<m.length;r++) for (var c=0;c<m[0].length;c++) {
+    ctx.fillStyle=m[r][c]?'rgba(200,150,10,0.45)':_DIM;
+    ctx.fillRect(_GAP+c*(_SQ+_GAP),_GAP+r*(_SQ+_GAP),_SQ,_SQ);
+  }
+  frag.appendChild(cv);
+  var g2=document.createElement('span'); g2.className='zgap'; frag.appendChild(g2);
+}
+
+function buildTicker() {
+  var el = document.getElementById('zipper-track');
+  if (!el) return;
+  var sob = Math.floor((new Date() - new Date('2026-05-31T12:00:00')) / 86400000);
+  var d2p = Math.max(0, Math.round((new Date('2026-06-21') - new Date()) / 86400000));
+  var rows = [
+    {cls:'wl', cat:'WORLD',   t:'NATO SUMMIT OPENS IN BRUSSELS — ALLIANCE SPENDING UNDER REVIEW'},
+    {cls:'cu', cat:'CULTURE', t:'NICK CAVE + BAD SEEDS CONFIRM NEW LP — RECORDING IN LONDON'},
+    {cls:'wl', cat:'SPORT',   t:'WIMBLEDON DRAWS RELEASED — GRASS SEASON UNDERWAY'},
+    {cls:'cu', cat:'FILM',    t:'CANNES PALME AWARDED — ARTHOUSE CIRCUIT MOVES TO VENICE'},
+    {cls:'wl', cat:'MARKETS', t:'BANK OF JAPAN HOLDS RATES — YEN WEAKENS IN ASIAN TRADE'},
+    {cls:'lf', cat:'LIFE OS', t:'DAY ' + sob + ' SOBER — STREAK HOLDING — SYSTEM NOMINAL'},
+    {cls:'bd', cat:'BODY',    t:'JUNE 21 PEAK — ' + d2p + ' DAYS OUT — TRAIN HARD TODAY'},
+    {cls:'fi', cat:'CASH',    t:'NETLIFY PRO ACTIVE — DEPLOY FREELY — NO SIZE CEILING'},
+    {cls:'fi', cat:'RENT',    t:'BROOKLYN $2200 DUE JUN 15 — WISE TRANSFER TO NIKOLAJ'},
+    {cls:'bd', cat:'SKIN',    t:'OLAPLEX NO.3 + TINTED SPF 30 — THURSDAY PURCHASE'},
+    {cls:'lf', cat:'ZEN GUN', t:'MADISON COUNTY CHURCH SUICIDE CORNER — OPEN THE FILE'},
+  ];
+  function buildItems(items) {
+    var frag = document.createDocumentFragment();
+    items.forEach(function(r) {
+      _addCat(frag, r.cat, r.cls);
+      _addText(frag, r.t);
+      _addSep(frag);
+    });
+    return frag;
+  }
+  el.appendChild(buildItems(rows));
+  el.appendChild(buildItems(rows)); // double for seamless loop
+  requestAnimationFrame(function() {
+    var w = el.scrollWidth / 2;
+    var dur = Math.round(w / 130);
+    var style = document.createElement('style');
+    style.textContent = '@keyframes zpan{0%{transform:translateX(0)}100%{transform:translateX(-' + w + 'px)}}';
+    document.head.appendChild(style);
+    el.style.animation = 'zpan ' + dur + 's linear infinite';
+  });
+}
+
+/* ═══════════════════════════════════════════
+   CORK BOARD
+   ═══════════════════════════════════════════ */
+var _allCards = [];
+
+var _TAROT = [
+  {n:'The Fool',    c:'#f0d060', k:'New beginnings', m:'Stand at the edge and jump. The universe catches those who move.',
+   s:'<rect x="12" y="8" width="16" height="14" fill="#c8a870"/><circle cx="40" cy="26" r="10" fill="#f0d060"/><line x1="40" y1="16" x2="40" y2="8" stroke="#f0d060" stroke-width="2.5"/><line x1="40" y1="16" x2="48" y2="10" stroke="#f0d060" stroke-width="2"/><line x1="40" y1="16" x2="32" y2="22" stroke="#f0d060" stroke-width="2"/><rect x="36" y="42" width="8" height="18" fill="#e8a030"/><rect x="34" y="60" width="5" height="14" fill="#4a8030"/><rect x="41" y="60" width="5" height="14" fill="#4a8030"/>'},
+  {n:'The Star',    c:'#6090d0', k:'Hope · Renewal', m:'After the tower falls, the stars come out. This is not the end.',
+   s:'<rect width="80" height="96" fill="#080c1a"/><polygon points="40,10 43,22 54,22 45,29 48,41 40,34 32,41 35,29 26,22 37,22" fill="#f0e060"/><circle cx="14" cy="20" r="2" fill="#c8d8f0"/><circle cx="66" cy="14" r="2" fill="#c8d8f0"/><circle cx="18" cy="44" r="1.5" fill="#c8d8f0"/>'},
+  {n:'The Sun',     c:'#f0c030', k:'Joy · Vitality', m:'Today is a good day. You have the energy to meet it.',
+   s:'<circle cx="40" cy="30" r="18" fill="#f0c030"/><circle cx="40" cy="30" r="8" fill="#f87020"/><line x1="40" y1="8" x2="40" y2="2" stroke="#f0c030" stroke-width="3"/><line x1="62" y1="30" x2="68" y2="30" stroke="#f0c030" stroke-width="3"/><line x1="18" y1="30" x2="12" y2="30" stroke="#f0c030" stroke-width="3"/>'},
+  {n:'The Moon',    c:'#6060a0', k:'Intuition · Mystery', m:'Not everything is what it seems. Trust your gut, not your eyes.',
+   s:'<rect width="80" height="96" fill="#040810"/><circle cx="40" cy="26" r="16" fill="#c8c0a0"/><circle cx="47" cy="24" r="13" fill="#040810"/><rect x="8" y="60" width="12" height="36" fill="#202040"/><rect x="60" y="60" width="12" height="36" fill="#202040"/>'},
+  {n:'The Tower',   c:'#c02020', k:'Upheaval · Liberation', m:'The structure that falls was built wrong. Lightning is correction.',
+   s:'<rect width="80" height="96" fill="#100008"/><polyline points="58,4 48,30 56,30 44,56" fill="none" stroke="#f0e020" stroke-width="3"/><rect x="22" y="32" width="36" height="58" fill="#303030"/><rect x="28" y="44" width="8" height="10" fill="#f0c020" opacity="0.7"/>'},
+  {n:'The Hermit',  c:'#a0a080', k:'Solitude · Inner light', m:'The light you carry is only visible in the dark.',
+   s:'<rect width="80" height="96" fill="#0c0c10"/><polygon points="40,10 68,88 12,88" fill="#2a2a30"/><polygon points="40,10 54,50 26,50" fill="#3a3a40"/><polygon points="40,10 48,30 32,30" fill="#e0e0e8"/>'},
+];
+
+var _PAINT = [
+  {t:'Nighthawks',   a:'Hopper, 1942',    d:'Four figures in a late-night diner. The loneliness of proximity.', u:'https://en.wikipedia.org/wiki/Nighthawks',
+   s:'<svg viewBox="0 0 118 76" width="118" height="76" xmlns="http://www.w3.org/2000/svg"><rect width="118" height="76" fill="#0a0c08"/><rect x="17" y="19" width="84" height="43" fill="#d4b830" opacity="0.9"/><rect x="17" y="17" width="84" height="6" fill="#4a6028"/><rect x="49" y="31" width="6" height="18" fill="#c04020"/><rect x="51" y="27" width="4" height="6" fill="#f0c090"/><rect x="56" y="31" width="6" height="16" fill="#2a2a3a"/><rect x="74" y="31" width="6" height="16" fill="#2a2a3a"/><rect x="26" y="27" width="7" height="20" fill="#e0e0e0"/></svg>'},
+  {t:'Son of Man',   a:'Magritte, 1964',  d:'A man. An apple. Everything we see hides another thing.', u:'https://en.wikipedia.org/wiki/The_Son_of_Man',
+   s:'<svg viewBox="0 0 118 76" width="118" height="76" xmlns="http://www.w3.org/2000/svg"><rect width="118" height="52" fill="#7090b8"/><ellipse cx="24" cy="17" rx="18" ry="8" fill="white" opacity="0.9"/><rect x="0" y="52" width="118" height="24" fill="#8a7050"/><rect x="43" y="27" width="32" height="40" fill="#1a1a28"/><rect x="45" y="13" width="26" height="18" fill="#f0c090"/><ellipse cx="59" cy="25" rx="12" ry="14" fill="#50a030"/></svg>'},
+  {t:'Pearl Earring',a:'Vermeer, c.1665', d:'Not a portrait — a tronie. A mood, a moment of turning.', u:'https://en.wikipedia.org/wiki/Girl_with_a_Pearl_Earring',
+   s:'<svg viewBox="0 0 118 76" width="118" height="76" xmlns="http://www.w3.org/2000/svg"><rect width="118" height="76" fill="#080c0a"/><ellipse cx="59" cy="40" rx="22" ry="28" fill="#e8c09a"/><ellipse cx="47" cy="40" rx="12" ry="22" fill="#1a0e08" opacity="0.35"/><ellipse cx="59" cy="19" rx="26" ry="14" fill="#3050a0"/><rect x="57" y="15" width="32" height="8" fill="#d09820"/><circle cx="73" cy="63" r="4" fill="#f0ece8"/></svg>'},
+];
+
+var _PHOTO = [
+  {t:'Gare Saint-Lazare', a:'Cartier-Bresson, 1932', d:'The decisive moment. Shot through a fence gap without looking. Pure instinct, perfect geometry.', u:'https://en.wikipedia.org/wiki/Behind_the_Gare_Saint-Lazare',
+   s:'<svg viewBox="0 0 118 76" width="118" height="76" xmlns="http://www.w3.org/2000/svg"><rect width="118" height="76" fill="#c8c0b8"/><ellipse cx="59" cy="65" rx="50" ry="11" fill="#9090a0" opacity="0.8"/><line x1="4" y1="16" x2="4" y2="56" stroke="#4a4a4a" stroke-width="1.5"/><line x1="19" y1="16" x2="19" y2="56" stroke="#4a4a4a" stroke-width="1.5"/><line x1="34" y1="16" x2="34" y2="56" stroke="#4a4a4a" stroke-width="1.5"/><line x1="4" y1="28" x2="108" y2="28" stroke="#4a4a4a" stroke-width="1"/><rect x="53" y="37" width="8" height="16" fill="#2a2a2a"/></svg>'},
+  {t:'V-J Day',           a:'Eisenstaedt, 1945',     d:'August 14, 1945. WWII ends. A sailor kisses a nurse. A nation exhaling.', u:'https://en.wikipedia.org/wiki/V-J_Day_in_Times_Square',
+   s:'<svg viewBox="0 0 118 76" width="118" height="76" xmlns="http://www.w3.org/2000/svg"><rect width="118" height="76" fill="#c0b8b0"/><rect x="0" y="4" width="21" height="72" fill="#888080"/><rect x="97" y="7" width="21" height="69" fill="#888080"/><rect x="47" y="25" width="10" height="30" fill="#1a1a1a"/><rect x="49" y="19" width="7" height="8" fill="#d0c0b0"/><rect x="55" y="27" width="9" height="28" fill="#e8e0e0"/></svg>'},
+];
+
+var _QUOTES = [
+  {t:'The first draft of anything is shit.',                                           b:'— Hemingway'},
+  {t:'You must be ready to burn yourself in your own flame.',                          b:'— Nietzsche'},
+  {t:'Do not go gentle into that good night.',                                         b:'— Dylan Thomas'},
+  {t:'Be regular and orderly in your life so you may be violent and original in your work.', b:'— Flaubert'},
+  {t:'The world breaks everyone, and afterward, some are strong at the broken places.',b:'— Hemingway'},
+  {t:'An intellectual is someone whose mind watches itself.',                          b:'— Camus'},
+  {t:'To live is the rarest thing in the world. Most people exist, that is all.',     b:'— Wilde'},
+];
+
+var _SETS = [
+  {h:'TODAY',     t:['Bach — Goldbergs','Robert Johnson','Arvo Pärt','Chet Baker']},
+  {h:'FOR WORK',  t:['Brian Eno — Ambient 1','Satie — Gymnopédies','Nick Drake','Miles Davis']},
+  {h:'LATE NIGHT',t:['Tom Waits — Rain Dogs','Cohen — Songs of L+H','Mingus — Ah Um','Monk']},
+];
+
+var _STRATS = [
+  'Abandon normal instruments',
+  'Work at a different speed',
+  'What would your closest friend do?',
+  'Go outside. Shut the door.',
+  'Emphasize the flaws',
+  'Faced with a choice, do both',
+  'Water',
+  'Ask your body',
+  'Honor thy error as a hidden intention',
+  'Listen to the quiet voice',
+  'What is the simplest solution?',
+  'Use an old idea',
+  'The error was the point',
+];
+
+/* ── card helpers ── */
+function openCard(idx) {
+  var d = _allCards[idx];
+  if (!d) return;
+  document.getElementById('ck-modal-ttl').textContent  = d.title || '';
+  document.getElementById('ck-modal-body').textContent = d.body  || '';
+  var lk = document.getElementById('ck-modal-lnk');
+  if (lk) lk.innerHTML = d.link
+    ? '<a href="' + d.link + '" target="_blank" rel="noopener">View original \u2197</a>'
+    : '';
+  document.getElementById('ck-modal').classList.add('on');
+}
+function closeCkModal() { document.getElementById('ck-modal').classList.remove('on'); }
+function openPoem(e)    { e && e.stopPropagation(); document.getElementById('poem-modal').classList.add('on'); }
+function crumpleCard(e) {
+  e.stopPropagation();
+  var el = e.currentTarget;
+  el.style.transition = 'transform .3s, opacity .3s';
+  el.style.transform  += ' scale(0.05) rotate(720deg)';
+  el.style.opacity    = '0';
+  setTimeout(function() { if (el.parentNode) el.parentNode.removeChild(el); }, 320);
+}
+function attachZoom() {
+  var mid    = document.getElementById('cork-mid');
+  var scroll = document.getElementById('cork-scroll');
+  if (!mid || !scroll) return;
+  /* Zoom */
+  var scale = 1;
+  mid.addEventListener('wheel', function(e) {
+    if (!e.ctrlKey && !e.metaKey) return;
+    e.preventDefault();
+    scale = Math.max(0.6, Math.min(2.5, scale + (e.deltaY < 0 ? 0.1 : -0.1)));
+    var inner = document.getElementById('cork-inner');
+    if (inner) inner.style.transform = 'scale(' + scale + ')';
+  }, {passive: false});
+  /* Click background to open scene — use mid not scroll so it fires once */
+  if (!mid._sceneListenerAdded) {
+    mid._sceneListenerAdded = true;
+    mid.addEventListener('click', function(e) {
+      if (!e.target.closest('.ck')) openCorkScene();
+    });
+  }
+}
+function openCorkScene() {
+  /* Build a scene modal with La Crosse river + full board below */
+  var modal = document.getElementById('ck-modal');
+  var ttl   = document.getElementById('ck-modal-ttl');
+  var body  = document.getElementById('ck-modal-body');
+  var lnk   = document.getElementById('ck-modal-lnk');
+  if (!modal) return;
+
+  ttl.textContent = '';
+  if (lnk) lnk.innerHTML = '';
+
+  /* Build modal body: scene canvas on top, board below */
+  body.style.padding = '0';
+  body.innerHTML =
+    /* header bar */
+    '<div style="background:#0e0804;padding:8px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #2a1608;">' +
+      '<span style="font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:rgba(200,160,80,0.5)">LA CROSSE \xb7 MISSISSIPPI RIVER</span>' +
+      '<span id="scene-time-lbl" style="font-family:IBM Plex Mono,monospace;font-size:7px;letter-spacing:.1em;text-transform:uppercase;color:rgba(200,160,80,0.3)"></span>' +
+    '</div>' +
+    /* scene canvas */
+    '<canvas id="scene-cv" style="display:block;width:100%;height:auto;image-rendering:pixelated;cursor:pointer" height="180" onclick="toggleSceneCig(event)"></canvas>' +
+    /* "add a note" button */
+    '<div style="background:#1a0e04;border-top:1px solid #2a1608;border-bottom:1px solid #2a1608;padding:6px 16px;display:flex;gap:8px;align-items:center;">' +
+      '<input id="scene-note-input" placeholder="Pin a note to the board..." ' +
+        'style="flex:1;background:rgba(255,240,200,0.08);border:1px solid rgba(200,160,80,0.25);color:#f0e8d0;font-family:IBM Plex Mono,monospace;font-size:10px;padding:5px 8px;outline:none;" ' +
+        'onkeydown="if(event.key===\'Enter\')addSceneNote()" />' +
+      '<button onclick="addSceneNote()" style="background:#2a1608;border:1px solid #c8a030;color:#c8a030;font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.1em;padding:5px 10px;cursor:pointer;">PIN \u21b5</button>' +
+    '</div>' +
+    /* full board */
+    '<div id="scene-board-wrap" style="background:#b07030;min-height:300px;overflow:auto;padding:20px;' +
+      'background-image:radial-gradient(circle at 1px 2px,rgba(60,25,5,0.45) 1px,transparent 0),' +
+      'radial-gradient(circle at 7px 6px,rgba(160,90,20,0.2) 1px,transparent 0);background-size:9px 9px;">' +
+      '<div id="scene-board-inner" style="position:relative;width:1320px;min-height:280px;"></div>' +
+    '</div>';
+
+  /* copy cards into scene board */
+  var inner = document.getElementById('cork-inner');
+  var sbInner = document.getElementById('scene-board-inner');
+  if (inner && sbInner) sbInner.innerHTML = inner.innerHTML;
+
+  modal.classList.add('on');
+
+  /* draw scene after modal opens */
+  setTimeout(function() {
+    var cv = document.getElementById('scene-cv');
+    if (cv) {
+      cv.width = cv.offsetWidth || 800;
+      drawRiverScene(cv);
+    }
+    var lbl = document.getElementById('scene-time-lbl');
+    if (lbl) {
+      var months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+      var hr = new Date().getHours();
+      lbl.textContent = months[new Date().getMonth()] + ' \xb7 ' + (hr>=19||hr<6 ? 'NIGHT' : hr>=17 ? 'SUNSET' : 'DAY');
+    }
+    /* start ferry animation */
+    clearInterval(window._ferryTimer);
+    window._ferryX = undefined;
+    window._ferryTimer = setInterval(function(){
+      var cv2 = document.getElementById('scene-cv');
+      if (!cv2) { clearInterval(window._ferryTimer); return; }
+      window._ferryX = ((window._ferryX||0) + 0.5) % (cv2.width + 60);
+      drawRiverScene(cv2);
+    }, 80);
+  }, 50);
+}
+
+function toggleSceneCig(e) {
+  var cv = document.getElementById('scene-cv');
+  if (!cv) return;
+  var rect = cv.getBoundingClientRect();
+  var sx = (e.clientX - rect.left) / rect.width * cv.width;
+  var sy = (e.clientY - rect.top) / rect.height * cv.height;
+  if (sx > cv.width - 120 && sy > cv.height - 40) {
+    window._cigLit = !window._cigLit;
+    drawRiverScene(cv);
+  }
+}
+
+function addSceneNote() {
+  var inp = document.getElementById('scene-note-input');
+  if (!inp || !inp.value.trim()) return;
+  var txt = inp.value.trim();
+  inp.value = '';
+  /* add to main board too */
+  var idx = _allCards.length;
+  _allCards.push({title: 'Note', body: txt});
+  /* add card to scene board */
+  var sbInner = document.getElementById('scene-board-inner');
+  var inner   = document.getElementById('cork-inner');
+  var x = 20 + Math.floor(Math.random()*900);
+  var y = 20 + Math.floor(Math.random()*200);
+  var r = (Math.random()*16-8).toFixed(1);
+  var card = '<div class="ck" style="left:'+x+'px;top:'+y+'px;transform:rotate('+r+'deg);z-index:6" ondblclick="crumpleCard(event)">' +
+    '<div class="ck-tape"></div>' +
+    '<div class="ck-note cream" onclick="openCard('+idx+')"><span class="ck-lbl">NOTE</span>'+txt+'</div>' +
+    '</div>';
+  if (sbInner) sbInner.innerHTML += card;
+  if (inner)   inner.innerHTML   += card;
+}
+
+function drawRiverScene(cv) {
+  var W = cv.width, H = cv.height;
+  var ctx = cv.getContext('2d');
+  var hr = new Date().getHours();
+  var isNight = hr >= 19 || hr < 6;
+  var isSunset = hr >= 17 && hr < 19;
+
+  function px(x,y,w,h,col){ctx.fillStyle=col;ctx.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h));}
+
+  /* SKY */
+  var sg = ctx.createLinearGradient(0,0,0,H*0.52);
+  if (isNight)       { sg.addColorStop(0,'#020408'); sg.addColorStop(1,'#060c16'); }
+  else if (isSunset) { sg.addColorStop(0,'#18060a'); sg.addColorStop(0.5,'#c03808'); sg.addColorStop(1,'#e07018'); }
+  else               { sg.addColorStop(0,'#3a6888'); sg.addColorStop(1,'#6a9ab0'); }
+  ctx.fillStyle = sg; ctx.fillRect(0,0,W,H*0.52);
+
+  /* Stars / moon */
+  if (isNight) {
+    [[30,6],[80,3],[150,9],[240,5],[330,8],[410,4],[490,7],[580,11],[660,5],[740,9],[810,4]].forEach(function(p){
+      if (p[0] < W) px(p[0],p[1],1,1,'rgba(230,220,200,0.7)');
+    });
+    ctx.fillStyle='#c8c0a0'; ctx.beginPath(); ctx.arc(W*0.84,16,9,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#060c16'; ctx.beginPath(); ctx.arc(W*0.84+4,14,7.5,0,Math.PI*2); ctx.fill();
+  } else if (!isSunset) {
+    [[W*0.15,12,50,14],[W*0.42,8,70,16],[W*0.72,14,55,13]].forEach(function(c){
+      ctx.fillStyle='rgba(255,255,255,0.3)'; ctx.beginPath(); ctx.ellipse(c[0],c[1],c[2],c[3],0,0,Math.PI*2); ctx.fill();
+    });
+  }
+
+  /* IOWA BLUFFS — far shore, gentle rolling hills */
+  var bluffY = H * 0.40;
+  ctx.fillStyle = isNight ? '#060c06' : '#1a2a0e';
+  ctx.beginPath(); ctx.moveTo(0, H*0.52);
+  var pts = [[0,bluffY+4],[W*0.08,bluffY-18],[W*0.18,bluffY-32],[W*0.28,bluffY-24],[W*0.38,bluffY-16],
+             [W*0.48,bluffY-28],[W*0.56,bluffY-38],[W*0.64,bluffY-30],[W*0.72,bluffY-20],[W*0.80,bluffY-26],
+             [W*0.88,bluffY-16],[W*0.94,bluffY-22],[W,bluffY-18],[W,H*0.52]];
+  pts.forEach(function(p,i){ i===0?ctx.moveTo(p[0],p[1]):ctx.lineTo(p[0],p[1]); });
+  ctx.closePath(); ctx.fill();
+
+  /* Tree line on bluffs */
+  if (!isNight) {
+    var tc = '#142208';
+    for (var ti=0; ti<36; ti++) {
+      var tx = ti*(W/36), ty = bluffY - 18 - Math.abs(Math.sin(ti*0.7))*16;
+      ctx.fillStyle=tc; ctx.beginPath(); ctx.moveTo(tx+3,ty-8); ctx.lineTo(tx,ty); ctx.lineTo(tx+6,ty); ctx.closePath(); ctx.fill();
+      px(tx+2,ty,2,6,tc);
+    }
+  }
+
+  /* RIVER — fills lower ~48% */
+  var riverY = H * 0.52;
+  var rg = ctx.createLinearGradient(0,riverY,0,H);
+  if (isNight)       { rg.addColorStop(0,'#030810'); rg.addColorStop(1,'#020508'); }
+  else if (isSunset) { rg.addColorStop(0,'#a03808'); rg.addColorStop(1,'#601808'); }
+  else               { rg.addColorStop(0,'#1e5070'); rg.addColorStop(1,'#0e2840'); }
+  ctx.fillStyle=rg; ctx.fillRect(0,riverY,W,H-riverY);
+
+  /* River ripples */
+  ctx.strokeStyle = isNight ? 'rgba(60,100,180,0.06)' : 'rgba(120,180,220,0.1)';
+  ctx.lineWidth=1;
+  for (var rip=0; rip<8; rip++) {
+    ctx.beginPath(); ctx.moveTo(rip*130,riverY+12+rip*6); ctx.lineTo(rip*130+70,riverY+12+rip*6); ctx.stroke();
+  }
+
+  /* STEEL BRIDGE — spans most of the scene, ABOVE the waterline */
+  var bridgeY = riverY - 28; /* well above water */
+  var bCol = isNight ? '#1a2038' : '#384870';
+  var bHL  = isNight ? '#242848' : '#485888';
+
+  /* bridge deck */
+  px(0, bridgeY+24, W*0.72, 5, bCol);
+  /* upper chord */
+  px(0, bridgeY, W*0.72, 4, bCol);
+  /* vertical members */
+  for (var bv=0; bv<=11; bv++) {
+    var bvx = bv*(W*0.72/11);
+    px(bvx, bridgeY, 4, 28, bCol);
+  }
+  /* X diagonals */
+  ctx.strokeStyle=bHL; ctx.lineWidth=1.5;
+  for (var bd=0; bd<11; bd++) {
+    var bx1=bd*(W*0.72/11), bx2=(bd+1)*(W*0.72/11);
+    ctx.beginPath(); ctx.moveTo(bx1,bridgeY); ctx.lineTo(bx2,bridgeY+28); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(bx2,bridgeY); ctx.lineTo(bx1,bridgeY+28); ctx.stroke();
+  }
+  /* bridge piers — go from deck DOWN into water */
+  [[W*0.18,bridgeY+28],[W*0.36,bridgeY+28],[W*0.54,bridgeY+28]].forEach(function(p){
+    px(p[0]-5,p[1],12,H-p[1],'rgba(20,20,40,0.7)');
+    px(p[0]-7,p[1]-4,16,6,isNight?'#242430':'#303048');
+  });
+  /* bridge lights */
+  if (isNight) {
+    for (var bl=0; bl<14; bl++) { px(bl*(W*0.72/14)+3,bridgeY+1,3,3,'rgba(200,220,255,0.55)'); }
+  }
+
+  /* PADDLE WHEEL STEAMBOAT / CASINO QUEEN */
+  var sbx = Math.round(window._ferryX !== undefined ? window._ferryX - 50 : W*0.3);
+  sbx = ((sbx % (W+110)) + (W+110)) % (W+110) - 55;
+  var sbCol = isNight ? '#d8d0c0' : '#f0e8d8';
+  /* hull */
+  ctx.fillStyle = isNight ? '#c0b080' : '#d0c090';
+  ctx.beginPath();
+  ctx.moveTo(sbx-8,riverY+50); ctx.lineTo(sbx,riverY+54);
+  ctx.lineTo(sbx+96,riverY+54); ctx.lineTo(sbx+104,riverY+50); ctx.closePath(); ctx.fill();
+  /* main deck */
+  px(sbx,   riverY+30, 96, 22, isNight?'#e0d8c8':'#f2eada');
+  /* upper deck */
+  px(sbx+8, riverY+18, 76, 14, isNight?'#c8c0b0':'#e0d8c8');
+  /* pilothouse */
+  px(sbx+32,riverY+9,  32, 11, isNight?'#b0a898':'#d0c8b8');
+  /* pilothouse windows */
+  var pwinCol = isNight ? 'rgba(240,200,80,0.55)' : 'rgba(140,190,230,0.4)';
+  px(sbx+35,riverY+11,6,6,pwinCol); px(sbx+44,riverY+11,6,6,pwinCol); px(sbx+53,riverY+11,6,6,pwinCol);
+  /* smokestacks */
+  px(sbx+18,riverY-4,7,15,isNight?'#2a2020':'#3a3028');
+  px(sbx+65,riverY-4,7,15,isNight?'#2a2020':'#3a3028');
+  px(sbx+16,riverY-6,11,4,isNight?'#1a1818':'#2a2820');
+  px(sbx+63,riverY-6,11,4,isNight?'#1a1818':'#2a2820');
+  /* smoke */
+  if (isNight) {
+    ctx.strokeStyle='rgba(180,180,160,0.2)'; ctx.lineWidth=3;
+    ctx.beginPath(); ctx.moveTo(sbx+21,riverY-6); ctx.bezierCurveTo(sbx+18,riverY-18,sbx+26,riverY-28,sbx+22,riverY-38); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(sbx+68,riverY-6); ctx.bezierCurveTo(sbx+72,riverY-20,sbx+66,riverY-32,sbx+70,riverY-42); ctx.stroke();
+  }
+  /* paddle wheel */
+  var pwx = sbx+88, pwy = riverY+46;
+  ctx.fillStyle=isNight?'#b89860':'#c8a870';
+  ctx.beginPath(); ctx.arc(pwx,pwy,13,0,Math.PI*2); ctx.fill();
+  ctx.strokeStyle=isNight?'#1a0a04':'#2a1a08'; ctx.lineWidth=2;
+  var pwa = (Date.now()/1800) % (Math.PI*2);
+  for (var pw=0; pw<8; pw++) {
+    var a = pwa + pw*Math.PI/4;
+    ctx.beginPath(); ctx.moveTo(pwx,pwy); ctx.lineTo(pwx+Math.cos(a)*13,pwy+Math.sin(a)*13); ctx.stroke();
+  }
+  /* Casino Queen sign */
+  ctx.fillStyle = isNight ? 'rgba(255,80,80,0.85)' : 'rgba(180,20,20,0.8)';
+  ctx.font = 'bold 8px IBM Plex Mono,monospace'; ctx.textAlign='left';
+  ctx.fillText('CASINO QUEEN', sbx+6, riverY+42);
+  /* deck railings */
+  ctx.strokeStyle = isNight?'rgba(200,180,140,0.35)':'rgba(240,220,180,0.5)'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(sbx,riverY+30); ctx.lineTo(sbx+96,riverY+30); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(sbx+8,riverY+18); ctx.lineTo(sbx+84,riverY+18); ctx.stroke();
+  /* wake */
+  ctx.strokeStyle=isNight?'rgba(80,120,200,0.08)':'rgba(160,200,230,0.15)'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(sbx-8,riverY+52); ctx.lineTo(sbx-50,riverY+60); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(sbx-8,riverY+52); ctx.lineTo(sbx-45,riverY+46); ctx.stroke();
+
+  /* BARGE */
+  var bax = Math.round(((window._ferryX||0)*0.35 + W*0.6) % (W+120)) - 10;
+  px(bax,riverY+34,100,14,isNight?'#3a2e18':'#5a4828');
+  px(bax+4,riverY+26,92,10,isNight?'#4a3820':'#6a5830');
+  [[0,'#304050'],[24,'#503020'],[48,'#204030'],[72,'#403020']].forEach(function(c){
+    px(bax+8+c[0],riverY+20,20,8,isNight?'#1a1a20':c[1]);
+  });
+  px(bax+72,riverY+16,16,12,isNight?'#1a1810':'#2a2818');
+  if (isNight) px(bax+74,riverY+18,4,4,'rgba(240,200,80,0.5)');
+
+  /* WINDOW FRAME */
+  var fc='#1a0c04';
+  px(0,0,W,6,fc); px(0,H-20,W,20,'#241406');
+  px(0,0,8,H,fc); px(W-8,0,8,H,fc);
+  px(W/2-3,0,6,H-20,fc); px(0,H*0.53,W,5,fc);
+
+  /* SILL: coffee mug */
+  var mx=18, my=H-34;
+  px(mx,my,18,22,'#3a2808');
+  ctx.strokeStyle='#6a4820'; ctx.lineWidth=1.5; ctx.strokeRect(mx,my,18,22);
+  ctx.strokeStyle='rgba(220,220,220,0.28)'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(mx+5,my-2); ctx.bezierCurveTo(mx+3,my-10,mx+9,my-15,mx+6,my-22); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(mx+12,my-2); ctx.bezierCurveTo(mx+15,my-9,mx+10,my-16,mx+13,my-24); ctx.stroke();
+  ctx.strokeStyle='#6a4820'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.arc(mx+22,my+10,5,Math.PI*0.25,Math.PI*1.75); ctx.stroke();
+
+  /* CIGARETTE */
+  var cigx = W-74, cigy = H-23;
+  px(cigx,cigy,32,4,'#f0f0e8'); px(cigx,cigy,6,4,'#c87020');
+  if (window._cigLit || isNight) {
+    ctx.fillStyle='#ff4800'; ctx.fillRect(cigx+26,cigy-1,6,6);
+    ctx.fillStyle='rgba(255,120,20,0.28)'; ctx.beginPath(); ctx.arc(cigx+29,cigy+2,8,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle='rgba(200,200,200,0.2)'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(cigx+29,cigy-1); ctx.bezierCurveTo(cigx+26,cigy-16,cigx+34,cigy-30,cigx+30,cigy-46); ctx.stroke();
+  }
+
+  /* Night lamp glow */
+  if (isNight) {
+    var lg = ctx.createRadialGradient(40,H,0,40,H,200);
+    lg.addColorStop(0,'rgba(240,190,80,0.13)'); lg.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=lg; ctx.fillRect(0,0,W,H);
+  }
+}
+
+
+/* ── main render ── */
+function renderBoard() {
+  var el = document.getElementById('cork-inner');
+  if (!el) return;
+  _allCards = [];
+
+  var dy   = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+  var sob  = Math.floor((new Date() - new Date('2026-05-31T12:00:00')) / 86400000);
+  var d2p  = Math.max(0, Math.round((new Date('2026-06-21') - new Date()) / 86400000));
+  var tarot = _TAROT[dy % _TAROT.length];
+  var paint = _PAINT[dy % _PAINT.length];
+  var photo = _PHOTO[(dy+1) % _PHOTO.length];
+  var quote = _QUOTES[dy % _QUOTES.length];
+  var set   = _SETS[dy % _SETS.length];
+  var strat = _STRATS[dy % _STRATS.length];
+
+  /* push returns the NEW length, so index = length BEFORE push */
+  function push(title, body, link) {
+    var idx = _allCards.length;
+    _allCards.push({title: title, body: body, link: link || ''});
+    return idx;
+  }
+
+  function card(x, y, r, z, inner) {
+    return '<div class="ck" style="left:'+x+'px;top:'+y+'px;transform:rotate('+r+'deg);z-index:'+(z||2)+'" ondblclick="crumpleCard(event)">'+inner+'</div>';
+  }
+  function pin(col) { return '<span class="ck-pin" style="background:'+col+'"></span>'; }
+  function noteCard(x,y,r,z, cls,cat,short,full,pinCol) {
+    var idx = push(cat + ' \u2014 ' + short.replace(/<br>/g,' '), full);
+    var bg  = {cream:'#f5edd4',yellow:'#fdf5d0',blue:'#e8eef8',green:'#eaf2e4',purple:'#f2eaf7'}[cls.split(' ')[0]] || '#f5edd4';
+    return card(x,y,r,z,
+      pin(pinCol) +
+      '<div class="ck-note '+cls+'" style="--bg:'+bg+'" onclick="openCard('+idx+')">' +
+      '<span class="ck-lbl">'+cat+'</span>'+short+'</div>'
+    );
+  }
+
+  var h = '';
+
+  /* ── ROW 1 — permanent items ── */
+
+  // Tarot
+  var ti = push(tarot.n, tarot.k + ' \u2014 ' + tarot.m);
+  h += card(8, 8, -3, 3,
+    pin(tarot.c) +
+    '<div class="ck-tarot" onclick="openCard('+ti+')">' +
+    '<svg viewBox="0 0 80 88" width="66" height="80" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated">' +
+    '<rect width="80" height="88" fill="#1a0a04"/>' +
+    '<rect x="3" y="3" width="74" height="82" fill="none" stroke="'+tarot.c+'" stroke-width="1"/>'+tarot.s+
+    '</svg><div class="ck-tarot-nm">'+tarot.n+'</div></div>'
+  );
+
+  // Painting
+  var pi = push(paint.t, paint.a + ' \u2014 ' + paint.d, paint.u);
+  h += card(105, 12, 2, 3,
+    pin('#255637') +
+    '<div class="ck-art" onclick="openCard('+pi+')">' + paint.s +
+    '<div class="ck-art-lbl">'+paint.t.toUpperCase()+'</div></div>'
+  );
+
+  // Photo
+  var phi = push(photo.t, photo.a + ' \u2014 ' + photo.d, photo.u);
+  h += card(240, 8, -2, 3,
+    pin('#4a7090') +
+    '<div class="ck-art" onclick="openCard('+phi+')">' + photo.s +
+    '<div class="ck-art-lbl">'+photo.a.split(',')[0].toUpperCase()+'</div></div>'
+  );
+
+  // Setlist
+  h += card(380, 10, -3, 2,
+    pin('#c8a030') +
+    '<div class="ck-setlist"><div class="ck-setlist-hd">'+set.h+'</div><ul>' +
+    set.t.map(function(x){return '<li>'+x+'</li>';}).join('') +
+    '</ul></div>'
+  );
+
+  // Oblique Strategy
+  var oi = push('Oblique Strategy', strat + '\n\n\u2014 Brian Eno & Peter Schmidt');
+  h += card(498, 8, 4, 2,
+    pin('#8a2a8a') +
+    '<div class="ck-note yellow" onclick="openCard('+oi+')">' +
+    '<span class="ck-lbl">Oblique Strategy</span>'+strat+'</div>'
+  );
+
+  // Radiator
+  h += card(630, 8, -2, 3,
+    pin('#c8a030') +
+    '<div class="ck-rad" onclick="openPoem(event)">' +
+    '<svg viewBox="0 0 88 60" width="86" height="58" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated">' +
+    '<rect x="2" y="52" width="84" height="6" fill="#c8a030"/><rect x="2" y="4" width="84" height="6" fill="#c8a030"/>' +
+    '<rect x="2" y="4" width="4" height="54" fill="#c8a030"/><rect x="82" y="4" width="4" height="54" fill="#c8a030"/>' +
+    '<rect x="8" y="10" width="8" height="42" fill="#a08020"/><rect x="19" y="10" width="8" height="42" fill="#a08020"/>' +
+    '<rect x="30" y="10" width="8" height="42" fill="#a08020"/><rect x="41" y="10" width="8" height="42" fill="#a08020"/>' +
+    '<rect x="52" y="10" width="8" height="42" fill="#a08020"/><rect x="63" y="10" width="8" height="42" fill="#a08020"/>' +
+    '<path d="M14 3 Q17 0 20 3 Q23 6 26 3" fill="none" stroke="#ff6020" stroke-width="1.5" opacity="0.8"/>' +
+    '<path d="M36 3 Q39 0 42 3 Q45 6 48 3" fill="none" stroke="#ff6020" stroke-width="1.5" opacity="0.8"/>' +
+    '<path d="M58 3 Q61 0 64 3 Q67 6 70 3" fill="none" stroke="#ff6020" stroke-width="1.5" opacity="0.8"/>' +
+    '<rect x="38" y="54" width="12" height="8" fill="#805010"/></svg>' +
+    '<div class="ck-rad-lbl">The Radiator Plan</div></div>'
+  );
+
+  /* ── ROW 2 — bottom strip ── */
+
+  // Quote strip
+  h += card(8, 158, 3, 3,
+    '<div class="ck-tape"></div>' +
+    '<div class="ck-strip">'+quote.t+'<div class="ck-strip-by">'+quote.b+'</div></div>'
+  );
+
+  // Zen Gun ticket
+  var tki = push('ZEN GUN \u2014 THE DRINKER', 'A film. MiniDV. Shot in Denmark, Bornholm.\nA man and a bottle and a Baltic island.\n\nFootage exists. Cut is pending.\nZen Gun Film No. 1');
+  h += card(240, 152, -4, 4,
+    '<div class="ck-tape"></div>' +
+    '<div style="background:#1a0a04;border:1px solid #c8a030;padding:6px 10px;width:130px;font-family:IBM Plex Mono,monospace;font-size:8px;color:#c8a030;letter-spacing:.06em;cursor:pointer" onclick="openCard('+tki+')">' +
+    '<div style="font-size:6px;opacity:0.5;margin-bottom:2px;">ADMIT ONE</div>' +
+    '<div style="font-size:9px;font-weight:700;">ZEN GUN</div>' +
+    '<div style="opacity:0.6;margin-top:2px;">THE DRINKER \xb7 2026</div>' +
+    '<div style="border-top:1px dashed rgba(200,160,48,0.3);margin-top:4px;padding-top:3px;font-size:6px;opacity:0.4;">NO. 0001 \xb7 BORNHOLM</div>' +
+    '</div>'
+  );
+
+  // Fortune slip
+  var fortunes = [
+    'The river remembers everything you tried to forget.',
+    'Write the book. The world needs your version.',
+    'What you resist most is what you need to start.',
+    'The bluffs have been watching longer than you know.',
+    'June 21. Make it count.',
+  ];
+  var fi = push('Fortune', fortunes[dy % fortunes.length]);
+  h += card(390, 155, 3, 4,
+    '<div class="ck-tape"></div>' +
+    '<div style="background:#fdf8e8;border:1px solid #d8c880;padding:5px 10px;width:160px;font-family:Spectral,serif;font-size:10px;font-style:italic;color:#3a2808;clip-path:polygon(0 2%,100% 0,99% 98%,1% 100%);cursor:pointer" onclick="openCard('+fi+')">' +
+    fortunes[dy % fortunes.length] + '</div>'
+  );
+
+  // Bornholm postcard
+  var pci = push('POSTCARD FROM BORNHOLM', 'Wind off the Baltic. The film is in the camera.\nDenmark Jun 12-16.\n\n\u201cThe Drinker\u201d \u2014 in production.\n\nUse the time well.');
+  h += card(560, 150, 2, 4,
+    '<div style="width:140px;background:#f8f4e8;border:1px solid #c8b880;padding:7px;font-family:IBM Plex Mono,monospace;cursor:pointer" onclick="openCard('+pci+')">' +
+    '<div style="flex:1;height:58px;background:#6a9ab0;margin-bottom:5px;position:relative;overflow:hidden;">' +
+    '<svg viewBox="0 0 140 58" width="126" height="52" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated">' +
+    '<rect width="140" height="58" fill="#6a9ab0"/><rect x="0" y="36" width="140" height="22" fill="#0e2840"/>' +
+    '<rect x="10" y="28" width="120" height="12" fill="#08182e"/>' +
+    '<circle cx="70" cy="14" r="10" fill="#c8c0a0" opacity="0.6"/><circle cx="75" cy="12" r="9" fill="#6a9ab0"/>' +
+    '<text x="70" y="54" font-family="monospace" font-size="7" fill="rgba(200,220,255,0.5)" text-anchor="middle">BORNHOLM</text>' +
+    '</svg></div>' +
+    '<div style="font-size:6px;color:#4a3020;border-top:1px solid #d8c880;padding-top:3px;">BORNHOLM \xb7 DENMARK</div>' +
+    '</div>'
+  );
+
+  // Filmstrip
+  var fsi = push('THE DRINKER \u2014 MiniDV', 'Shot in Denmark, 2025.\nA man. A bottle. A Baltic island.\n\nFootage exists. Assembly pending.\nZen Gun Film No. 1');
+  h += card(708, 148, -3, 4,
+    pin('#1a1a1a') +
+    '<svg viewBox="0 0 30 120" width="30" height="120" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated;display:block;cursor:pointer" onclick="openCard('+fsi+')">' +
+    '<rect width="30" height="120" fill="#1a1a1a"/>' +
+    '<rect x="2" y="2" width="4" height="6" fill="#333"/><rect x="24" y="2" width="4" height="6" fill="#333"/><rect x="8" y="1" width="14" height="14" fill="#2a3848"/>' +
+    '<rect x="2" y="22" width="4" height="6" fill="#333"/><rect x="24" y="22" width="4" height="6" fill="#333"/><rect x="8" y="21" width="14" height="14" fill="#1a2838"/>' +
+    '<rect x="2" y="42" width="4" height="6" fill="#333"/><rect x="24" y="42" width="4" height="6" fill="#333"/><rect x="8" y="41" width="14" height="14" fill="#2a3848"/>' +
+    '<rect x="2" y="62" width="4" height="6" fill="#333"/><rect x="24" y="62" width="4" height="6" fill="#333"/><rect x="8" y="61" width="14" height="14" fill="#1a2838"/>' +
+    '<rect x="2" y="82" width="4" height="6" fill="#333"/><rect x="24" y="82" width="4" height="6" fill="#333"/><rect x="8" y="81" width="14" height="14" fill="#2a3848"/>' +
+    '<rect x="2" y="102" width="4" height="6" fill="#333"/><rect x="24" y="102" width="4" height="6" fill="#333"/><rect x="8" y="101" width="14" height="14" fill="#1a2838"/>' +
+    '<text x="15" y="118" font-family="monospace" font-size="3.5" fill="rgba(200,180,100,0.6)" text-anchor="middle">ZEN GUN</text>' +
+    '</svg>'
+  );
+
+  // Guitar
+  h += card(750, 10, 5, 3,
+    pin('#8a5010') +
+    '<svg viewBox="0 0 30 70" width="30" height="70" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated;display:block">' +
+    '<ellipse cx="15" cy="56" rx="12" ry="10" fill="#c87020"/><ellipse cx="15" cy="44" rx="8" ry="7" fill="#c87020"/>' +
+    '<rect x="11" y="44" width="8" height="12" fill="#c87020"/><circle cx="15" cy="52" r="3" fill="#1a0a04"/>' +
+    '<rect x="13" y="12" width="4" height="34" fill="#a06018"/><rect x="11" y="6" width="8" height="8" fill="#8a5010"/>' +
+    '<rect x="9" y="7" width="3" height="2" fill="#c8a030"/><rect x="18" y="7" width="3" height="2" fill="#c8a030"/>' +
+    '<line x1="13" y1="14" x2="13" y2="46" stroke="#e0d0a0" stroke-width="0.5"/>' +
+    '<line x1="15" y1="14" x2="15" y2="46" stroke="#e0d0a0" stroke-width="0.5"/>' +
+    '<line x1="17" y1="14" x2="17" y2="46" stroke="#e0d0a0" stroke-width="0.5"/>' +
+    '</svg>'
+  );
+
+  // Newspaper
+  var nwi = push('LA CROSSE TRIBUNE', 'RIVER AT FULL STAGE\n\nBarge traffic slow. Steamboat season opens on upper Mississippi. Flood stage watch lifted.\n\nCasino Queen to resume evening cruises.');
+  h += card(800, 80, -3, 4,
+    '<div class="ck-tape"></div>' +
+    '<div style="background:#f0e8d0;border:1px solid #b8a880;padding:8px 10px;width:120px;font-family:IBM Plex Mono,monospace;font-size:8px;color:#1a0a04;cursor:pointer" onclick="openCard('+nwi+')">' +
+    '<div style="font-size:6px;letter-spacing:.14em;border-bottom:1px solid #b8a880;padding-bottom:3px;margin-bottom:4px;">La Crosse Tribune</div>' +
+    '<div style="font-size:9px;font-weight:700;line-height:1.3;margin-bottom:3px;">RIVER AT FULL STAGE</div>' +
+    '<div style="font-size:7px;opacity:0.5;">Barge traffic slow \u2014 steamboat season opens</div>' +
+    '</div>'
+  );
+
+  // Wanted poster
+  var wai = push('WANTED: G. LONNING', 'Last seen: La Crosse, WI.\n\nCharges: excessive ambition, writing too slowly, dreaming in the daytime.\n\nReward: $500 or a good conversation.\n\nApproach with caution \u2014 known to be working on it.');
+  h += card(944, 8, 3, 4,
+    pin('#bd441f') +
+    '<div style="background:#f5edd4;border:2px solid #1a0a04;padding:8px 10px;width:90px;font-family:IBM Plex Mono,monospace;text-align:center;cursor:pointer" onclick="openCard('+wai+')">' +
+    '<div style="font-size:7px;letter-spacing:.2em;font-weight:900;border-bottom:1px solid #1a0a04;padding-bottom:3px;margin-bottom:4px;">WANTED</div>' +
+    '<svg viewBox="0 0 30 36" width="30" height="36" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:2px auto;image-rendering:pixelated">' +
+    '<rect x="6" y="4" width="18" height="20" fill="#d0a878"/><rect x="4" y="8" width="22" height="14" fill="#d0a878"/>' +
+    '<rect x="8" y="10" width="4" height="4" fill="#2a1a08"/><rect x="18" y="10" width="4" height="4" fill="#2a1a08"/>' +
+    '<rect x="10" y="18" width="10" height="2" fill="#2a1a08"/><rect x="4" y="2" width="22" height="6" fill="#2a1a08"/>' +
+    '<rect x="6" y="24" width="18" height="12" fill="#3a2808"/>' +
+    '</svg>' +
+    '<div style="font-size:7px;margin-top:3px;opacity:0.6;">DEAD OR ALIVE</div>' +
+    '<div style="font-size:8px;font-weight:700;margin-top:1px;">G. LONNING</div>' +
+    '<div style="font-size:6px;opacity:0.4;margin-top:2px;">$500 REWARD</div>' +
+    '</div>'
+  );
+
+  /* ── TODO CARDS ── */
+  var todos = [
+    {x:840, y:155, r:-4, cls:'cream torn stained', pin:'#bd441f', cat:'THIS WEEK', short:'Shoulders today',           full:'Push day. V-taper width. Laterals slow and controlled. GtG warm-up.'},
+    {x:960, y:155, r: 3, cls:'cream torn',         pin:'#bd441f', cat:'THIS WEEK', short:'Get quarters<br>laundry',   full:'Laundry day. Need quarters from store.'},
+    {x:1080,y:155, r:-2, cls:'green',              pin:'#255637', cat:'THIS WEEK', short:'Day '+sob+' sober<br>keep going', full:'Streak is real. Sleep, water, food. Every day adds up.'},
+    {x:1080,y:  8, r: 4, cls:'yellow ledger',      pin:'#b8860b', cat:'BUY NOW',   short:'Olaplex No.3<br>+ Moroccan Oil', full:'Olaplex: damp hair 10min, shampoo out. Moroccan: half pump on towel-dry. Both from Amazon or Sally Beauty.'},
+    {x:1200,y:  8, r:-3, cls:'yellow',             pin:'#b8860b', cat:'BUY NOW',   short:'Tinted SPF 30+',             full:'Swap morning sunscreen. Evens redness, reads like nothing. ~$20-30. Get it Thursday.'},
+    {x:1200,y:105, r: 2, cls:'yellow torn',        pin:'#b8860b', cat:'BUY NOW',   short:'Black vest<br>no lapels',    full:'Depop: black waistcoat / black vest M. Single-breasted, no lapels. Wool or cotton. $25-40. KEYSTONE piece.'},
+    {x: 960,y: 60, r: 3, cls:'blue ledger',        pin:'#4a7090', cat:'ADMIN',     short:'Brooklyn rent<br>$2,200 Jun 15', full:'Wise IBAN transfer to Nikolaj. Must land by 15th.'},
+    {x: 840,y: 60, r:-3, cls:'blue',               pin:'#4a7090', cat:'ADMIN',     short:'Invisalign<br>book July',    full:'Brooklyn Family Orthodontics + Dr. Pewarski second opinion. $3500-4500 = go in-office. Book before you leave La Crosse.'},
+    {x:1080,y: 80, r: 4, cls:'blue stained',       pin:'#4a7090', cat:'ADMIN',     short:'La Crosse lease<br>ends Jun 30', full:'Talk with Leo about extension vs move. Decide this week.'},
+    {x: 380,y: 60, r:-2, cls:'purple torn',        pin:'#6a2a8a', cat:'ZEN GUN',   short:'Madison County<br>open it', full:'Madison County Church Suicide Corner. Slow-moving. Time out of mind. Dreamlike. Open the file and write one sentence.'},
+  ];
+
+  todos.forEach(function(td) {
+    h += noteCard(td.x, td.y, td.r, 2, td.cls, td.cat, td.short, td.full, td.pin);
+  });
+
+  el.innerHTML = h;
+  attachZoom();
+}
+
+
 /* ════════ BOOT ════════ */
 
 /* ════════ BACKDROP FUNCTIONS ════════ */
@@ -2108,48 +2984,156 @@ function openMoon(){
  var now=new Date();
  var isDay=now.getHours()>=6&&now.getHours()<19;
  var arcType=isDay?'Diurnal Arc \u2609':'Nocturnal Arc \u263d';
- /* Arabian desert 8-bit sky */
  var svg='<rect width="700" height="500" fill="#06030f"/>'
   +'<rect x="0" y="0" width="700" height="200" fill="#08041a"/>'
-  +'<rect x="14" y="8" width="4" height="4" fill="#fff" opacity="0.8"/><rect x="56" y="4" width="4" height="4" fill="#ffd" opacity="0.7"/><rect x="98" y="16" width="4" height="4" fill="#fff" opacity="0.6"/><rect x="140" y="6" width="4" height="4" fill="#fff" opacity="0.9"/><rect x="196" y="12" width="4" height="4" fill="#ffd" opacity="0.7"/><rect x="252" y="4" width="4" height="4" fill="#fff" opacity="0.8"/><rect x="308" y="18" width="4" height="4" fill="#fff" opacity="0.6"/><rect x="364" y="8" width="4" height="4" fill="#fff" opacity="0.9"/><rect x="420" y="14" width="4" height="4" fill="#ffd" opacity="0.7"/><rect x="476" y="6" width="4" height="4" fill="#fff" opacity="0.8"/><rect x="532" y="10" width="4" height="4" fill="#fff" opacity="0.6"/><rect x="588" y="16" width="4" height="4" fill="#fff" opacity="0.9"/><rect x="644" y="8" width="4" height="4" fill="#fff" opacity="0.7"/>'
-  +'<rect x="500" y="30" width="8" height="4" fill="#f0d060"/><rect x="496" y="34" width="16" height="4" fill="#f0d060"/><rect x="492" y="38" width="24" height="4" fill="#f0d060"/><rect x="492" y="42" width="4" height="8" fill="#f0d060"/><rect x="508" y="42" width="4" height="4" fill="#f0d060"/><rect x="492" y="50" width="4" height="4" fill="#f0d060"/><rect x="496" y="54" width="16" height="4" fill="#f0d060"/><rect x="500" y="58" width="8" height="4" fill="#f0d060"/><rect x="496" y="38" width="16" height="20" fill="#c8a830"/>'
+  +'<rect x="500" y="30" width="60" height="12" fill="#e8d860"/><rect x="496" y="42" width="68" height="12" fill="#d8c850"/><rect x="496" y="38" width="16" height="36" fill="#102240"/>'
   +'<rect x="0" y="360" width="700" height="140" fill="#1e0e06"/>'
-  +'<rect x="0" y="340" width="120" height="24" fill="#2a1208"/><rect x="80" y="320" width="140" height="44" fill="#321808"/><rect x="260" y="310" width="160" height="54" fill="#3a1e0a"/><rect x="460" y="320" width="140" height="44" fill="#321808"/><rect x="560" y="340" width="140" height="24" fill="#2a1208"/>'
-  +'<rect x="320" y="250" width="16" height="110" fill="#0e0604"/><rect x="312" y="242" width="32" height="12" fill="#0e0604"/><rect x="316" y="226" width="24" height="20" fill="#0e0604"/><rect x="320" y="210" width="16" height="20" fill="#0e0604"/><rect x="325" y="268" width="6" height="8" fill="#f0a020" opacity="0.8"/>'
-  +'<rect x="100" y="290" width="12" height="80" fill="#0a0604"/><rect x="68" y="270" width="48" height="12" fill="#0a0604"/><rect x="76" y="278" width="36" height="8" fill="#0a0604"/>'
-  +'<rect x="560" y="300" width="12" height="70" fill="#0a0604"/><rect x="532" y="280" width="48" height="12" fill="#0a0604"/>'
-  +'<rect x="180" y="340" width="72" height="24" fill="#0a0604"/><rect x="196" y="320" width="40" height="24" fill="#0a0604"/><rect x="200" y="308" width="16" height="16" fill="#0a0604"/><rect x="180" y="360" width="12" height="20" fill="#0a0604"/><rect x="196" y="362" width="12" height="18" fill="#0a0604"/><rect x="216" y="362" width="12" height="18" fill="#0a0604"/><rect x="232" y="360" width="12" height="20" fill="#0a0604"/>';
+  +'<rect x="320" y="250" width="16" height="110" fill="#0e0604"/><rect x="316" y="226" width="24" height="28" fill="#0e0604"/>'
+  +'<rect x="100" y="290" width="12" height="80" fill="#0a0604"/><rect x="68" y="270" width="48" height="12" fill="#0a0604"/>'
+  +'<rect x="560" y="300" width="12" height="70" fill="#0a0604"/><rect x="532" y="280" width="48" height="12" fill="#0a0604"/>';
  showBackdrop(svg);
  document.getElementById('modal').classList.add('landscape-mode');
- var p='background:rgba(8,4,26,0.80);border:1px solid rgba(200,168,96,0.25);padding:14px 18px;margin-bottom:10px;';
- var html=''
-  /* Phase card */
-  +'<div style="'+p+'text-align:center">'
-  +'<div style="font-size:52px;line-height:1;margin-bottom:6px">'+phase+'</div>'
-  +'<div style="font-family:Fraunces,serif;font-weight:900;font-size:26px;color:#f0d060">'+phaseName+'</div>'
-  +'<div style="font-family:IBM Plex Mono,monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(200,168,80,0.7);margin-top:4px">'+now.toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric"})+' \xb7 '+arcType+'</div>'
-  +'<div style="display:flex;justify-content:center;gap:16px;margin-top:10px">'
-  +'<a href="https://stellarium-web.org/" target="_blank" rel="noopener" style="font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#c8a830;text-decoration:none">Your Sky Tonight \u2197</a>'
-  +'<a href="https://apod.nasa.gov/apod/astropix.html" target="_blank" rel="noopener" style="font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#c8a830;text-decoration:none">NASA APOD \u2197</a>'
-  +'<a href="https://www.timeanddate.com/astronomy/usa/la-crosse" target="_blank" rel="noopener" style="font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#c8a830;text-decoration:none">La Crosse Sky \u2197</a>'
-  +'</div>'
-  +'</div>'
-  /* Mythology card */
-  +'<div style="'+p+'">'
-  +'<div style="font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:#c8a830;margin-bottom:8px">'+lore.tradition+'</div>'
-  +'<div style="font-family:Spectral,serif;font-size:15px;line-height:1.7;font-style:italic;color:#f0e8d0">'+lore.text+'</div>'
-  +'<div style="margin-top:10px"><a href="'+lore.link+'" target="_blank" rel="noopener" style="font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#e8a030;text-decoration:none">'+lore.linkText+' \u2197</a></div>'
-  +'</div>'
-  /* Astronomy fact */
-  +'<div style="'+p+'">'
-  +'<div style="font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:rgba(160,200,255,0.7);margin-bottom:8px">Tonight \u2014 Astronomy</div>'
-  +'<div style="font-family:Spectral,serif;font-size:14px;line-height:1.65;color:#d0dcf0">'+astro.fact+'</div>'
-  +'<div style="margin-top:10px"><a href="'+astro.link+'" target="_blank" rel="noopener" style="font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#80b0e0;text-decoration:none">'+astro.linkText+' \u2197</a></div>'
-  +'</div>'
-  +'<div style="font-family:IBM Plex Mono,monospace;font-size:8px;color:rgba(200,168,96,0.35);text-align:center">Tradition and fact rotate nightly.</div>';
+
+ /* TAB DATA */
+ var PLANETS=[
+  {name:'Jupiter',sym:'\u2643',col:'#e8c878',
+   desc:'Visible in the southwest after sunset — the brightest "star" low on the horizon. In mythology: Zeus, king of the gods, ruler of thunder. Associated with expansion, luck, wisdom, and the higher mind. In alchemy: Tin. In astrology: rules Sagittarius and Pisces.',
+   pixel:'<rect x="8" y="12" width="24" height="18" fill="#e8c878"/><rect x="4" y="16" width="32" height="4" fill="#c8a050"/><rect x="4" y="22" width="32" height="4" fill="#d0b060"/><rect x="10" y="8" width="20" height="4" fill="#e8c878"/>'},
+  {name:'Saturn',sym:'\u2644',col:'#e0d090',
+   desc:'Rises in the east around midnight in June. Visible as a steady golden star. In mythology: Kronos, god of time and the harvest, who devoured his children. Associated with discipline, limitation, karma, and structure. In alchemy: Lead. The rings visible in any telescope.',
+   pixel:'<rect x="10" y="12" width="20" height="16" fill="#e0d090"/><rect x="2" y="18" width="36" height="3" fill="#c0b070" opacity="0.7"/><rect x="0" y="16" width="40" height="2" fill="#e0c878" opacity="0.5"/><rect x="18" y="8" width="4" height="4" fill="#e0d090"/>'},
+  {name:'Mars',sym:'\u2642',col:'#e06030',
+   desc:'Rising in the east before dawn this month, glowing red-orange. In mythology: Ares, god of war, passion, and courage. Associated with drive, aggression, physical energy. In alchemy: Iron. Rules Aries and Scorpio.',
+   pixel:'<rect x="12" y="10" width="16" height="16" fill="#e06030"/><rect x="8" y="14" width="24" height="8" fill="#d05020"/><rect x="14" y="8" width="12" height="2" fill="#e06030"/>'},
+  {name:'Venus',sym:'\u2640',col:'#f0e0b0',
+   desc:'The morning star or evening star depending on season. Brilliantly bright, unmistakable. In mythology: Aphrodite, goddess of love and beauty. Associated with art, desire, aesthetics, and harmony. In alchemy: Copper. Rules Taurus and Libra.',
+   pixel:'<rect x="14" y="8" width="12" height="12" fill="#f0e0b0"/><rect x="10" y="12" width="20" height="6" fill="#e8d0a0"/><rect x="18" y="20" width="4" height="8" fill="#e0c898"/><rect x="12" y="26" width="16" height="2" fill="#e0c898"/>'},
+ ];
+
+ var PHENOMENA=[
+  {name:'Summer Solstice',date:'June 21, 2026',sym:'\u2600',col:'#f0c030',
+   desc:'The longest day of the year. The sun reaches its highest point in the sky. In ancient Rome: Litha, a fire festival. The druids at Stonehenge align the sunrise with the heel stone. The dying of the year begins here — the days shorten from this point. Your peak day.',
+   hist:'In 1687, Newton completed the Principia Mathematica, explaining why the solstice occurs. In 3000 BC, Stonehenge was already aligned to this sunrise.'},
+  {name:'Perseid Meteor Shower',date:'Peak: Aug 11-13',sym:'\u2604',col:'#a0c0ff',
+   desc:'Up to 100 meteors per hour at peak. The Perseids are debris from Comet Swift-Tuttle, a 26km-wide comet last seen in 1992. Ancient Romans called it "the tears of Saint Lawrence." Best viewed from a dark field after midnight, lying flat, eyes wide open.',
+   hist:'The Perseids have been observed for 2,000 years. The Chinese recorded them in 36 AD. They appear to radiate from the constellation Perseus.'},
+  {name:'Great Comet of 1997',date:'Hale-Bopp',sym:'\u2604',col:'#80d0c0',
+   desc:'Visible to the naked eye for a record 18 months. So bright it could be seen in daylight. Discovered simultaneously by Alan Hale and Thomas Bopp in 1995. The dust tail and ion tail made a V-shape visible to anyone who looked up. It will not return for 2,520 years.',
+   hist:'Its last visit was around 2200 BC — roughly when the ancient Egyptians were building the pyramids. The next visit will be around 4385 AD.'},
+  {name:'Aurora Borealis',date:'Ongoing solar cycle',sym:'\u2728',col:'#40e080',
+   desc:'Solar maximum is currently underway (2024-2026). The Northern Lights are visible further south than usual during strong geomagnetic storms. From Wisconsin, there have already been sightings this year. Watch for NOAA Kp index alerts above 5. Go somewhere dark.',
+   hist:'The Cree called the aurora "Dance of the Spirits." Norse mythology said it was the shimmer from the shields of the Valkyries riding across the sky.'},
+  {name:'Transit of Venus',date:'Last: June 5, 2012',sym:'\u2640',col:'#f0c080',
+   desc:'Venus crossing the face of the sun — an extremely rare event. The next transit is not until December 10-11, 2117. You will not see one. Your children will not see one. The 1769 transit was observed by Captain Cook from Tahiti — the data helped calculate the distance from Earth to the Sun.',
+   hist:'Transits come in pairs separated by 8 years, then over a century apart. The 1716 transit was predicted by Edmund Halley (of Halley\'s Comet) who died before seeing it.'},
+ ];
+
+ var SUN_FACTS=[
+  {title:'June Solstice \u2014 Solar Maximum',col:'#f0c030',sym:'\u2600',
+   desc:'June 21 is the astronomical peak \u2014 the sun at its absolute highest arc across the sky. The sun rises at its most northerly point and sets at its most northerly point. Daylight in La Crosse today: ~15 hours 20 minutes. The ancient Egyptians oriented temples to the solstice sunrise.',
+   myth:'In Greek mythology: Helios drives his golden chariot across the sky each day. The sun is Apollo \u2014 god of light, reason, music, poetry, and healing. In alchemy: Gold. Sol Invictus, the unconquered sun, was a Roman festival on December 25 \u2014 which the early church absorbed into Christmas. In Egyptian: Ra. In Hindu: Surya.'},
+  {title:'Sun in Gemini',col:'#e0c050',sym:'\u264a',
+   desc:'The sun is currently in Gemini (through ~June 21), then moves to Cancer. Gemini is associated with duality, communication, curiosity, and restlessness. If you feel pulled in two directions this month \u2014 that tracks. From Cancer onward: themes of home, memory, and the interior life.',
+   myth:'The twins Castor and Pollux \u2014 one mortal, one divine. They alternate between Olympus and the underworld, spending a day in each. A myth about the two sides of a person: the animal and the divine.'},
+  {title:'Solar Altitude',col:'#f0b020',sym:'\u2609',
+   desc:'At solar noon in La Crosse today, the sun reaches approximately 68\u00b0 above the horizon \u2014 almost overhead. In December, that drops to 22\u00b0. The difference is why seasons exist: same sun, different angle, different intensity. Vitamin D synthesis requires UV-B, which only reaches you when the sun is above ~45\u00b0.',
+   myth:'In alchemical tradition, the sun represents the active, masculine principle \u2014 sulfur \u2014 that animates the passive feminine silver-moon. The Great Work of alchemy is the marriage of Sol and Luna: the integration of opposites.'},
+ ];
+
+ /* BUILD TABS */
+ var tab_style='display:inline-block;padding:6px 12px;font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;border:1px solid rgba(200,168,96,0.3);margin-right:4px;margin-bottom:10px;';
+ var active_tab='background:rgba(220,190,110,0.2);color:#f0d060;border-color:rgba(220,190,110,0.6);';
+ var inactive_tab='background:rgba(0,0,0,0.2);color:rgba(200,168,96,0.5);';
+
+ function panelStyle(col){ return 'background:rgba(22,14,55,0.97);border:1px solid '+(col||'rgba(220,190,110,0.5)')+';padding:14px 18px;margin-bottom:10px;'; }
+
+ function moonPanel(){
+  return '<div style="'+panelStyle()+'text-align:center">'
+   +'<div style="font-size:52px;line-height:1;margin-bottom:6px">'+phase+'</div>'
+   +'<div style="font-family:Fraunces,serif;font-weight:900;font-size:26px;color:#f0d060">'+phaseName+'</div>'
+   +'<div style="font-family:IBM Plex Mono,monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(200,168,80,0.7);margin-top:4px">'+now.toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric"})+' \xb7 '+arcType+'</div>'
+   +'<div style="display:flex;justify-content:center;gap:16px;margin-top:10px">'
+   +'<a href="https://stellarium-web.org/" target="_blank" style="font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#c8a830;text-decoration:none">Your Sky \u2197</a>'
+   +'<a href="https://apod.nasa.gov/apod/astropix.html" target="_blank" style="font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#c8a830;text-decoration:none">NASA APOD \u2197</a>'
+   +'</div></div>'
+   +'<div style="'+panelStyle()+'">'
+   +'<div style="font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:#c8a830;margin-bottom:8px">'+lore.tradition+'</div>'
+   +'<div style="font-family:Spectral,serif;font-size:15px;line-height:1.7;font-style:italic;color:#f8f0e0">'+lore.text+'</div>'
+   +'<div style="margin-top:8px"><a href="'+lore.link+'" target="_blank" style="font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.1em;color:#e8a030;text-decoration:none">'+lore.linkText+' \u2197</a></div>'
+   +'</div>'
+   +'<div style="'+panelStyle('rgba(120,160,240,0.4)')+'">'
+   +'<div style="font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:rgba(160,200,255,0.7);margin-bottom:8px">Tonight</div>'
+   +'<div style="font-family:Spectral,serif;font-size:14px;line-height:1.65;color:#d0dcf0">'+astro.fact+'</div>'
+   +'<div style="margin-top:8px"><a href="'+astro.link+'" target="_blank" style="font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.1em;color:#80b0e0;text-decoration:none">'+astro.linkText+' \u2197</a></div>'
+   +'</div>';
+ }
+
+ function planetsPanel(){
+  return PLANETS.map(function(p){
+   return '<div style="'+panelStyle('rgba('+[p.col].join(',')+'0.3)'.replace('#','')+')')+'">'
+    +'<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">'
+    +'<svg viewBox="0 0 40 28" width="40" height="28" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated;flex-shrink:0">'+p.pixel+'</svg>'
+    +'<div>'
+    +'<span style="font-family:Fraunces,serif;font-weight:900;font-size:18px;color:'+p.col+'">'+p.sym+' '+p.name+'</span>'
+    +'</div></div>'
+    +'<div style="font-family:Spectral,serif;font-size:13px;line-height:1.65;color:#e0d8c8">'+p.desc+'</div>'
+    +'</div>';
+  }).join('');
+ }
+
+ function phenomenaPanel(){
+  return PHENOMENA.map(function(p){
+   return '<div style="'+panelStyle('rgba(100,150,200,0.3)')+'">'
+    +'<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px">'
+    +'<span style="font-family:Fraunces,serif;font-weight:900;font-size:16px;color:'+p.col+'">'+p.sym+' '+p.name+'</span>'
+    +'<span style="font-family:IBM Plex Mono,monospace;font-size:8px;color:rgba(200,180,120,0.6)">'+p.date+'</span>'
+    +'</div>'
+    +'<div style="font-family:Spectral,serif;font-size:13px;line-height:1.65;color:#e0d8c8;margin-bottom:8px">'+p.desc+'</div>'
+    +'<div style="font-family:IBM Plex Mono,monospace;font-size:8px;line-height:1.6;color:rgba(180,200,255,0.6);border-top:1px solid rgba(120,160,240,0.2);padding-top:8px">'+p.hist+'</div>'
+    +'</div>';
+  }).join('');
+ }
+
+ function sunPanel(){
+  return SUN_FACTS.map(function(s){
+   return '<div style="'+panelStyle('rgba(240,180,20,0.3)')+'">'
+    +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">'
+    +'<span style="font-size:20px">'+s.sym+'</span>'
+    +'<span style="font-family:Fraunces,serif;font-weight:900;font-size:16px;color:'+s.col+'">'+s.title+'</span>'
+    +'</div>'
+    +'<div style="font-family:Spectral,serif;font-size:13px;line-height:1.65;color:#f0e8c8;margin-bottom:8px">'+s.desc+'</div>'
+    +'<div style="font-family:Spectral,serif;font-size:12px;line-height:1.6;color:rgba(240,210,120,0.7);font-style:italic;border-top:1px solid rgba(240,180,20,0.2);padding-top:8px">'+s.myth+'</div>'
+    +'</div>';
+  }).join('');
+ }
+
+ function renderTabs(active){
+  var tabs=['Moon','Planets','Phenomena','Sun'];
+  var fns=[moonPanel,planetsPanel,phenomenaPanel,sunPanel];
+  var html='<div style="margin-bottom:4px">';
+  tabs.forEach(function(t,i){
+   html+='<span style="'+tab_style+(i===active?active_tab:inactive_tab)+'" onclick="renderCelestialTab('+i+')" id="cel-tab-'+i+'">'+t+'</span>';
+  });
+  html+='</div><div id="cel-content">'+(fns[active]())+'</div>';
+  return html;
+ }
+
+ /* expose tab switch */
+ window._celFns=[moonPanel,planetsPanel,phenomenaPanel,sunPanel];
+ window.renderCelestialTab=function(idx){
+  var tabs=document.querySelectorAll('[id^="cel-tab-"]');
+  tabs.forEach(function(t,i){
+   t.style.cssText=tab_style+(i===idx?active_tab:inactive_tab);
+  });
+  var content=document.getElementById('cel-content');
+  if(content)content.innerHTML=window._celFns[idx]();
+ };
+
+ var html=renderTabs(0);
+
  document.getElementById('m-no').textContent='\u2609';
  document.getElementById('m-title').textContent='The Celestial';
- document.getElementById('m-dept').textContent='Moon \xb7 Stars \xb7 Myth \xb7 Astronomy';
+ document.getElementById('m-dept').textContent='Moon \xb7 Planets \xb7 Phenomena \xb7 Sun';
  document.getElementById('m-body').innerHTML=html;
  document.getElementById('m-body').style.padding='20px';
  document.getElementById('m-advisor').innerHTML='';
@@ -2181,7 +3165,7 @@ function openCompass(){
   +'<rect x="610" y="180" width="22" height="130" fill="#060c06"/><rect x="604" y="192" width="34" height="16" fill="#060c06"/><rect x="606" y="208" width="30" height="14" fill="#080e08"/><rect x="608" y="222" width="26" height="14" fill="#060c06"/><rect x="606" y="236" width="30" height="14" fill="#080e08"/>';
  showBackdrop(svg);
  document.getElementById('modal').classList.add('landscape-mode');
- var p='background:rgba(8,14,30,0.80);border:1px solid rgba(100,140,220,0.2);padding:14px 18px;margin-bottom:10px;';
+ var p='background:rgba(14,24,56,0.97);border:1px solid rgba(120,160,240,0.5);padding:14px 18px;margin-bottom:10px;';
  var html='<div style="'+p+'">'
   +'<div style="font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:rgba(180,200,255,0.55);margin-bottom:8px">'+quote.cat+'</div>'
   +'<div style="font-family:Spectral,serif;font-size:16px;line-height:1.65;font-style:italic;color:#e8e0cc">"'+quote.q+'"</div>'
@@ -2244,7 +3228,7 @@ function openWatch(){
   +'<rect x="40" y="16" width="4" height="4" fill="#fff" opacity="0.4"/><rect x="100" y="8" width="4" height="4" fill="#ffd" opacity="0.3"/><rect x="200" y="20" width="4" height="4" fill="#fff" opacity="0.4"/><rect x="500" y="10" width="4" height="4" fill="#fff" opacity="0.4"/><rect x="620" y="6" width="4" height="4" fill="#ffd" opacity="0.5"/>';
  showBackdrop(svg);
  document.getElementById('modal').classList.add('landscape-mode');
- var p='background:rgba(8,6,4,0.82);border:1px solid rgba(160,140,100,0.2);padding:14px 18px;margin-bottom:10px;';
+ var p='background:rgba(24,18,12,0.97);border:1px solid rgba(210,185,125,0.5);padding:14px 18px;margin-bottom:10px;';
  var html='<div style="'+p+'">'
   +'<div style="font-family:IBM Plex Mono,monospace;font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:#907850;margin-bottom:8px">Memento Mori</div>'
   +'<div style="font-family:Spectral,serif;font-size:15px;line-height:1.65;font-style:italic;color:#d0c8a8">'+memo+'</div>'
@@ -2280,6 +3264,8 @@ function openWatch(){
 /* compass advisor */
 
 paintHeader();paintSky();paintNow();renderPortals();renderListen();drawStrat();drawQuote();checkHostedReturn();setTimeout(function(){renderScholar();renderFloatScholar();},2000);
+renderBoard();
+buildTicker();
 /* Keep Render warm - ping every 8 minutes */
 function keepWarm(){fetch('https://lifeos-backend-nf15.onrender.com/').catch(function(){});}
 keepWarm();

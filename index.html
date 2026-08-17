@@ -723,6 +723,11 @@ async function sbLoad(key){
   try{var r=await fetch(SB_URL+'/rest/v1/lifeos_data?id=eq.'+encodeURIComponent(key)+'&select=data',{headers:sbH()});var d=await r.json();return(d&&d[0])?d[0].data:null;}
   catch(e){return null;}
 }
+/* Generic typed-table read (workout_week, events, ...) — returns null on any failure so callers fall back to their hardcoded defaults */
+async function sbGet(table,query){
+  try{var r=await fetch(SB_URL+'/rest/v1/'+table+'?'+query,{headers:sbH()});if(!r.ok)return null;return await r.json();}
+  catch(e){return null;}
+}
 /* Advisor memory */
 async function sbSaveAdv(id,msgs){await sbSave('adv_'+id,msgs);}
 async function sbLoadAdv(id){return await sbLoad('adv_'+id)||[];}
@@ -3298,6 +3303,25 @@ setInterval(function(){paintSky();paintNow();},60000);
   var sc=await sbLoad('closet');if(sc&&sc.length){lsSet(CLOSET_KEY,JSON.stringify(sc));}
   var ss=await sbLoad('stories');if(ss&&ss.length){try{localStorage.setItem(STORY_KEY,JSON.stringify(ss));}catch(e){}}
   var sf2=await sbLoad('finance_ledger');if(sf2&&sf2.balance!==undefined){lsSet(FIN_KEY,JSON.stringify(sf2));}
+
+  /* One brain: pull WORKOUT_WEEK / EVENTS / UPCOMING from Supabase, editable
+     without a redeploy. Hardcoded arrays above stay as the fallback if any
+     fetch fails or comes back empty. */
+  var wk=await sbGet('workout_week','select=day,title,focus,rest,blocks&order=day_order');
+  if(wk&&wk.length){WORKOUT_WEEK=wk.map(function(r){return{d:r.day,ttl:r.title,focus:r.focus,rest:r.rest,blocks:r.blocks};});}
+
+  var evRows=await sbGet('events','select=title,date,kind,amount&order=date');
+  if(evRows&&evRows.length){
+    function fmtEvDate(iso){var d=new Date(iso+'T00:00');return MO[d.getMonth()].slice(0,3)+' '+d.getDate();}
+    var newEvents=[],newUpcoming=[];
+    evRows.forEach(function(r){
+      if(r.kind==='ledger'){newUpcoming.push({date:fmtEvDate(r.date),label:r.title,amount:r.amount,type:r.amount>0?'in':(r.amount<0?'out':'note')});}
+      else{newEvents.push({date:r.date,t:r.title,type:r.kind});}
+    });
+    if(newEvents.length)EVENTS=newEvents;
+    if(newUpcoming.length)UPCOMING=newUpcoming;
+    paintHeader();
+  }
   console.log('✓ Supabase sync complete');
 })();
 </script>

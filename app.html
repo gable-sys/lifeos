@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<title>Henry OS</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f4ecd6;--paper2:#e6d8b4;--paper3:#dccca3;
+  --ink:#191309;--ink2:#372d20;--ink3:#574a37;
+  --line:rgba(25,19,9,0.45);--line2:rgba(25,19,9,0.18);
+  --terra:#bd441f;--terra2:#d35e2a;--green:#255637;--green2:#3a6b4d;--gold:#8f6219;
+}
+body.night{
+  --paper:#0e0c09;--paper2:#16130e;--paper3:#1e1a13;
+  --ink:#f0e8d5;--ink2:#c8bc9e;--ink3:#8a7d66;
+  --line:rgba(240,232,213,0.13);--line2:rgba(240,232,213,0.07);
+  --terra:#c94f28;--terra2:#a33d1a;--green:#2e6b42;--green2:#3d8f59;--gold:#b8891a;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{background:var(--paper);color:var(--ink);font-family:'Spectral',Georgia,serif;font-size:15px;line-height:1.55;min-height:100vh;-webkit-font-smoothing:antialiased;padding-bottom:env(safe-area-inset-bottom);transition:background .2s,color .2s;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+a{color:var(--terra);}
+button{font:inherit;}
+
+/* ── TOPBAR ── */
+#topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px;position:sticky;top:0;background:var(--paper);z-index:5;border-bottom:1px solid var(--line2);}
+#topbar .brand{font-family:'Fraunces',serif;font-weight:900;font-size:20px;letter-spacing:-0.01em;}
+#topbar .brand-sub{font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink3);margin-top:1px;}
+#night-toggle{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line);background:none;color:var(--ink3);padding:5px 9px;cursor:pointer;}
+
+/* ── BOOT / FATAL ── */
+#boot-loading{position:fixed;inset:0;display:none;align-items:center;justify-content:center;flex-direction:column;gap:10px;background:var(--paper);z-index:50;}
+#boot-loading .spin{width:22px;height:22px;border:2px solid var(--line);border-top-color:var(--terra);border-radius:50%;animation:spin 0.9s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+#boot-loading .msg{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink3);text-align:center;padding:0 30px;}
+.fatal{padding:60px 24px;text-align:center;font-family:'Spectral',serif;font-size:15px;color:var(--ink2);}
+
+/* ── GRID (home) ── */
+#home{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px 16px 30px;}
+.tile{border:1px solid var(--line);background:var(--paper2);padding:14px 12px;cursor:pointer;transition:transform .1s,background .15s;min-height:74px;display:flex;flex-direction:column;justify-content:center;}
+.tile:active{transform:scale(0.97);background:var(--paper3);}
+.tile-no{font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:var(--ink3);margin-bottom:3px;}
+.tile-dept{font-family:'IBM Plex Mono',monospace;font-size:7.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--green);margin-bottom:2px;}
+.tile-title{font-family:'Fraunces',serif;font-weight:600;font-size:16px;line-height:1.1;}
+.tile.cork{grid-column:1/-1;background:var(--paper3);border-color:var(--gold);}
+.tile.cork .tile-dept{color:var(--gold);}
+
+/* ── DEPT VIEW ── */
+#dept-view{display:none;padding:14px 16px 40px;}
+#dept-header{margin-bottom:16px;}
+#dept-header .d-no{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--ink3);}
+#dept-header .d-dept{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--green);margin-top:3px;}
+#dept-header .d-title{font-family:'Fraunces',serif;font-weight:900;font-size:25px;line-height:1.05;margin-top:2px;}
+#dept-header .d-site{display:inline-block;margin-top:6px;font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--ink3);text-decoration:none;}
+
+.loading{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink3);padding:20px 0;}
+.error-block{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--terra);padding:16px 0;}
+.empty{font-family:'Spectral',serif;font-style:italic;color:var(--ink3);font-size:13px;padding:6px 0;}
+.hint{font-family:'Spectral',serif;font-style:italic;color:var(--ink3);font-size:12.5px;margin-bottom:12px;}
+
+.sect{margin-bottom:6px;}
+.sect-head{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--green);border-bottom:1px solid var(--line2);padding-bottom:5px;margin:20px 0 8px;}
+.sect-head:first-child{margin-top:0;}
+
+.prose p{margin-bottom:10px;font-size:14px;}
+.prose-label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.03em;color:var(--terra);}
+
+.pick-card{border:1px solid var(--terra);background:var(--paper2);padding:12px 14px;margin-bottom:6px;}
+.pick-card .label{font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--terra);margin-bottom:6px;}
+.pick-text{font-family:'Fraunces',serif;font-size:15px;font-style:italic;line-height:1.4;}
+
+.wisdom-row{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid var(--line2);}
+.wisdom-day{min-width:36px;color:var(--ink3);font-size:10px;padding-top:2px;}
+.wisdom-text{font-size:13.5px;flex:1;}
+.wisdom-row.is-today{background:rgba(189,68,31,0.07);}
+.wisdom-row.is-today .wisdom-day{color:var(--terra);font-weight:600;}
+
+.row{display:flex;align-items:center;gap:10px;padding:10px 2px;border-bottom:1px solid var(--line2);cursor:pointer;}
+.row:active{background:var(--paper2);}
+.row-time{min-width:64px;color:var(--ink3);font-size:11px;}
+.row-title{flex:1;font-size:14px;}
+.row-dept{color:var(--green);font-size:9px;margin-left:6px;}
+.row-amt{font-size:12px;font-weight:600;}
+.row-amt.in{color:var(--green);}
+.row-amt.out{color:var(--terra);}
+
+.edit-form{border:1px solid var(--ink);background:var(--paper2);padding:12px;margin:6px 0 10px;display:flex;flex-direction:column;gap:8px;}
+.edit-form input,.edit-form textarea{font-family:'Spectral',serif;font-size:14px;padding:9px 10px;border:1.5px solid var(--ink);background:var(--paper);color:var(--ink);width:100%;}
+.form-row{display:flex;gap:8px;}
+.form-row input{flex:1;}
+
+.btn-primary,.btn-danger,.btn-ghost,.btn-add{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;border:1.5px solid var(--ink);padding:9px 14px;cursor:pointer;background:none;color:var(--ink);}
+.btn-primary{background:var(--green);border-color:var(--green);color:var(--paper);}
+.btn-primary.is-done{background:none;color:var(--green);border-color:var(--green);}
+.btn-danger{border-color:var(--terra);color:var(--terra);}
+.btn-ghost{border-color:var(--line);color:var(--ink3);}
+.btn-add{width:100%;margin:8px 0 4px;border-style:dashed;color:var(--ink3);}
+.btn-add:active,.btn-primary:active,.btn-danger:active,.btn-ghost:active{opacity:.7;}
+
+.wk-today-card{border:1px solid var(--green);background:var(--paper2);padding:12px 14px;margin-bottom:14px;display:flex;flex-direction:column;gap:9px;}
+.wk-today-card .label{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--green);}
+.dot-row{display:flex;gap:5px;}
+.dot{width:9px;height:9px;border-radius:50%;border:1px solid var(--green);background:none;}
+.dot.filled{background:var(--green);}
+
+details.wk-day{border-bottom:1px solid var(--line2);padding:10px 0;}
+details.wk-day summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;}
+details.wk-day summary::-webkit-details-marker{display:none;}
+details.wk-day summary::after{content:'▸';margin-left:auto;color:var(--terra);font-family:'IBM Plex Mono',monospace;font-size:11px;}
+details.wk-day[open] summary::after{content:'▾';}
+.wk-dnum{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:10px;letter-spacing:.1em;color:var(--paper);background:var(--green);padding:5px 7px;min-width:38px;text-align:center;}
+.wk-ttl{font-family:'Fraunces',serif;font-weight:600;font-size:14.5px;}
+.wk-ttl em{color:var(--terra);font-style:italic;font-size:12px;}
+.wk-day.rest .wk-dnum{background:var(--ink3);}
+.wk-focus{font-size:12.5px;font-style:italic;color:var(--ink3);margin:8px 0 6px 48px;}
+.wk-block{margin:8px 0 8px 48px;}
+.wk-bname{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:4px;}
+.wk-ex{display:flex;justify-content:space-between;gap:10px;padding:4px 0;}
+.wk-ex .nm{font-size:13px;}
+.wk-ex .tip{font-size:10.5px;color:var(--ink3);font-style:italic;}
+.wk-ex .rx{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--terra);white-space:nowrap;font-weight:600;padding-top:1px;}
+
+.task-group{margin-bottom:4px;}
+.task-cat{margin:14px 0 4px;}
+.task-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line2);transition:opacity .2s,transform .2s;}
+.task-row.done-anim{opacity:0;transform:translateX(14px);}
+.task-check{width:20px;height:20px;flex-shrink:0;border:1.5px solid var(--green);border-radius:50%;background:none;color:var(--green);font-size:11px;line-height:1;cursor:pointer;padding:0;}
+.task-title{font-size:13.5px;flex:1;}
+</style>
+</head>
+<body>
+
+<div id="boot-loading">
+  <div class="spin"></div>
+  <div class="msg" id="boot-msg">Loading…</div>
+</div>
+
+<div id="app">
+  <div id="topbar">
+    <div>
+      <div class="brand">Henry OS</div>
+      <div class="brand-sub" id="td-sub">Mini App</div>
+    </div>
+    <button id="night-toggle" onclick="toggleNight()">☾</button>
+  </div>
+
+  <div id="home"></div>
+
+  <div id="dept-view">
+    <div id="dept-header"></div>
+    <div id="dept-body"></div>
+  </div>
+</div>
+
+<script>
+/* ════════ CONFIG ════════ */
+var API_BASE = 'https://lifeos-backend-nf15.onrender.com';
+var SITE_URL = 'https://stupendous-concha-2d70be.netlify.app';
+var WD_ORDER = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+var MO = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+var tg = window.Telegram && window.Telegram.WebApp;
+var CONFIG = null;
+var currentDept = null;
+var editingTT = null;
+var editingEv = null;
+
+var home = document.getElementById('home');
+var deptView = document.getElementById('dept-view');
+var deptHeader = document.getElementById('dept-header');
+var deptBody = document.getElementById('dept-body');
+var bootLoading = document.getElementById('boot-loading');
+var bootMsg = document.getElementById('boot-msg');
+
+/* ════════ HELPERS ════════ */
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function fmtDate(iso){if(!iso)return'';var d=new Date(iso+'T00:00');return MO[d.getMonth()]+' '+d.getDate();}
+function fmtAmt(n){n=Number(n)||0;return(n>0?'+$':'-$')+Math.abs(n).toFixed(0);}
+function haptic(){try{tg&&tg.HapticFeedback&&tg.HapticFeedback.impactOccurred('light');}catch(e){}}
+
+async function api(path, opts){
+  opts = opts || {};
+  var headers = Object.assign({'Content-Type':'application/json','X-Telegram-Init-Data': tg ? tg.initData : ''}, opts.headers||{});
+  var res = await fetch(API_BASE + path, Object.assign({}, opts, {headers: headers}));
+  if(!res.ok){
+    var msg = 'Request failed ('+res.status+')';
+    try{var j=await res.json();if(j&&j.error)msg=j.error;}catch(e){}
+    throw new Error(msg);
+  }
+  return res.json();
+}
+function withColdStartHint(promise){
+  var t = setTimeout(function(){
+    var el = deptBody.querySelector('.loading');
+    if(el) el.textContent = "Henry's waking up — first load can take up to a minute…";
+  }, 3000);
+  return promise.finally(function(){clearTimeout(t);});
+}
+
+function formatProse(text){
+  if(!text) return '<p class="empty">Nothing filed yet.</p>';
+  return text.split(/\n\n+/).map(function(p){
+    var m = p.match(/^([A-Z][A-Z0-9 '\-()\/]{2,42}:)\s*([\s\S]*)$/);
+    if(m) return '<p><b class="prose-label">'+esc(m[1])+'</b> '+esc(m[2])+'</p>';
+    return '<p>'+esc(p)+'</p>';
+  }).join('');
+}
+
+/* ════════ THEME ════════ */
+function applyTheme(){
+  var manual = null;
+  try{manual = localStorage.getItem('henry_night');}catch(e){}
+  var isNight = manual !== null ? manual === '1' : (tg && tg.colorScheme === 'dark');
+  document.body.classList.toggle('night', !!isNight);
+  document.getElementById('night-toggle').textContent = isNight ? '☀' : '☾';
+  try{
+    var paper = isNight ? '#0e0c09' : '#f4ecd6';
+    tg && tg.setHeaderColor && tg.setHeaderColor(paper);
+    tg && tg.setBackgroundColor && tg.setBackgroundColor(paper);
+  }catch(e){}
+}
+function toggleNight(){
+  var on = !document.body.classList.contains('night');
+  try{localStorage.setItem('henry_night', on ? '1':'0');}catch(e){}
+  applyTheme();
+}
+
+/* ════════ HOME GRID ════════ */
+function renderGrid(depts){
+  home.innerHTML = depts.map(function(d){
+    var cls = d.id === 'cork' ? 'tile cork' : 'tile';
+    return '<div class="'+cls+'" onclick="openDept(\''+d.id+'\')">'
+      + (d.no ? '<div class="tile-no mono">'+esc(d.no)+'</div>' : '')
+      + '<div class="tile-dept">'+esc(d.dept)+'</div>'
+      + '<div class="tile-title">'+esc(d.title)+'</div>'
+      + '</div>';
+  }).join('');
+}
+
+/* ════════ DEPT NAV ════════ */
+function openDept(id){
+  var cfg = CONFIG.departments.filter(function(d){return d.id===id;})[0];
+  if(!cfg) return;
+  currentDept = cfg;
+  editingTT = null; editingEv = null;
+  deptHeader.innerHTML = ''
+    + (cfg.no ? '<div class="d-no mono">'+esc(cfg.no)+'</div>' : '')
+    + '<div class="d-dept">'+esc(cfg.dept)+'</div>'
+    + '<div class="d-title">'+esc(cfg.title)+'</div>'
+    + '<a class="d-site" href="'+SITE_URL+'" target="_blank" rel="noopener">↳ open on the full site</a>';
+  deptBody.innerHTML = '<div class="loading">Loading…</div>';
+  home.style.display = 'none';
+  deptView.style.display = 'block';
+  window.scrollTo(0,0);
+  if(tg && tg.BackButton){ tg.BackButton.show(); }
+  loadDeptBody(cfg).catch(function(e){
+    deptBody.innerHTML = '<div class="error-block">Couldn\'t load this — '+esc(e.message)+'</div>';
+  });
+}
+function goHome(){
+  deptView.style.display = 'none';
+  home.style.display = 'grid';
+  if(tg && tg.BackButton){ tg.BackButton.hide(); }
+  currentDept = null;
+}
+if(tg && tg.BackButton){ tg.BackButton.onClick(goHome); }
+
+async function loadDeptBody(cfg){
+  if(cfg.kind === 'workout') return renderWorkout(cfg);
+  if(cfg.kind === 'reading') return renderReading(cfg);
+  if(cfg.kind === 'schedule') return renderSchedule(cfg);
+  if(cfg.kind === 'finance') return renderFinance(cfg);
+  if(cfg.kind === 'todos') return renderCork(cfg);
+  return renderKb(cfg);
+}
+
+/* ════════ TASKS (shared by every department + the cork board) ════════ */
+async function fetchTaskGroups(category){
+  var q = category ? ('?category='+encodeURIComponent(category)) : '';
+  var data = await api('/app/api/tasks'+q);
+  return data.groups;
+}
+function tasksHTML(groups){
+  if(!groups.length) return '<p class="empty">Nothing open here. Clean desk.</p>';
+  return groups.map(function(g){
+    return '<div class="task-group">'
+      + '<div class="task-cat sect-head" style="margin-top:14px">'+esc(g.category)+'</div>'
+      + g.tasks.map(function(t){
+          return '<div class="task-row" id="task-'+t.id+'">'
+            + '<button class="task-check" onclick="markTaskDone(\''+t.id+'\')">✓</button>'
+            + '<span class="task-title">'+esc(t.title)+'</span>'
+            + '</div>';
+        }).join('')
+      + '</div>';
+  }).join('');
+}
+async function renderTasksSection(category){
+  try{
+    var groups = await fetchTaskGroups(category);
+    return '<div class="sect-head">Open Tasks</div>' + tasksHTML(groups);
+  }catch(e){
+    return '<div class="sect-head">Open Tasks</div><div class="error-block">'+esc(e.message)+'</div>';
+  }
+}
+async function renderCork(){
+  var groups = await withColdStartHint(fetchTaskGroups(null));
+  deptBody.innerHTML = '<p class="hint">Everything open, across every department. Tap to clear it.</p>' + tasksHTML(groups);
+}
+async function markTaskDone(id){
+  var row = document.getElementById('task-'+id);
+  if(row) row.classList.add('done-anim');
+  haptic();
+  try{
+    await api('/app/api/tasks/'+id+'/done', {method:'POST'});
+    if(row) setTimeout(function(){row.remove();}, 220);
+  }catch(e){
+    if(row) row.classList.remove('done-anim');
+    alert('Could not mark done — '+e.message);
+  }
+}
+
+/* ════════ WORKOUT ════════ */
+async function renderWorkout(cfg){
+  var data = await withColdStartHint(api('/app/api/workout'));
+  var doneSet = {}; (data.done||[]).forEach(function(d){doneSet[d]=true;});
+  var isDoneToday = !!doneSet[data.today_date];
+  var html = '<div class="wk-today-card">'
+    + '<div class="label">Today · '+esc(data.today)+'</div>'
+    + '<button class="btn-primary'+(isDoneToday?' is-done':'')+'" onclick="toggleWorkoutDone(\''+data.today_date+'\', '+(isDoneToday?'true':'false')+')">'
+    + (isDoneToday ? '✓ Done today' : 'Mark today done') + '</button>'
+    + '<div class="dot-row">' + last7Dots(doneSet) + '</div>'
+    + '</div>';
+  html += (data.week||[]).map(function(day){return workoutDayHTML(day, day.day===data.today);}).join('');
+  html += await renderTasksSection(cfg.task_category);
+  deptBody.innerHTML = html;
+}
+function last7Dots(doneSet){
+  var out = '';
+  for(var i=6;i>=0;i--){
+    var d = new Date(); d.setDate(d.getDate()-i);
+    var iso = d.toISOString().slice(0,10);
+    out += '<span class="dot'+(doneSet[iso]?' filled':'')+'"></span>';
+  }
+  return out;
+}
+function workoutDayHTML(day, isToday){
+  var blocks = (day.blocks||[]).map(function(b){
+    var exs = (b.ex||[]).map(function(e){
+      return '<div class="wk-ex"><div><div class="nm">'+esc(e.nm)+'</div>'+(e.tip?'<div class="tip">'+esc(e.tip)+'</div>':'')+'</div><div class="rx">'+esc(e.rx)+'</div></div>';
+    }).join('');
+    return '<div class="wk-block"><div class="wk-bname">'+esc(b.name)+'</div>'+exs+'</div>';
+  }).join('');
+  return '<details class="wk-day'+(day.rest?' rest':'')+'"'+(isToday?' open':'')+'>'
+    + '<summary><span class="wk-dnum">'+esc(day.day)+'</span><span class="wk-ttl"><b>'+esc(day.title)+'</b>'+(isToday?' <em>· today</em>':'')+'</span></summary>'
+    + (day.focus ? '<div class="wk-focus">'+esc(day.focus)+'</div>' : '')
+    + blocks
+    + '</details>';
+}
+async function toggleWorkoutDone(date, isDone){
+  haptic();
+  try{
+    if(isDone) await api('/app/api/workout/done/'+date, {method:'DELETE'});
+    else await api('/app/api/workout/done', {method:'POST', body: JSON.stringify({date: date})});
+    renderWorkout(currentDept);
+  }catch(e){ alert(e.message); }
+}
+
+/* ════════ READING ════════ */
+async function renderReading(cfg){
+  var data = await withColdStartHint(api('/app/api/reading'));
+  var html = '<div class="pick-card"><div class="label">Henry\'s Pick — Tonight</div><p class="pick-text">'+esc(data.henrys_pick.text)+'</p></div>';
+  html += '<div class="sect-head">The Curriculum</div><div class="prose">'+formatProse(data.curriculum)+'</div>';
+  html += '<div class="sect-head">Wisdom Rotation</div><div class="wisdom-list">';
+  WD_ORDER.forEach(function(day){
+    html += '<div class="wisdom-row'+(day===data.today_weekday?' is-today':'')+'"><span class="wisdom-day mono">'+day.slice(0,3)+'</span><span class="wisdom-text">'+esc(data.wisdom[day]||'')+'</span></div>';
+  });
+  html += '</div>';
+  html += await renderTasksSection(cfg.task_category);
+  deptBody.innerHTML = html;
+}
+
+/* ════════ SCHEDULE ════════ */
+async function renderSchedule(cfg){
+  var data = await withColdStartHint(api('/app/api/schedule'));
+  var html = '<div class="sect-head">Daily Timetable</div><div id="tt-list">'
+    + (data.timetable||[]).map(ttRowHTML).join('') + '</div>';
+  html += editingTT === 'new' ? ttFormHTML(null) : '<button class="btn-add" onclick="editingTT=\'new\';renderSchedule(currentDept)">+ Add to timetable</button>';
+  html += '<div class="sect-head">Next 7 Days</div><div id="ev-list">'
+    + ((data.events||[]).length ? data.events.map(evRowHTML).join('') : '<p class="empty">Nothing on the books.</p>');
+  html += '</div>';
+  html += editingEv === 'new' ? evFormHTML(null) : '<button class="btn-add" onclick="editingEv=\'new\';renderSchedule(currentDept)">+ Add event</button>';
+  html += await renderTasksSection(cfg.task_category);
+  deptBody.innerHTML = html;
+}
+function ttRowHTML(item){
+  if(editingTT === item.id) return ttFormHTML(item);
+  return '<div class="row" onclick="editingTT=\''+item.id+'\';renderSchedule(currentDept)">'
+    + '<span class="row-time mono">'+esc(item.start_time)+(item.end_time?'–'+esc(item.end_time):'')+'</span>'
+    + '<span class="row-title">'+esc(item.title)+(item.dept?' <span class="row-dept mono">'+esc(item.dept)+'</span>':'')+'</span>'
+    + '</div>';
+}
+function ttFormHTML(item){
+  item = item || {};
+  var id = item.id || '';
+  return '<div class="edit-form">'
+    + '<div class="form-row"><input type="time" id="tt-start" value="'+esc(item.start_time||'')+'"><input type="time" id="tt-end" value="'+esc(item.end_time||'')+'"></div>'
+    + '<input type="text" id="tt-title" placeholder="Title" value="'+esc(item.title||'')+'">'
+    + '<input type="text" id="tt-dept" placeholder="Label (optional) — e.g. Performance" value="'+esc(item.dept||'')+'">'
+    + '<div class="form-row"><button class="btn-primary" onclick="saveTT(\''+id+'\')">Save</button>'
+    + (id ? '<button class="btn-danger" onclick="deleteTT(\''+id+'\')">Delete</button>' : '')
+    + '<button class="btn-ghost" onclick="editingTT=null;renderSchedule(currentDept)">Cancel</button></div>'
+    + '</div>';
+}
+async function saveTT(id){
+  var body = {
+    start_time: document.getElementById('tt-start').value,
+    end_time: document.getElementById('tt-end').value || null,
+    title: document.getElementById('tt-title').value.trim(),
+    dept: document.getElementById('tt-dept').value.trim() || null,
+  };
+  if(!body.start_time || !body.title){ alert('Time and title required.'); return; }
+  try{
+    if(id) await api('/app/api/schedule/timetable/'+id, {method:'PATCH', body: JSON.stringify(body)});
+    else await api('/app/api/schedule/timetable', {method:'POST', body: JSON.stringify(body)});
+    editingTT = null; haptic(); renderSchedule(currentDept);
+  }catch(e){ alert(e.message); }
+}
+async function deleteTT(id){
+  try{ await api('/app/api/schedule/timetable/'+id, {method:'DELETE'}); editingTT=null; renderSchedule(currentDept); }
+  catch(e){ alert(e.message); }
+}
+function evRowHTML(ev){
+  if(editingEv === ev.id) return evFormHTML(ev);
+  return '<div class="row" onclick="editingEv=\''+ev.id+'\';renderSchedule(currentDept)">'
+    + '<span class="row-time mono">'+fmtDate(ev.date)+'</span>'
+    + '<span class="row-title">'+esc(ev.title)+'</span>'
+    + '</div>';
+}
+function evFormHTML(ev){
+  ev = ev || {};
+  var id = ev.id || '';
+  return '<div class="edit-form">'
+    + '<input type="date" id="ev-date" value="'+esc(ev.date||'')+'">'
+    + '<input type="text" id="ev-title" placeholder="Title" value="'+esc(ev.title||'')+'">'
+    + '<div class="form-row"><button class="btn-primary" onclick="saveEvent(\''+id+'\')">Save</button>'
+    + (id ? '<button class="btn-danger" onclick="deleteEvent(\''+id+'\')">Delete</button>' : '')
+    + '<button class="btn-ghost" onclick="editingEv=null;renderSchedule(currentDept)">Cancel</button></div>'
+    + '</div>';
+}
+async function saveEvent(id){
+  var body = { date: document.getElementById('ev-date').value, title: document.getElementById('ev-title').value.trim() };
+  if(!body.date || !body.title){ alert('Date and title required.'); return; }
+  try{
+    if(id) await api('/app/api/schedule/event/'+id, {method:'PATCH', body: JSON.stringify(body)});
+    else await api('/app/api/schedule/event', {method:'POST', body: JSON.stringify(body)});
+    editingEv = null; haptic(); renderSchedule(currentDept);
+  }catch(e){ alert(e.message); }
+}
+async function deleteEvent(id){
+  try{ await api('/app/api/schedule/event/'+id, {method:'DELETE'}); editingEv=null; renderSchedule(currentDept); }
+  catch(e){ alert(e.message); }
+}
+
+/* ════════ FINANCE (simple render — live balance stays on the site) ════════ */
+async function renderFinance(cfg){
+  var data = await withColdStartHint(api('/app/api/finance'));
+  var html = '<div class="sect-head">Upcoming</div>';
+  html += (data.upcoming||[]).length ? data.upcoming.map(function(f){
+    return '<div class="row"><span class="row-time mono">'+fmtDate(f.date)+'</span><span class="row-title">'+esc(f.title)+'</span><span class="row-amt mono '+(f.amount>0?'in':'out')+'">'+fmtAmt(f.amount)+'</span></div>';
+  }).join('') : '<p class="empty">Nothing on the books.</p>';
+  html += await renderTasksSection(cfg.task_category);
+  deptBody.innerHTML = html;
+}
+
+/* ════════ KB-ONLY DEPARTMENTS ════════ */
+function kbLabel(dept){ return dept.replace(/_/g,' ').replace(/\b\w/g, function(c){return c.toUpperCase();}); }
+async function renderKb(cfg){
+  var data = await withColdStartHint(api('/app/api/kb/'+cfg.id));
+  var html = '';
+  if(!data.sections || !data.sections.length){
+    html += '<p class="empty">Nothing filed here yet.</p>';
+  }else{
+    html += data.sections.map(function(s){
+      return '<div class="sect"><div class="sect-head">'+esc(kbLabel(s.dept))+'</div><div class="prose">'+formatProse(s.content)+'</div></div>';
+    }).join('');
+  }
+  html += await renderTasksSection(cfg.task_category);
+  deptBody.innerHTML = html;
+}
+
+/* ════════ BOOT ════════ */
+function showFatal(msg){
+  bootLoading.style.display = 'none';
+  document.getElementById('app').innerHTML = '<div class="fatal">'+esc(msg)+'</div>';
+}
+function paintFromCache(){
+  try{
+    var cached = JSON.parse(localStorage.getItem('henry_config')||'null');
+    if(cached && cached.departments){ CONFIG = cached; renderGrid(cached.departments); return true; }
+  }catch(e){}
+  return false;
+}
+async function boot(){
+  if(!tg){ showFatal('Open this from Henry in Telegram.'); return; }
+  tg.ready(); tg.expand();
+  applyTheme();
+  try{ tg.onEvent && tg.onEvent('themeChanged', applyTheme); }catch(e){}
+  if(!tg.initData){ showFatal('Open this from Henry in Telegram — no session found.'); return; }
+
+  var hadCache = paintFromCache();
+  if(!hadCache) bootLoading.style.display = 'flex';
+  var t = setTimeout(function(){ bootMsg.textContent = "Henry's waking up — first load can take up to a minute…"; }, 3000);
+  try{
+    CONFIG = await api('/app/api/config');
+    try{ localStorage.setItem('henry_config', JSON.stringify(CONFIG)); }catch(e){}
+    renderGrid(CONFIG.departments);
+  }catch(e){
+    clearTimeout(t);
+    if(!hadCache){ showFatal('Could not reach Henry — '+e.message); return; }
+  }
+  clearTimeout(t);
+  bootLoading.style.display = 'none';
+
+  var startParam = (tg.initDataUnsafe && tg.initDataUnsafe.start_param) || new URLSearchParams(location.search).get('dept');
+  if(startParam && CONFIG && CONFIG.departments.some(function(d){return d.id===startParam;})) openDept(startParam);
+}
+boot();
+</script>
+</body>
+</html>
